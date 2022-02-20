@@ -1,0 +1,37 @@
+# mybatis
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mappers/*xml
+  type-aliases-package: com.actionworks.flashsale.mybatis.entity
+
+spring:
+  application:
+    # 应用名称
+    name: flash-sale
+  datasource:
+    type: org.apache.commons.dbcp2.BasicDataSource
+    url: jdbc:mysql://localhost:3306/learn_mybatis?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: root
+    password: xxxxxx
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# 应用服务 WEB 访问端口
+server:
+  port: 8090
+  servlet:
+    context-path: /api
+  tomcat:
+    threads:
+      max: 500
+
+management:
+  metrics:
+    export:
+      datadog:
+        enabled: false
+      prometheus:
+        enabled: true
+      jmx:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
