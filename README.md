@@ -9,3 +9,4 @@
 - flash-sale-infrastructure: 基础设施层，包含mapper文件
 - flash-sale-app: 应用层，包含service服务
 - flash-sale-controller: controller层
+- environment-mysql: 保存数据库脚本
