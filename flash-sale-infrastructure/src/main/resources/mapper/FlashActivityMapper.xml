@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.actionworks.flashsale.persistence.mapper.FlashActivityMapper">
+    <sql id="ALL_COLUMNS">
+        id,
+        activity_name,
+        start_time,
+        end_time,
+        activity_desc,
+        status,
+        modified_time,
+        create_time
+    </sql>
+
+    <insert id="insert" parameterType="com.actionworks.flashsale.persistence.model.FlashActivityDO"
+            useGeneratedKeys="true" keyProperty="flashActivityDO.id">
+        INSERT INTO flash_activity
+        (activity_name,
+        start_time,
+        end_time,
+        activity_desc,
+        status,
+        modified_time,
+        create_time)
+        VALUES (
+        #{activityName,jdbcType=VARCHAR},
+        #{startTime,jdbcType=TIMESTAMP},
+        #{endTime,jdbcType=TIMESTAMP},
+        #{activityDesc,jdbcType=LONGVARCHAR},
+        #{status,jdbcType=INTEGER},
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
+            SELECT LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+</mapper>
