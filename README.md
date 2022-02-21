@@ -10,6 +10,7 @@
 - flash-sale-app: 应用层，包含service服务
 - flash-sale-controller: controller层
 - environment-mysql: 保存数据库脚本
+- environment-postman: postman测试脚本
 
 ## 3. 分支说明
 
