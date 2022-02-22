@@ -47,4 +47,16 @@ public class FlashActivityController {
 
         return ResponseConvertor.with(appResult);
     }
+
+    /**
+     * 下线秒杀活动
+     *
+     * @param activityId 秒杀活动ID
+     */
+    @PutMapping(value = "/flash-activities/{activityId}/offline")
+    public <T> SingleResponse<T> offlineFlashActivity(@PathVariable Long activityId) {
+        AppResult<T> appResult = flashActivityAppService.offlineFlashActivity(activityId);
+
+        return ResponseConvertor.with(appResult);
+    }
 }

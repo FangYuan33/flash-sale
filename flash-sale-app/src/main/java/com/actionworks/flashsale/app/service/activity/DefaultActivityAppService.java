@@ -41,4 +41,13 @@ public class DefaultActivityAppService implements FlashActivityAppService {
 
         return AppResult.success();
     }
+
+    @Override
+    public <T> AppResult<T> offlineFlashActivity(Long activityId) {
+        log.info("activityOffline|下线秒杀活动|{}", activityId);
+
+        flashActivityDomainService.offlineActivity(activityId);
+
+        return AppResult.success();
+    }
 }

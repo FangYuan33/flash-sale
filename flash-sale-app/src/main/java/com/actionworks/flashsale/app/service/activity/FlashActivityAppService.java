@@ -21,4 +21,11 @@ public interface FlashActivityAppService {
      * @param activityId 秒杀活动ID
      */
     <T> AppResult<T> onlineFlashActivity(Long activityId);
+
+    /**
+     * 下线秒杀活动
+     *
+     * @param activityId 秒杀活动ID
+     */
+    <T> AppResult<T> offlineFlashActivity(Long activityId);
 }

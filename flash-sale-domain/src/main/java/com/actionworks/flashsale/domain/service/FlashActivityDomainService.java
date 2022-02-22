@@ -18,4 +18,11 @@ public interface FlashActivityDomainService {
      * @param activityId 活动ID
      */
     void onlineActivity(Long activityId);
+
+    /**
+     * 下线活动
+     *
+     * @param activityId 活动ID
+     */
+    void offlineActivity(Long activityId);
 }

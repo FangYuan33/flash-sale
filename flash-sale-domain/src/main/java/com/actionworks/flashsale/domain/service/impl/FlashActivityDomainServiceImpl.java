@@ -12,10 +12,8 @@ import javax.annotation.Resource;
 
 import java.util.Optional;
 
-import static com.actionworks.flashsale.domain.exception.DomainErrorCode.FLASH_ACTIVITY_NOT_EXIST;
-import static com.actionworks.flashsale.domain.exception.DomainErrorCode.PARAMS_INVALID;
-import static com.actionworks.flashsale.domain.model.enums.FlashActivityStatus.ONLINE;
-import static com.actionworks.flashsale.domain.model.enums.FlashActivityStatus.PUBLISHED;
+import static com.actionworks.flashsale.domain.exception.DomainErrorCode.*;
+import static com.actionworks.flashsale.domain.model.enums.FlashActivityStatus.*;
 
 @Slf4j
 @Service
@@ -37,23 +35,40 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
 
     @Override
     public void onlineActivity(Long activityId) {
+        FlashActivity flashActivity = getActivityById(activityId);
+        if (ONLINE.getCode().equals(flashActivity.getStatus())) {
+            return;
+        }
+
+        // 更改状态为已上线
+        flashActivityRepository.updateById(flashActivity.setStatus(ONLINE.getCode()));
+        log.info("activityOnline|活动已上线|{}", activityId);
+    }
+
+    @Override
+    public void offlineActivity(Long activityId) {
+        FlashActivity flashActivity = getActivityById(activityId);
+
+        if (OFFLINE.getCode().equals(flashActivity.getStatus())) {
+            return;
+        }
+        if (!ONLINE.getCode().equals(flashActivity.getStatus())) {
+            throw new DomainException(OFFLINE_FLASH_ACTIVITY_FORBIDDEN);
+        }
+
+        // 更新状态为已下线
+        flashActivityRepository.updateById(flashActivity.setStatus(OFFLINE.getCode()));
+        log.info("activityOffline|活动已下线|{}", activityId);
+    }
+
+    private FlashActivity getActivityById(Long activityId) {
         if (activityId == null) {
             throw new DomainException(PARAMS_INVALID);
         }
 
         Optional<FlashActivity> flashActivityOptional = flashActivityRepository.findById(activityId);
 
-        if (!flashActivityOptional.isPresent()) {
-            throw new DomainException(FLASH_ACTIVITY_NOT_EXIST);
-        }
-
-        FlashActivity flashActivity = flashActivityOptional.get();
-        if (ONLINE.getCode().equals(flashActivity.getStatus())) {
-            return;
-        }
-
-        // 状态为已上线
-        flashActivityRepository.updateById(flashActivity.setStatus(ONLINE.getCode()));
-        log.info("activityOnline|活动已上线|{}", activityId);
+        // orElseThrow 要么返回非空的值，否则抛出异常
+        return flashActivityOptional.orElseThrow(() -> new DomainException(FLASH_ACTIVITY_NOT_EXIST));
     }
 }

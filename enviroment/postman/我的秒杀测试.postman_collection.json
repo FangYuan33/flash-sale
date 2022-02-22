@@ -53,6 +53,27 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "下线秒杀活动",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:8090/api/flash-activities/2/offline",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"api",
+						"flash-activities",
+						"2",
+						"offline"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
