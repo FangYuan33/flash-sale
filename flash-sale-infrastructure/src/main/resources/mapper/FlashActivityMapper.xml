@@ -24,11 +24,11 @@
         modified_time,
         create_time)
         VALUES (
-        #{activityName,jdbcType=VARCHAR},
-        #{startTime,jdbcType=TIMESTAMP},
-        #{endTime,jdbcType=TIMESTAMP},
-        #{activityDesc,jdbcType=LONGVARCHAR},
-        #{status,jdbcType=INTEGER},
+        #{activityName, jdbcType=VARCHAR},
+        #{startTime, jdbcType=TIMESTAMP},
+        #{endTime, jdbcType=TIMESTAMP},
+        #{activityDesc, jdbcType=LONGVARCHAR},
+        #{status, jdbcType=INTEGER},
         now(),
         now()
         )
@@ -37,4 +37,32 @@
         </selectKey>
     </insert>
 
+    <select id="getById" resultType="com.actionworks.flashsale.persistence.model.FlashActivityDO">
+        select <include refid="ALL_COLUMNS"></include>
+        from flash_activity
+        where flash_activity.id = #{activityId}
+    </select>
+
+    <update id="updateById" parameterType="com.actionworks.flashsale.persistence.model.FlashActivityDO">
+        update flash_activity
+        <set>
+            <if test="activityName != null and activityName != ''">
+                activity_name = #{activityName},
+            </if>
+            <if test="activityDesc != null and activityDesc != ''">
+                activity_desc = #{activityDesc},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            modified_time = now()
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

@@ -1,6 +1,7 @@
 package com.actionworks.flashsale.domain.model.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
  * @author fangyuan
  */
 @Data
+@Accessors(chain = true)
 public class FlashActivity {
 
     /**

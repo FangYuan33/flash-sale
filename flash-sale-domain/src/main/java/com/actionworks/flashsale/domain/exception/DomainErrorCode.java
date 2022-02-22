@@ -13,11 +13,12 @@ public enum DomainErrorCode implements ErrorCodeI {
     /**
      * 通用错误码
      */
-    PARAMS_INVALID("PARAMS_INVALID", "参数错误"),
+    PARAMS_INVALID("500", "参数错误"),
     /**
      * 活动相关错误码
      */
-    ONLINE_FLASH_ACTIVITY_PARAMS_INVALID("ONLINE_FLASH_ACTIVITY_PARAMS_INVALID", "待上线的活动参数无效");
+    FLASH_ACTIVITY_NOT_EXIST("301", "活动不存在"),
+    ONLINE_FLASH_ACTIVITY_PARAMS_INVALID("302", "待上线的活动参数无效");
 
     private final String errCode;
     private final String errDesc;

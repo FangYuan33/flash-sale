@@ -11,4 +11,11 @@ public interface FlashActivityDomainService {
      * 发布秒杀活动
      */
     void publishActivity(FlashActivity flashActivity);
+
+    /**
+     * 上线活动
+     *
+     * @param activityId 活动ID
+     */
+    void onlineActivity(Long activityId);
 }

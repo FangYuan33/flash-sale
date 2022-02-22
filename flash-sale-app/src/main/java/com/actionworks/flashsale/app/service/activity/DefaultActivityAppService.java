@@ -32,4 +32,13 @@ public class DefaultActivityAppService implements FlashActivityAppService {
 
         return AppResult.success();
     }
+
+    @Override
+    public <T> AppResult<T> onlineFlashActivity(Long activityId) {
+        log.info("activityOnline|上线秒杀活动|{}", activityId);
+
+        flashActivityDomainService.onlineActivity(activityId);
+
+        return AppResult.success();
+    }
 }

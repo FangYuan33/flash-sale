@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "670ed1af-5aba-4d69-a11f-eb70adee3e5d",
+		"_postman_id": "61095404-7bb8-41e4-a879-0d5772c222fa",
 		"name": "我的秒杀测试",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -28,6 +28,27 @@
 					"path": [
 						"api",
 						"flash-activities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "上线秒杀活动",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:8090/api/flash-activities/2/online",
+					"host": [
+						"localhost"
+					],
+					"port": "8090",
+					"path": [
+						"api",
+						"flash-activities",
+						"2",
+						"online"
 					]
 				}
 			},
