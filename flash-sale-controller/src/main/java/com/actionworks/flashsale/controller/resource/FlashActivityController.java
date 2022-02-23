@@ -2,15 +2,18 @@ package com.actionworks.flashsale.controller.resource;
 
 import com.actionworks.flashsale.app.model.command.FlashActivityPublishCommand;
 import com.actionworks.flashsale.app.model.dto.FlashActivityDTO;
+import com.actionworks.flashsale.app.model.query.FlashActivitiesQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
 import com.actionworks.flashsale.app.service.activity.FlashActivityAppService;
 import com.actionworks.flashsale.controller.model.convertor.FlashActivityConvertor;
 import com.actionworks.flashsale.controller.model.convertor.ResponseConvertor;
 import com.actionworks.flashsale.controller.model.request.FlashActivityPublishRequest;
+import com.actionworks.flashsale.controller.model.request.FlashActivityQueryRequest;
 import com.alibaba.cola.dto.SingleResponse;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 秒杀活动Controller
@@ -69,5 +72,17 @@ public class FlashActivityController {
         AppResult<FlashActivityDTO> flashActivity = flashActivityAppService.getFlashActivity(activityId);
 
         return ResponseConvertor.with(flashActivity);
+    }
+
+    /**
+     * 根据条件获取秒杀活动
+     */
+    @GetMapping(value = "/flash-activities")
+    public SingleResponse<List<FlashActivityDTO>> getFlashActivities(@RequestBody FlashActivityQueryRequest request) {
+        FlashActivitiesQuery flashActivitiesQuery = FlashActivityConvertor.toQuery(request);
+
+        AppResult<List<FlashActivityDTO>> activities = flashActivityAppService.getFlashActivities(flashActivitiesQuery);
+
+        return ResponseConvertor.with(activities);
     }
 }

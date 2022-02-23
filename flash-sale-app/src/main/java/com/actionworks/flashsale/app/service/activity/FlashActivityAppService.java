@@ -1,7 +1,11 @@
 package com.actionworks.flashsale.app.service.activity;
 
 import com.actionworks.flashsale.app.model.command.FlashActivityPublishCommand;
+import com.actionworks.flashsale.app.model.dto.FlashActivityDTO;
+import com.actionworks.flashsale.app.model.query.FlashActivitiesQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
+
+import java.util.List;
 
 /**
  * 秒杀活动Service
@@ -29,5 +33,13 @@ public interface FlashActivityAppService {
      */
     <T> AppResult<T> offlineFlashActivity(Long activityId);
 
-    <T> AppResult<T> getFlashActivity(Long activityId);
+    /**
+     * 根据ID获取秒杀活动
+     */
+    AppResult<FlashActivityDTO> getFlashActivity(Long activityId);
+
+    /**
+     * 根据条件获取秒杀活动
+     */
+    AppResult<List<FlashActivityDTO>> getFlashActivities(FlashActivitiesQuery flashActivitiesQuery);
 }

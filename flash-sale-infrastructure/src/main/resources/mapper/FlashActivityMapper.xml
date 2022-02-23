@@ -38,7 +38,7 @@
     </insert>
 
     <select id="getById" resultType="com.actionworks.flashsale.persistence.model.FlashActivityDO">
-        select <include refid="ALL_COLUMNS"></include>
+        select <include refid="ALL_COLUMNS"/>
         from flash_activity
         where flash_activity.id = #{activityId}
     </select>
@@ -65,4 +65,52 @@
         </set>
         where id = #{id}
     </update>
+
+    <select id="getByQueryCondition" resultType="com.actionworks.flashsale.persistence.model.FlashActivityDO">
+        select <include refid="ALL_COLUMNS"/>
+        from flash_activity
+        <where>
+            <if test="activityName != null and activityName != ''">
+                activity_name like concat('%', #{activityName}, '%')
+            </if>
+            <if test="activityDesc != null and activityDesc != ''">
+                and activity_desc like concat('%', #{activityDesc}, '%')
+            </if>
+            <if test="startTime != null">
+                and start_time = #{startTime}
+            </if>
+            <if test="endTime != null">
+                and end_time = #{endTime}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by create_time desc
+        limit #{offset}, #{pageSize}
+    </select>
+
+    <select id="countByQueryCondition" resultType="int"
+            parameterType="com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition">
+        select count(*)
+        from flash_activity
+        <where>
+            <if test="activityName != null and activityName != ''">
+                activity_name like concat('%', #{activityName}, '%')
+            </if>
+            <if test="activityDesc != null and activityDesc != ''">
+                and activity_desc like concat('%', #{activityDesc}, '%')
+            </if>
+            <if test="startTime != null">
+                and start_time = #{startTime}
+            </if>
+            <if test="endTime != null">
+                and end_time = #{endTime}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        limit #{offset}, #{pageSize}
+    </select>
 </mapper>

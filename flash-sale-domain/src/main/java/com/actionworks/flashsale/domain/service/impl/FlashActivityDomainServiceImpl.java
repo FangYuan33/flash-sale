@@ -2,6 +2,8 @@ package com.actionworks.flashsale.domain.service.impl;
 
 import com.actionworks.flashsale.domain.exception.DomainException;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
+import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
+import com.actionworks.flashsale.domain.model.query.PageResult;
 import com.actionworks.flashsale.domain.repository.FlashActivityRepository;
 import com.actionworks.flashsale.domain.service.FlashActivityDomainService;
 import com.alibaba.fastjson.JSON;
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static com.actionworks.flashsale.domain.exception.DomainErrorCode.*;
@@ -75,5 +79,19 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
 
         // orElseThrow 要么返回非空的值，否则抛出异常
         return flashActivityOptional.orElseThrow(() -> new DomainException(FLASH_ACTIVITY_NOT_EXIST));
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public PageResult<FlashActivity> getFlashActivities(FlashActivityQueryCondition flashActivityQueryCondition) {
+        // 校正分页参数
+        flashActivityQueryCondition.buildParams();
+
+        // 查询实体对象和计数
+        Optional<List<FlashActivity>> flashActivities =
+                flashActivityRepository.findByQueryCondition(flashActivityQueryCondition);
+        int count = flashActivityRepository.countByQueryCondition(flashActivityQueryCondition);
+
+        return PageResult.with(flashActivities.orElse(Collections.EMPTY_LIST), count);
     }
 }

@@ -1,7 +1,9 @@
 package com.actionworks.flashsale.domain.repository;
 
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
+import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,4 +32,14 @@ public interface FlashActivityRepository {
      * @param flashActivity 指定了ID的活动实体类
      */
     void updateById(FlashActivity flashActivity);
+
+    /**
+     * 条件查询秒杀活动
+     */
+    Optional<List<FlashActivity>> findByQueryCondition(FlashActivityQueryCondition flashActivityQueryCondition);
+
+    /**
+     * 条件查询计数
+     */
+    int countByQueryCondition(FlashActivityQueryCondition flashActivityQueryCondition);
 }

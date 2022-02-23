@@ -1,7 +1,9 @@
 package com.actionworks.flashsale.controller.model.convertor;
 
 import com.actionworks.flashsale.app.model.command.FlashActivityPublishCommand;
+import com.actionworks.flashsale.app.model.query.FlashActivitiesQuery;
 import com.actionworks.flashsale.controller.model.request.FlashActivityPublishRequest;
+import com.actionworks.flashsale.controller.model.request.FlashActivityQueryRequest;
 import org.springframework.beans.BeanUtils;
 
 /**
@@ -21,5 +23,16 @@ public class FlashActivityConvertor {
         BeanUtils.copyProperties(request, activityPublishCommand);
 
         return activityPublishCommand;
+    }
+
+    public static FlashActivitiesQuery toQuery(FlashActivityQueryRequest request) {
+        if (request == null) {
+            return null;
+        }
+
+        FlashActivitiesQuery flashActivitiesQuery = new FlashActivitiesQuery();
+        BeanUtils.copyProperties(request, flashActivitiesQuery);
+
+        return flashActivitiesQuery;
     }
 }
