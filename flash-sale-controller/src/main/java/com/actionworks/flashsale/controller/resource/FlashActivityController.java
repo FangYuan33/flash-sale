@@ -1,6 +1,7 @@
 package com.actionworks.flashsale.controller.resource;
 
 import com.actionworks.flashsale.app.model.command.FlashActivityPublishCommand;
+import com.actionworks.flashsale.app.model.dto.FlashActivityDTO;
 import com.actionworks.flashsale.app.model.result.AppResult;
 import com.actionworks.flashsale.app.service.activity.FlashActivityAppService;
 import com.actionworks.flashsale.controller.model.convertor.FlashActivityConvertor;
@@ -58,5 +59,15 @@ public class FlashActivityController {
         AppResult<T> appResult = flashActivityAppService.offlineFlashActivity(activityId);
 
         return ResponseConvertor.with(appResult);
+    }
+
+    /**
+     * 根据ID获取活动
+     */
+    @GetMapping(value = "/flash-activities/{activityId}")
+    public SingleResponse<FlashActivityDTO> getFlashActivity(@PathVariable("activityId") Long activityId) {
+        AppResult<FlashActivityDTO> flashActivity = flashActivityAppService.getFlashActivity(activityId);
+
+        return ResponseConvertor.with(flashActivity);
     }
 }

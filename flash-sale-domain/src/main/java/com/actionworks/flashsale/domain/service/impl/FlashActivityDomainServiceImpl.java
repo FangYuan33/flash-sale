@@ -61,6 +61,11 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
         log.info("activityOffline|活动已下线|{}", activityId);
     }
 
+    @Override
+    public FlashActivity getFlashActivity(Long activityId) {
+        return getActivityById(activityId);
+    }
+
     private FlashActivity getActivityById(Long activityId) {
         if (activityId == null) {
             throw new DomainException(PARAMS_INVALID);

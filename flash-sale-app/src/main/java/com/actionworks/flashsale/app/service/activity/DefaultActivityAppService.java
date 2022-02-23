@@ -3,7 +3,9 @@ package com.actionworks.flashsale.app.service.activity;
 import com.actionworks.flashsale.app.exception.BizException;
 import com.actionworks.flashsale.app.model.convertor.FlashActivityAppConvertor;
 import com.actionworks.flashsale.app.model.command.FlashActivityPublishCommand;
+import com.actionworks.flashsale.app.model.dto.FlashActivityDTO;
 import com.actionworks.flashsale.app.model.result.AppResult;
+import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.service.FlashActivityDomainService;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
@@ -49,5 +51,13 @@ public class DefaultActivityAppService implements FlashActivityAppService {
         flashActivityDomainService.offlineActivity(activityId);
 
         return AppResult.success();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public AppResult<FlashActivityDTO> getFlashActivity(Long activityId) {
+        FlashActivity flashActivity = flashActivityDomainService.getFlashActivity(activityId);
+
+        return AppResult.success("查询成功", FlashActivityAppConvertor.toFlashActivityDTO(flashActivity));
     }
 }

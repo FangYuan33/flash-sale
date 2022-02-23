@@ -25,4 +25,9 @@ public interface FlashActivityDomainService {
      * @param activityId 活动ID
      */
     void offlineActivity(Long activityId);
+
+    /**
+     * 根据ID获取单个活动
+     */
+    FlashActivity getFlashActivity(Long activityId);
 }
