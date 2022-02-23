@@ -60,6 +60,7 @@ public class DefaultActivityAppService implements FlashActivityAppService {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public AppResult<FlashActivityDTO> getFlashActivity(Long activityId) {
         FlashActivity flashActivity = flashActivityDomainService.getFlashActivity(activityId);
 
@@ -67,6 +68,7 @@ public class DefaultActivityAppService implements FlashActivityAppService {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public AppResult<List<FlashActivityDTO>> getFlashActivities(FlashActivitiesQuery flashActivitiesQuery) {
         FlashActivityQueryCondition flashActivityQueryCondition =
                 FlashActivityAppConvertor.toFlashActivityQueryCondition(flashActivitiesQuery);

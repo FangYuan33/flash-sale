@@ -1,7 +1,6 @@
 package com.actionworks.flashsale.controller.resource;
 
 import com.actionworks.flashsale.app.model.command.FlashActivityPublishCommand;
-import com.actionworks.flashsale.app.model.dto.FlashActivityDTO;
 import com.actionworks.flashsale.app.model.query.FlashActivitiesQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
 import com.actionworks.flashsale.app.service.activity.FlashActivityAppService;
@@ -9,6 +8,7 @@ import com.actionworks.flashsale.controller.model.convertor.FlashActivityConvert
 import com.actionworks.flashsale.controller.model.convertor.ResponseConvertor;
 import com.actionworks.flashsale.controller.model.request.FlashActivityPublishRequest;
 import com.actionworks.flashsale.controller.model.request.FlashActivityQueryRequest;
+import com.actionworks.flashsale.controller.model.response.FlashActivityResponse;
 import com.alibaba.cola.dto.SingleResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,21 +68,17 @@ public class FlashActivityController {
      * 根据ID获取活动
      */
     @GetMapping(value = "/flash-activities/{activityId}")
-    public SingleResponse<FlashActivityDTO> getFlashActivity(@PathVariable("activityId") Long activityId) {
-        AppResult<FlashActivityDTO> flashActivity = flashActivityAppService.getFlashActivity(activityId);
-
-        return ResponseConvertor.with(flashActivity);
+    public SingleResponse<FlashActivityResponse> getFlashActivity(@PathVariable("activityId") Long activityId) {
+        return ResponseConvertor.with(flashActivityAppService.getFlashActivity(activityId));
     }
 
     /**
      * 根据条件获取秒杀活动
      */
     @GetMapping(value = "/flash-activities")
-    public SingleResponse<List<FlashActivityDTO>> getFlashActivities(@RequestBody FlashActivityQueryRequest request) {
+    public SingleResponse<List<FlashActivityResponse>> getFlashActivities(@RequestBody FlashActivityQueryRequest request) {
         FlashActivitiesQuery flashActivitiesQuery = FlashActivityConvertor.toQuery(request);
 
-        AppResult<List<FlashActivityDTO>> activities = flashActivityAppService.getFlashActivities(flashActivitiesQuery);
-
-        return ResponseConvertor.with(activities);
+        return ResponseConvertor.with(flashActivityAppService.getFlashActivities(flashActivitiesQuery));
     }
 }

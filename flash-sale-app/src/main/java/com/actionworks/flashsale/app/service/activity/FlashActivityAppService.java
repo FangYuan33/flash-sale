@@ -36,10 +36,10 @@ public interface FlashActivityAppService {
     /**
      * 根据ID获取秒杀活动
      */
-    AppResult<FlashActivityDTO> getFlashActivity(Long activityId);
+    <T> AppResult<T> getFlashActivity(Long activityId);
 
     /**
      * 根据条件获取秒杀活动
      */
-    AppResult<List<FlashActivityDTO>> getFlashActivities(FlashActivitiesQuery flashActivitiesQuery);
+    <T> AppResult<List<T>> getFlashActivities(FlashActivitiesQuery flashActivitiesQuery);
 }
