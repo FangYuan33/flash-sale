@@ -1,7 +1,6 @@
 package com.actionworks.flashsale.app.service.activity;
 
 import com.actionworks.flashsale.app.model.command.FlashActivityPublishCommand;
-import com.actionworks.flashsale.app.model.dto.FlashActivityDTO;
 import com.actionworks.flashsale.app.model.query.FlashActivitiesQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
 
