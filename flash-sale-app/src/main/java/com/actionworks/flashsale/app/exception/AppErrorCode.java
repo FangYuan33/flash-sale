@@ -15,7 +15,9 @@ public enum AppErrorCode implements ErrorCodeI {
     INVALID_PARAMS("INVALID_PARAMS", "参数错误"),
     TRY_LATER("TRY_LATER", "稍后再试"),
     FREQUENTLY_ERROR("FREQUENTLY_ERROR", "操作频繁，稍后再试"),
-    BUSINESS_ERROR("BUSINESS_ERROR", "未知错误");
+    BUSINESS_ERROR("BUSINESS_ERROR", "未知错误"),
+
+    ACTIVITY_NOT_EXIST("ACTIVITY_NOT_EXIST", "秒杀活动不存在");
 
     /**
      * 错误码

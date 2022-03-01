@@ -7,9 +7,6 @@ import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
 import org.springframework.beans.BeanUtils;
 
-/**
- * app层对象转换器
- */
 public class FlashActivityAppConvertor {
     public static FlashActivity toDomain(FlashActivityPublishCommand flashActivityPublishCommand) {
         if (flashActivityPublishCommand == null) {

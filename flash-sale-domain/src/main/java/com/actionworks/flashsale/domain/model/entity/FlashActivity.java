@@ -46,7 +46,7 @@ public class FlashActivity {
     private Integer status;
 
     /**
-     * 校验创建秒杀活动的参数参数
+     * 校验创建秒杀活动的参数
      * 活动名、开始时间、结束时间非空
      * 结束时间在开始之间之后、结束时间大于当前时间
      */

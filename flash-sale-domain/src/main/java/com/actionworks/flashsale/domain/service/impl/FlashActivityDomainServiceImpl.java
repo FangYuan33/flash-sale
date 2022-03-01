@@ -29,7 +29,7 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
     @Override
     public void publishActivity(FlashActivity flashActivity) {
         if (flashActivity == null || !flashActivity.validateParamsForCreate()) {
-            throw new DomainException(PARAMS_INVALID);
+            throw new DomainException(PUBLISH_FLASH_ACTIVITY_PARAMS_INVALID);
         }
 
         // 状态为已发布
