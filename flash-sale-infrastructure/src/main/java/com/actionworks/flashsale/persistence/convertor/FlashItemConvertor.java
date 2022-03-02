@@ -15,4 +15,14 @@ public class FlashItemConvertor {
         BeanUtils.copyProperties(flashItem, flashItemDO);
         return flashItemDO;
     }
+
+    public static FlashItem toDomainObject(FlashItemDO flashItemDO) {
+        if (flashItemDO == null) {
+            return null;
+        }
+
+        FlashItem flashItem = new FlashItem();
+        BeanUtils.copyProperties(flashItemDO, flashItem);
+        return flashItem;
+    }
 }

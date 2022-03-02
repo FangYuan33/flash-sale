@@ -30,7 +30,7 @@ public class FlashActivityRepositoryImpl implements FlashActivityRepository {
     }
 
     @Override
-    public Optional<FlashActivity> findById(Long activityId) {
+    public Optional<FlashActivity> getById(Long activityId) {
         FlashActivityDO flashActivity = flashActivityMapper.selectById(activityId);
 
         if (flashActivity == null) {

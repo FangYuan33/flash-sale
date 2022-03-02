@@ -20,13 +20,11 @@ public enum DomainErrorCode implements ErrorCodeI {
     FLASH_ACTIVITY_NOT_EXIST("301", "活动不存在"),
     PUBLISH_FLASH_ACTIVITY_PARAMS_INVALID("302", "待上线的活动参数无效"),
     OFFLINE_FLASH_ACTIVITY_FORBIDDEN("303", "未上线的活动不能下线"),
-
     /**
      * 秒杀活动相关错误码
      */
-    PUBLISH_FLASH_ITEM_PARAMS_INVALID("401", "待发布的秒杀活动参数无效");
-
-
+    PUBLISH_FLASH_ITEM_PARAMS_INVALID("401", "待发布的秒杀活动参数无效"),
+    FLASH_ITEM_NOT_EXIST("402", "秒杀商品不存在");
 
     private final String errCode;
     private final String errDesc;

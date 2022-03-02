@@ -7,10 +7,7 @@ import com.actionworks.flashsale.controller.model.convertor.FlashItemConvertor;
 import com.actionworks.flashsale.controller.model.convertor.ResponseConvertor;
 import com.actionworks.flashsale.controller.model.request.FlashItemPublishRequest;
 import com.alibaba.cola.dto.SingleResponse;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -36,6 +33,18 @@ public class FlashItemController {
         FlashItemPublishCommand command = FlashItemConvertor.toCommand(request);
 
         AppResult<T> appResult = flashItemAppService.publishFlashItem(activityId, command);
+
+        return ResponseConvertor.with(appResult);
+    }
+
+    /**
+     * 上线秒杀商品
+     *
+     * @param itemId 秒杀商品ID
+     */
+    @PutMapping(value = "/flash-items/{itemId}/online")
+    public <T> SingleResponse<T> onlineFlashItem(@PathVariable Long itemId) {
+        AppResult<T> appResult = flashItemAppService.onlineFlashItem(itemId);
 
         return ResponseConvertor.with(appResult);
     }

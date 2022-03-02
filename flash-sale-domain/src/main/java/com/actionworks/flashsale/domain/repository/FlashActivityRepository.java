@@ -24,7 +24,7 @@ public interface FlashActivityRepository {
      *
      * @param activityId 活动ID
      */
-    Optional<FlashActivity> findById(Long activityId);
+    Optional<FlashActivity> getById(Long activityId);
 
     /**
      * 根据ID更新活动

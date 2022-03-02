@@ -10,4 +10,11 @@ public interface FlashItemAppService {
      * @param activityId 秒杀活动ID
      */
     <T> AppResult<T> publishFlashItem(Long activityId, FlashItemPublishCommand command);
+
+    /**
+     * 上线秒杀商品
+     *
+     * @param itemId 秒杀商品ID
+     */
+    <T> AppResult<T> onlineFlashItem(Long itemId);
 }

@@ -75,7 +75,7 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
             throw new DomainException(PARAMS_INVALID);
         }
 
-        Optional<FlashActivity> flashActivityOptional = flashActivityRepository.findById(activityId);
+        Optional<FlashActivity> flashActivityOptional = flashActivityRepository.getById(activityId);
 
         // orElseThrow 要么返回非空的值，否则抛出异常
         return flashActivityOptional.orElseThrow(() -> new DomainException(FLASH_ACTIVITY_NOT_EXIST));

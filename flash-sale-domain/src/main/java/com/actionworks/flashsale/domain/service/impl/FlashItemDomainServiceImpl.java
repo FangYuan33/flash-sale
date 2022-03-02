@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+import java.util.Optional;
+
+import static com.actionworks.flashsale.domain.exception.DomainErrorCode.FLASH_ITEM_NOT_EXIST;
 import static com.actionworks.flashsale.domain.exception.DomainErrorCode.PUBLISH_FLASH_ITEM_PARAMS_INVALID;
 
 @Slf4j
@@ -30,5 +33,21 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
         flashItem.setStatus(FlashItemStatus.PUBLISHED.getCode());
         flashItemRepository.save(flashItem);
         log.info("activityPublish|秒杀商品已发布|{}", JSON.toJSONString(flashItem));
+    }
+
+    @Override
+    public void onlineFlashItem(Long itemId) {
+        Optional<FlashItem> flashItemOptional = flashItemRepository.getById(itemId);
+        FlashItem flashItem = flashItemOptional.orElseThrow(() -> new DomainException(FLASH_ITEM_NOT_EXIST));
+
+        // 状态校验，若为上线直接返回
+        if (FlashItemStatus.ONLINE.getCode().equals(flashItem.getStatus())) {
+            return;
+        }
+
+        // 更新状态为已上线
+        flashItem.setStatus(FlashItemStatus.ONLINE.getCode());
+        flashItemRepository.updateById(flashItem);
+        log.info("activityPublish|秒杀商品已上线|{}", JSON.toJSONString(flashItem));
     }
 }
