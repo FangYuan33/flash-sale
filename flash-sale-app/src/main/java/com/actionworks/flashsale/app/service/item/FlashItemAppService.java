@@ -17,4 +17,11 @@ public interface FlashItemAppService {
      * @param itemId 秒杀商品ID
      */
     <T> AppResult<T> onlineFlashItem(Long itemId);
+
+    /**
+     * 下线秒杀商品
+     *
+     * @param itemId 秒杀商品ID
+     */
+    <T> AppResult<T> offlineFlashItem(Long itemId);
 }

@@ -65,4 +65,13 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
 
         return AppResult.success();
     }
+
+    @Override
+    public <T> AppResult<T> offlineFlashItem(Long itemId) {
+        log.info("offlineFlashItem|下线秒杀商品|{}", itemId);
+
+        flashItemDomainService.offlineFlashItem(itemId);
+
+        return AppResult.success();
+    }
 }

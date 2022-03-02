@@ -48,4 +48,16 @@ public class FlashItemController {
 
         return ResponseConvertor.with(appResult);
     }
+
+    /**
+     * 下线秒杀商品
+     *
+     * @param itemId 秒杀商品ID
+     */
+    @PutMapping(value = "/flash-items/{itemId}/offline")
+    public <T> SingleResponse<T> offlineFlashItem(@PathVariable Long itemId) {
+        AppResult<T> appResult = flashItemAppService.offlineFlashItem(itemId);
+
+        return ResponseConvertor.with(appResult);
+    }
 }

@@ -37,8 +37,7 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
 
     @Override
     public void onlineFlashItem(Long itemId) {
-        Optional<FlashItem> flashItemOptional = flashItemRepository.getById(itemId);
-        FlashItem flashItem = flashItemOptional.orElseThrow(() -> new DomainException(FLASH_ITEM_NOT_EXIST));
+        FlashItem flashItem = getFlashItemById(itemId);
 
         // 状态校验，若为上线直接返回
         if (FlashItemStatus.ONLINE.getCode().equals(flashItem.getStatus())) {
@@ -48,6 +47,28 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
         // 更新状态为已上线
         flashItem.setStatus(FlashItemStatus.ONLINE.getCode());
         flashItemRepository.updateById(flashItem);
-        log.info("activityPublish|秒杀商品已上线|{}", JSON.toJSONString(flashItem));
+        log.info("onlineFlashItem|秒杀商品已上线|{}", JSON.toJSONString(flashItem));
+    }
+
+    @Override
+    public void offlineFlashItem(Long itemId) {
+        FlashItem flashItem = getFlashItemById(itemId);
+
+        // 状态校验，若为已下线直接返回
+        if (FlashItemStatus.OFFLINE.getCode().equals(flashItem.getStatus())) {
+            return;
+        }
+
+        // 更新结果为已下线
+        flashItem.setStatus(FlashItemStatus.OFFLINE.getCode());
+        flashItemRepository.updateById(flashItem);
+        log.info("offlineFlashItem|秒杀商品已下线|{}", JSON.toJSONString(flashItem));
+    }
+
+    private FlashItem getFlashItemById(Long itemId) {
+        Optional<FlashItem> flashItemOptional = flashItemRepository.getById(itemId);
+
+        // 无对应的秒杀商品则抛出业务异常
+        return flashItemOptional.orElseThrow(() -> new DomainException(FLASH_ITEM_NOT_EXIST));
     }
 }
