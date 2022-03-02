@@ -6,6 +6,7 @@ import com.actionworks.flashsale.app.service.item.FlashItemAppService;
 import com.actionworks.flashsale.controller.model.convertor.FlashItemConvertor;
 import com.actionworks.flashsale.controller.model.convertor.ResponseConvertor;
 import com.actionworks.flashsale.controller.model.request.FlashItemPublishRequest;
+import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import com.alibaba.cola.dto.SingleResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,6 +58,18 @@ public class FlashItemController {
     @PutMapping(value = "/flash-items/{itemId}/offline")
     public <T> SingleResponse<T> offlineFlashItem(@PathVariable Long itemId) {
         AppResult<T> appResult = flashItemAppService.offlineFlashItem(itemId);
+
+        return ResponseConvertor.with(appResult);
+    }
+
+    /**
+     * 通过ID 获取单条秒杀商品信息
+     *
+     * @param itemId 秒杀商品ID
+     */
+    @GetMapping("/flash-items/{itemId}")
+    public SingleResponse<FlashItem> getFlashItem(@PathVariable Long itemId) {
+        AppResult<FlashItem> appResult = flashItemAppService.getById(itemId);
 
         return ResponseConvertor.with(appResult);
     }

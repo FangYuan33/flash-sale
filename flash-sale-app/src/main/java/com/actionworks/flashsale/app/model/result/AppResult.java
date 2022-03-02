@@ -66,6 +66,10 @@ public class AppResult<T> {
         return AppResult.success(msg, null);
     }
 
+    public static <T> AppResult<T> success(T data) {
+        return AppResult.success("操作成功", data);
+    }
+
     public static <T> AppResult<T> success(String msg, T data) {
         return new AppResult<>(Type.SUCCESS.getValue(), true, msg, data);
     }

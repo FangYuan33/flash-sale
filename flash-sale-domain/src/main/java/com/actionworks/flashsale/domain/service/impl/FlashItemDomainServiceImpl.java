@@ -65,6 +65,11 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
         log.info("offlineFlashItem|秒杀商品已下线|{}", JSON.toJSONString(flashItem));
     }
 
+    @Override
+    public FlashItem getById(Long itemId) {
+        return getFlashItemById(itemId);
+    }
+
     private FlashItem getFlashItemById(Long itemId) {
         Optional<FlashItem> flashItemOptional = flashItemRepository.getById(itemId);
 

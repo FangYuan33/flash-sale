@@ -21,4 +21,11 @@ public interface FlashItemDomainService {
      * @param itemId 秒杀商品ID
      */
     void offlineFlashItem(Long itemId);
+
+    /**
+     * 通过ID获取秒杀商品
+     *
+     * @param itemId 秒杀商品ID
+     */
+    FlashItem getById(Long itemId);
 }

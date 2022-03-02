@@ -64,7 +64,7 @@ public class DefaultActivityAppService implements FlashActivityAppService {
     public AppResult<FlashActivityDTO> getFlashActivity(Long activityId) {
         FlashActivity flashActivity = flashActivityDomainService.getFlashActivity(activityId);
 
-        return AppResult.success("查询成功", FlashActivityAppConvertor.toFlashActivityDTO(flashActivity));
+        return AppResult.success(FlashActivityAppConvertor.toFlashActivityDTO(flashActivity));
     }
 
     @Override
@@ -80,6 +80,6 @@ public class DefaultActivityAppService implements FlashActivityAppService {
         List<FlashActivityDTO> result = flashActivities.getData()
                 .stream().map(FlashActivityAppConvertor::toFlashActivityDTO).collect(Collectors.toList());
 
-        return AppResult.success("查询成功", result);
+        return AppResult.success(result);
     }
 }

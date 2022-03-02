@@ -74,4 +74,12 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
 
         return AppResult.success();
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public AppResult<FlashItem> getById(Long itemId) {
+        FlashItem flashItem = flashItemDomainService.getById(itemId);
+
+        return AppResult.success(flashItem);
+    }
 }
