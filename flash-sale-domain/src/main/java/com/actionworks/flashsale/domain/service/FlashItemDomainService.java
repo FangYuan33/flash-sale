@@ -1,6 +1,10 @@
 package com.actionworks.flashsale.domain.service;
 
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
+import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
+import com.actionworks.flashsale.domain.model.query.PageResult;
+
+import java.util.List;
 
 public interface FlashItemDomainService {
     /**
@@ -28,4 +32,9 @@ public interface FlashItemDomainService {
      * @param itemId 秒杀商品ID
      */
     FlashItem getById(Long itemId);
+
+    /**
+     * 条件查询秒杀商品
+     */
+    PageResult<FlashItem> listByQueryCondition(FlashItemQueryCondition queryCondition);
 }

@@ -1,6 +1,7 @@
 package com.actionworks.flashsale.persistence.repository;
 
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
+import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.exception.RepositoryException;
 import com.actionworks.flashsale.persistence.convertor.FlashItemConvertor;
@@ -9,7 +10,9 @@ import com.actionworks.flashsale.persistence.model.FlashItemDO;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.actionworks.flashsale.exception.RepositoryErrorCode.ID_NOT_EXIST;
 
@@ -46,5 +49,25 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
         FlashItemDO flashItemDO = FlashItemConvertor.toDataObject(flashItem);
 
         flashItemMapper.updateById(flashItemDO);
+    }
+
+    @Override
+    public Optional<List<FlashItem>> listByQueryCondition(FlashItemQueryCondition queryCondition) {
+        List<FlashItemDO> flashItemDOList = flashItemMapper.listByQueryCondition(queryCondition);
+
+        if (flashItemDOList.isEmpty()) {
+            return Optional.empty();
+        }
+
+        // stream 转换对象类型
+        List<FlashItem> flashItems = flashItemDOList.stream()
+                .map(FlashItemConvertor::toDomainObject).collect(Collectors.toList());
+
+        return Optional.of(flashItems);
+    }
+
+    @Override
+    public int countByQueryCondition(FlashItemQueryCondition queryCondition) {
+        return flashItemMapper.countByQueryCondition(queryCondition);
     }
 }

@@ -3,6 +3,8 @@ package com.actionworks.flashsale.domain.service.impl;
 import com.actionworks.flashsale.domain.exception.DomainException;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
+import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
+import com.actionworks.flashsale.domain.model.query.PageResult;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import com.alibaba.fastjson.JSON;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static com.actionworks.flashsale.domain.exception.DomainErrorCode.FLASH_ITEM_NOT_EXIST;
@@ -75,5 +79,17 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
 
         // 无对应的秒杀商品则抛出业务异常
         return flashItemOptional.orElseThrow(() -> new DomainException(FLASH_ITEM_NOT_EXIST));
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public PageResult<FlashItem> listByQueryCondition(FlashItemQueryCondition queryCondition) {
+        // 校正分页参数
+        queryCondition.buildParams();
+
+        Optional<List<FlashItem>> flashItems = flashItemRepository.listByQueryCondition(queryCondition);
+        int count = flashItemRepository.countByQueryCondition(queryCondition);
+
+        return PageResult.with(flashItems.orElse(Collections.EMPTY_LIST), count);
     }
 }

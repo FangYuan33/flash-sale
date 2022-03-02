@@ -1,6 +1,7 @@
 package com.actionworks.flashsale.app.service.item;
 
 import com.actionworks.flashsale.app.model.command.FlashItemPublishCommand;
+import com.actionworks.flashsale.app.model.query.FlashItemQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
 
 public interface FlashItemAppService {
@@ -31,4 +32,9 @@ public interface FlashItemAppService {
      * @param itemId 秒杀商品ID
      */
     <T> AppResult<T> getById(Long itemId);
+
+    /**
+     * 条件查询秒杀商品
+     */
+    <T> AppResult<T> getFlashItems(FlashItemQuery query);
 }

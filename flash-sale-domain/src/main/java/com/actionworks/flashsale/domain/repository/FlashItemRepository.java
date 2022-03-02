@@ -1,7 +1,9 @@
 package com.actionworks.flashsale.domain.repository;
 
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
+import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface FlashItemRepository {
@@ -22,4 +24,14 @@ public interface FlashItemRepository {
      * @param flashItem 必须包含商品ID
      */
     void updateById(FlashItem flashItem);
+
+    /**
+     * 条件查询秒杀商品
+     */
+    Optional<List<FlashItem>> listByQueryCondition(FlashItemQueryCondition queryCondition);
+
+    /**
+     * 条件计数
+     */
+    int countByQueryCondition(FlashItemQueryCondition queryCondition);
 }

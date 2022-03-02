@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 public class BaseDO {
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    protected Long id;
 
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+    protected LocalDateTime createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime modifiedTime;
+    protected LocalDateTime modifiedTime;
 }

@@ -4,9 +4,12 @@ import com.actionworks.flashsale.app.exception.BizException;
 import com.actionworks.flashsale.app.model.command.FlashItemPublishCommand;
 import com.actionworks.flashsale.app.model.convertor.FlashItemAppConvertor;
 import com.actionworks.flashsale.app.model.dto.FlashItemDTO;
+import com.actionworks.flashsale.app.model.query.FlashItemQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
+import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
+import com.actionworks.flashsale.domain.model.query.PageResult;
 import com.actionworks.flashsale.domain.service.FlashActivityDomainService;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import com.alibaba.fastjson.JSON;
@@ -14,6 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.actionworks.flashsale.app.exception.AppErrorCode.ACTIVITY_NOT_EXIST;
 import static com.actionworks.flashsale.app.exception.AppErrorCode.INVALID_PARAMS;
@@ -84,5 +90,19 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
         FlashItemDTO flashItemDTO = FlashItemAppConvertor.toFlashItemDTO(flashItem);
 
         return AppResult.success(flashItemDTO);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public AppResult<List<FlashItemDTO>> getFlashItems(FlashItemQuery query) {
+        FlashItemQueryCondition queryCondition = FlashItemAppConvertor.toFlashItemQueryCondition(query);
+
+        PageResult<FlashItem> flashItemPageResult = flashItemDomainService.listByQueryCondition(queryCondition);
+
+        // stream 转换对象类型
+        List<FlashItemDTO> itemDTOS = flashItemPageResult.getData().stream()
+                .map(FlashItemAppConvertor::toFlashItemDTO).collect(Collectors.toList());
+
+        return AppResult.success(itemDTOS);
     }
 }
