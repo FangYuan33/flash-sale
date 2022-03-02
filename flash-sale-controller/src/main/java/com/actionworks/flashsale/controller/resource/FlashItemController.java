@@ -6,11 +6,13 @@ import com.actionworks.flashsale.app.service.item.FlashItemAppService;
 import com.actionworks.flashsale.controller.model.convertor.FlashItemConvertor;
 import com.actionworks.flashsale.controller.model.convertor.ResponseConvertor;
 import com.actionworks.flashsale.controller.model.request.FlashItemPublishRequest;
+import com.actionworks.flashsale.controller.model.response.FlashItemResponse;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import com.alibaba.cola.dto.SingleResponse;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 秒杀品Controller
@@ -68,9 +70,7 @@ public class FlashItemController {
      * @param itemId 秒杀商品ID
      */
     @GetMapping("/flash-items/{itemId}")
-    public SingleResponse<FlashItem> getFlashItem(@PathVariable Long itemId) {
-        AppResult<FlashItem> appResult = flashItemAppService.getById(itemId);
-
-        return ResponseConvertor.with(appResult);
+    public SingleResponse<FlashItemResponse> getFlashItem(@PathVariable Long itemId) {
+        return ResponseConvertor.with(flashItemAppService.getById(itemId));
     }
 }

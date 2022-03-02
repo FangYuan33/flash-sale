@@ -1,6 +1,7 @@
 package com.actionworks.flashsale.app.model.convertor;
 
 import com.actionworks.flashsale.app.model.command.FlashItemPublishCommand;
+import com.actionworks.flashsale.app.model.dto.FlashItemDTO;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import org.springframework.beans.BeanUtils;
 
@@ -14,5 +15,15 @@ public class FlashItemAppConvertor {
         FlashItem flashItem = new FlashItem();
         BeanUtils.copyProperties(command, flashItem);
         return flashItem;
+    }
+
+    public static FlashItemDTO toFlashItemDTO(FlashItem flashItem) {
+        if (flashItem == null) {
+            return null;
+        }
+
+        FlashItemDTO flashItemDTO = new FlashItemDTO();
+        BeanUtils.copyProperties(flashItem, flashItemDTO);
+        return flashItemDTO;
     }
 }

@@ -3,6 +3,7 @@ package com.actionworks.flashsale.app.service.item;
 import com.actionworks.flashsale.app.exception.BizException;
 import com.actionworks.flashsale.app.model.command.FlashItemPublishCommand;
 import com.actionworks.flashsale.app.model.convertor.FlashItemAppConvertor;
+import com.actionworks.flashsale.app.model.dto.FlashItemDTO;
 import com.actionworks.flashsale.app.model.result.AppResult;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
@@ -77,9 +78,11 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
 
     @Override
     @SuppressWarnings("unchecked")
-    public AppResult<FlashItem> getById(Long itemId) {
+    public AppResult<FlashItemDTO> getById(Long itemId) {
         FlashItem flashItem = flashItemDomainService.getById(itemId);
 
-        return AppResult.success(flashItem);
+        FlashItemDTO flashItemDTO = FlashItemAppConvertor.toFlashItemDTO(flashItem);
+
+        return AppResult.success(flashItemDTO);
     }
 }
