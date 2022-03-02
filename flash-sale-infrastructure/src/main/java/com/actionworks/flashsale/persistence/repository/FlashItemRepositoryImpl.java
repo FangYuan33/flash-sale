@@ -18,6 +18,7 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
     @Override
     public void save(FlashItem flashItem) {
         FlashItemDO flashItemDO = FlashItemConvertor.toDataObject(flashItem);
-        flashItemMapper.save(flashItemDO);
+
+        flashItemMapper.insert(flashItemDO);
     }
 }

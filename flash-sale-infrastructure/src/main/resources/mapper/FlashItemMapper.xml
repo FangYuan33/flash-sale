@@ -19,39 +19,4 @@
         create_time
     </sql>
 
-    <insert id="save" parameterType="com.actionworks.flashsale.persistence.model.FlashItemDO"
-            useGeneratedKeys="true" keyProperty="flashItemDO.id">
-        INSERT INTO flash_item(
-        item_title,
-        item_sub_title,
-        item_desc,
-        initial_stock,
-        available_stock,
-        original_price,
-        flash_price,
-        start_time,
-        end_time,
-        status,
-        activity_id,
-        modified_time,
-        create_time
-        ) VALUES (
-        #{itemTitle,jdbcType=VARCHAR},
-        #{itemSubTitle,jdbcType=VARCHAR},
-        #{itemDesc,jdbcType=LONGVARCHAR},
-        #{initialStock,jdbcType=INTEGER},
-        #{availableStock,jdbcType=INTEGER},
-        #{originalPrice,jdbcType=BIGINT},
-        #{flashPrice,jdbcType=BIGINT},
-        #{startTime,jdbcType=TIMESTAMP},
-        #{endTime,jdbcType=TIMESTAMP},
-        #{status,jdbcType=INTEGER},
-        #{activityId,jdbcType=BIGINT},
-        now(),
-        now()
-        )
-        <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
-            SELECT LAST_INSERT_ID();
-        </selectKey>
-    </insert>
 </mapper>

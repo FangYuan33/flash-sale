@@ -31,7 +31,7 @@ public class FlashActivityRepositoryImpl implements FlashActivityRepository {
 
     @Override
     public Optional<FlashActivity> findById(Long activityId) {
-        FlashActivityDO flashActivity = flashActivityMapper.getById(activityId);
+        FlashActivityDO flashActivity = flashActivityMapper.selectById(activityId);
 
         if (flashActivity == null) {
             return Optional.empty();

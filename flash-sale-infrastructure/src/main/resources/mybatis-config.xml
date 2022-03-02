@@ -14,6 +14,6 @@
     </typeAliases>
 
     <mappers>
-        <mapper resource="mapper/FlashActivityMapper.xml"/>
+
     </mappers>
 </configuration>

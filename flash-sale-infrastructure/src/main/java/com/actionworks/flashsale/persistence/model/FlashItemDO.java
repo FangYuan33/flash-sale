@@ -1,11 +1,13 @@
 package com.actionworks.flashsale.persistence.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
 @Data
+@TableName("flash_item")
 @EqualsAndHashCode(callSuper = false)
 public class FlashItemDO extends BaseDO {
     /**
