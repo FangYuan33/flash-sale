@@ -39,8 +39,8 @@ public class FlashActivityController {
     }
 
     @ApiOperation(value = "上线秒杀活动")
-    @ApiImplicitParam(name = "activityId", value = "秒杀活动ID")
     @PutMapping(value = "/flash-activities/{activityId}/online")
+    @ApiImplicitParam(name = "activityId", value = "秒杀活动ID", dataTypeClass = Long.class)
     public <T> SingleResponse<T> onlineFlashActivity(@PathVariable Long activityId) {
         AppResult<T> appResult = flashActivityAppService.onlineFlashActivity(activityId);
 
@@ -48,8 +48,8 @@ public class FlashActivityController {
     }
 
     @ApiOperation(value = "下线秒杀活动")
-    @ApiImplicitParam(name = "activityId", value = "秒杀活动ID")
     @PutMapping(value = "/flash-activities/{activityId}/offline")
+    @ApiImplicitParam(name = "activityId", value = "秒杀活动ID", dataTypeClass = Long.class)
     public <T> SingleResponse<T> offlineFlashActivity(@PathVariable Long activityId) {
         AppResult<T> appResult = flashActivityAppService.offlineFlashActivity(activityId);
 
@@ -58,7 +58,7 @@ public class FlashActivityController {
 
     @ApiOperation(value = "根据ID获取活动")
     @GetMapping(value = "/flash-activities/{activityId}")
-    @ApiImplicitParam(name = "activityId", value = "秒杀活动ID")
+    @ApiImplicitParam(name = "activityId", value = "秒杀活动ID", dataTypeClass = Long.class)
     public SingleResponse<FlashActivityResponse> getFlashActivity(@PathVariable("activityId") Long activityId) {
         return ResponseConvertor.with(flashActivityAppService.getFlashActivity(activityId));
     }

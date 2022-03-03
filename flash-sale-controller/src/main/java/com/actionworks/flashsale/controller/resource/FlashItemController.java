@@ -29,8 +29,8 @@ public class FlashItemController {
     private FlashItemAppService flashItemAppService;
 
     @ApiOperation(value = "发布秒杀商品")
-    @ApiImplicitParam(name = "activityId", value = "秒杀活动ID")
     @PostMapping("/activities/{activityId}/flash-items/publish")
+    @ApiImplicitParam(name = "activityId", value = "秒杀活动ID", dataTypeClass = Long.class)
     public <T> SingleResponse<T> publishFlashItem(@PathVariable Long activityId,
                                                   @RequestBody FlashItemPublishRequest request) {
         FlashItemPublishCommand command = FlashItemConvertor.toCommand(request);
@@ -41,8 +41,8 @@ public class FlashItemController {
     }
 
     @ApiOperation(value = "上线秒杀商品")
-    @ApiImplicitParam(name = "itemId", value = "秒杀商品ID")
     @PutMapping(value = "/flash-items/{itemId}/online")
+    @ApiImplicitParam(name = "itemId", value = "秒杀商品ID", dataTypeClass = Long.class)
     public <T> SingleResponse<T> onlineFlashItem(@PathVariable Long itemId) {
         AppResult<T> appResult = flashItemAppService.onlineFlashItem(itemId);
 
@@ -50,8 +50,8 @@ public class FlashItemController {
     }
 
     @ApiOperation(value = "下线秒杀商品")
-    @ApiImplicitParam(name = "itemId", value = "秒杀商品ID")
     @PutMapping(value = "/flash-items/{itemId}/offline")
+    @ApiImplicitParam(name = "itemId", value = "秒杀商品ID", dataTypeClass = Long.class)
     public <T> SingleResponse<T> offlineFlashItem(@PathVariable Long itemId) {
         AppResult<T> appResult = flashItemAppService.offlineFlashItem(itemId);
 
@@ -60,7 +60,7 @@ public class FlashItemController {
 
     @GetMapping("/flash-items/{itemId}")
     @ApiOperation(value = "通过ID获取秒杀商品信息")
-    @ApiImplicitParam(name = "itemId", value = "秒杀商品ID")
+    @ApiImplicitParam(name = "itemId", value = "秒杀商品ID", dataTypeClass = Long.class)
     public SingleResponse<FlashItemResponse> getFlashItem(@PathVariable Long itemId) {
         return ResponseConvertor.with(flashItemAppService.getById(itemId));
     }
