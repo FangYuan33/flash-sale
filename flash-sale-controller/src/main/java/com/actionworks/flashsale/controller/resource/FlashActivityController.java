@@ -10,6 +10,8 @@ import com.actionworks.flashsale.controller.model.request.FlashActivityPublishRe
 import com.actionworks.flashsale.controller.model.request.FlashActivityQueryRequest;
 import com.actionworks.flashsale.controller.model.response.FlashActivityResponse;
 import com.alibaba.cola.dto.SingleResponse;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,11 +28,7 @@ public class FlashActivityController {
     @Resource
     private FlashActivityAppService flashActivityAppService;
 
-    /**
-     * 发布秒杀活动
-     *
-     * @param request 活动发布请求对象
-     */
+    @ApiOperation(value = "发布秒杀活动")
     @PostMapping(value = "/flash-activities/publish")
     public <T> SingleResponse<T> publishFlashActivity(@RequestBody FlashActivityPublishRequest request) {
         FlashActivityPublishCommand activityPublishCommand = FlashActivityConvertor.toCommand(request);
@@ -40,11 +38,8 @@ public class FlashActivityController {
         return ResponseConvertor.with(appResult);
     }
 
-    /**
-     * 上线秒杀活动
-     *
-     * @param activityId 秒杀活动ID
-     */
+    @ApiOperation(value = "上线秒杀活动")
+    @ApiImplicitParam(name = "activityId", value = "秒杀活动ID")
     @PutMapping(value = "/flash-activities/{activityId}/online")
     public <T> SingleResponse<T> onlineFlashActivity(@PathVariable Long activityId) {
         AppResult<T> appResult = flashActivityAppService.onlineFlashActivity(activityId);
@@ -52,11 +47,8 @@ public class FlashActivityController {
         return ResponseConvertor.with(appResult);
     }
 
-    /**
-     * 下线秒杀活动
-     *
-     * @param activityId 秒杀活动ID
-     */
+    @ApiOperation(value = "下线秒杀活动")
+    @ApiImplicitParam(name = "activityId", value = "秒杀活动ID")
     @PutMapping(value = "/flash-activities/{activityId}/offline")
     public <T> SingleResponse<T> offlineFlashActivity(@PathVariable Long activityId) {
         AppResult<T> appResult = flashActivityAppService.offlineFlashActivity(activityId);
@@ -64,17 +56,14 @@ public class FlashActivityController {
         return ResponseConvertor.with(appResult);
     }
 
-    /**
-     * 根据ID获取活动
-     */
+    @ApiOperation(value = "根据ID获取活动")
     @GetMapping(value = "/flash-activities/{activityId}")
+    @ApiImplicitParam(name = "activityId", value = "秒杀活动ID")
     public SingleResponse<FlashActivityResponse> getFlashActivity(@PathVariable("activityId") Long activityId) {
         return ResponseConvertor.with(flashActivityAppService.getFlashActivity(activityId));
     }
 
-    /**
-     * 根据条件获取秒杀活动
-     */
+    @ApiOperation(value = "根据条件获取秒杀活动")
     @PostMapping(value = "/flash-activities")
     public SingleResponse<List<FlashActivityResponse>> getFlashActivities(@RequestBody FlashActivityQueryRequest request) {
         FlashActivitiesQuery flashActivitiesQuery = FlashActivityConvertor.toQuery(request);

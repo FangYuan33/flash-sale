@@ -10,6 +10,8 @@ import com.actionworks.flashsale.controller.model.request.FlashItemPublishReques
 import com.actionworks.flashsale.controller.model.request.FlashItemQueryRequest;
 import com.actionworks.flashsale.controller.model.response.FlashItemResponse;
 import com.alibaba.cola.dto.SingleResponse;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,11 +28,8 @@ public class FlashItemController {
     @Resource
     private FlashItemAppService flashItemAppService;
 
-    /**
-     * 发布秒杀商品
-     *
-     * @param activityId 秒杀活动ID
-     */
+    @ApiOperation(value = "发布秒杀商品")
+    @ApiImplicitParam(name = "activityId", value = "秒杀活动ID")
     @PostMapping("/activities/{activityId}/flash-items/publish")
     public <T> SingleResponse<T> publishFlashItem(@PathVariable Long activityId,
                                                   @RequestBody FlashItemPublishRequest request) {
@@ -41,11 +40,8 @@ public class FlashItemController {
         return ResponseConvertor.with(appResult);
     }
 
-    /**
-     * 上线秒杀商品
-     *
-     * @param itemId 秒杀商品ID
-     */
+    @ApiOperation(value = "上线秒杀商品")
+    @ApiImplicitParam(name = "itemId", value = "秒杀商品ID")
     @PutMapping(value = "/flash-items/{itemId}/online")
     public <T> SingleResponse<T> onlineFlashItem(@PathVariable Long itemId) {
         AppResult<T> appResult = flashItemAppService.onlineFlashItem(itemId);
@@ -53,11 +49,8 @@ public class FlashItemController {
         return ResponseConvertor.with(appResult);
     }
 
-    /**
-     * 下线秒杀商品
-     *
-     * @param itemId 秒杀商品ID
-     */
+    @ApiOperation(value = "下线秒杀商品")
+    @ApiImplicitParam(name = "itemId", value = "秒杀商品ID")
     @PutMapping(value = "/flash-items/{itemId}/offline")
     public <T> SingleResponse<T> offlineFlashItem(@PathVariable Long itemId) {
         AppResult<T> appResult = flashItemAppService.offlineFlashItem(itemId);
@@ -65,20 +58,15 @@ public class FlashItemController {
         return ResponseConvertor.with(appResult);
     }
 
-    /**
-     * 通过ID 获取单条秒杀商品信息
-     *
-     * @param itemId 秒杀商品ID
-     */
     @GetMapping("/flash-items/{itemId}")
+    @ApiOperation(value = "通过ID获取秒杀商品信息")
+    @ApiImplicitParam(name = "itemId", value = "秒杀商品ID")
     public SingleResponse<FlashItemResponse> getFlashItem(@PathVariable Long itemId) {
         return ResponseConvertor.with(flashItemAppService.getById(itemId));
     }
 
-    /**
-     * 条件查询秒杀商品
-     */
     @PostMapping("/flash-items")
+    @ApiOperation(value = "条件查询秒杀商品")
     public SingleResponse<List<FlashItemResponse>> getFlashItems(@RequestBody FlashItemQueryRequest request) {
         FlashItemQuery query = FlashItemConvertor.toQuery(request);
 

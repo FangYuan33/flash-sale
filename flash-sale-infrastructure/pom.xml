@@ -85,5 +85,12 @@
             <version>5.2.19.RELEASE</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- swagger 3.0 -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
     </dependencies>
 </project>
