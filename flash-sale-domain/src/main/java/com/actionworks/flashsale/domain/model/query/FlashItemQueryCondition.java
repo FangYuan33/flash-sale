@@ -9,11 +9,6 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = true)
 public class FlashItemQueryCondition extends BaseQueryCondition {
     /**
-     * 秒杀品ID
-     */
-    private Long id;
-
-    /**
      * 秒杀活动ID
      */
     private Long activityId;

@@ -2,6 +2,7 @@ package com.actionworks.flashsale.controller.model.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +10,8 @@ import java.time.LocalDateTime;
  * 秒杀活动查询请求对象
  */
 @Data
-public class FlashActivityQueryRequest {
+@EqualsAndHashCode(callSuper = true)
+public class FlashActivityQueryRequest extends BaseQueryRequest {
     /**
      * 活动名称
      */
@@ -36,14 +38,4 @@ public class FlashActivityQueryRequest {
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
-
-    /**
-     * 查询条件 每页展示的个数
-     */
-    private Integer pageSize;
-
-    /**
-     * 查询条件 展示的页面数
-     */
-    private Integer pageNum;
 }

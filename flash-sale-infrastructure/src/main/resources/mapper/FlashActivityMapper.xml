@@ -13,7 +13,7 @@
         create_time
     </sql>
 
-    <select id="getByQueryCondition" resultType="com.actionworks.flashsale.persistence.model.FlashActivityDO">
+    <select id="listByQueryCondition" resultType="com.actionworks.flashsale.persistence.model.FlashActivityDO">
         select <include refid="ALL_COLUMNS"/>
         from flash_activity
         <where>

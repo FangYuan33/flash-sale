@@ -36,7 +36,7 @@ public interface FlashActivityRepository {
     /**
      * 条件查询秒杀活动
      */
-    Optional<List<FlashActivity>> findByQueryCondition(FlashActivityQueryCondition flashActivityQueryCondition);
+    Optional<List<FlashActivity>> listByQueryCondition(FlashActivityQueryCondition flashActivityQueryCondition);
 
     /**
      * 条件查询计数

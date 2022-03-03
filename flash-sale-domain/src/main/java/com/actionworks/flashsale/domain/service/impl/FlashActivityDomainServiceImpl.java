@@ -83,13 +83,13 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
 
     @Override
     @SuppressWarnings("unchecked")
-    public PageResult<FlashActivity> getFlashActivities(FlashActivityQueryCondition flashActivityQueryCondition) {
+    public PageResult<FlashActivity> listByQueryCondition(FlashActivityQueryCondition flashActivityQueryCondition) {
         // 校正分页参数
         flashActivityQueryCondition.buildParams();
 
         // 查询实体对象和计数
         Optional<List<FlashActivity>> flashActivities =
-                flashActivityRepository.findByQueryCondition(flashActivityQueryCondition);
+                flashActivityRepository.listByQueryCondition(flashActivityQueryCondition);
         int count = flashActivityRepository.countByQueryCondition(flashActivityQueryCondition);
 
         return PageResult.with(flashActivities.orElse(Collections.EMPTY_LIST), count);

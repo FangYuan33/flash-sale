@@ -52,9 +52,9 @@ public class FlashActivityRepositoryImpl implements FlashActivityRepository {
     }
 
     @Override
-    public Optional<List<FlashActivity>> findByQueryCondition(FlashActivityQueryCondition queryCondition) {
+    public Optional<List<FlashActivity>> listByQueryCondition(FlashActivityQueryCondition queryCondition) {
         // stream DO转 DOMAIN层对象
-        List<FlashActivity> result = flashActivityMapper.getByQueryCondition(queryCondition)
+        List<FlashActivity> result = flashActivityMapper.listByQueryCondition(queryCondition)
                 .stream().map(FlashActivityConvertor::toDomainObject).collect(Collectors.toList());
 
         return Optional.of(result);

@@ -31,7 +31,7 @@ public class FlashActivityController {
      *
      * @param request 活动发布请求对象
      */
-    @PostMapping(value = "/flash-activities")
+    @PostMapping(value = "/flash-activities/publish")
     public <T> SingleResponse<T> publishFlashActivity(@RequestBody FlashActivityPublishRequest request) {
         FlashActivityPublishCommand activityPublishCommand = FlashActivityConvertor.toCommand(request);
 
@@ -75,7 +75,7 @@ public class FlashActivityController {
     /**
      * 根据条件获取秒杀活动
      */
-    @GetMapping(value = "/flash-activities")
+    @PostMapping(value = "/flash-activities")
     public SingleResponse<List<FlashActivityResponse>> getFlashActivities(@RequestBody FlashActivityQueryRequest request) {
         FlashActivitiesQuery flashActivitiesQuery = FlashActivityConvertor.toQuery(request);
 

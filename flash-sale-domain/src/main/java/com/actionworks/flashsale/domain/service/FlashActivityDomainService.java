@@ -36,5 +36,5 @@ public interface FlashActivityDomainService {
     /**
      * 批量分页获取秒杀活动
      */
-    PageResult<FlashActivity> getFlashActivities(FlashActivityQueryCondition flashActivityQueryCondition);
+    PageResult<FlashActivity> listByQueryCondition(FlashActivityQueryCondition flashActivityQueryCondition);
 }

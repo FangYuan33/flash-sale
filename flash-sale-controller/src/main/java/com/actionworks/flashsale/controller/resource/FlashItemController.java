@@ -31,7 +31,7 @@ public class FlashItemController {
      *
      * @param activityId 秒杀活动ID
      */
-    @PostMapping("/activities/{activityId}/flash-items")
+    @PostMapping("/activities/{activityId}/flash-items/publish")
     public <T> SingleResponse<T> publishFlashItem(@PathVariable Long activityId,
                                                   @RequestBody FlashItemPublishRequest request) {
         FlashItemPublishCommand command = FlashItemConvertor.toCommand(request);
@@ -78,7 +78,7 @@ public class FlashItemController {
     /**
      * 条件查询秒杀商品
      */
-    @GetMapping("/activities/flash-items")
+    @PostMapping("/flash-items")
     public SingleResponse<List<FlashItemResponse>> getFlashItems(@RequestBody FlashItemQueryRequest request) {
         FlashItemQuery query = FlashItemConvertor.toQuery(request);
 

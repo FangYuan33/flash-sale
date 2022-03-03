@@ -1,16 +1,13 @@
 package com.actionworks.flashsale.app.model.query;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
 @Data
-public class FlashItemQuery {
-    /**
-     * 秒杀品ID
-     */
-    private Long id;
-
+@EqualsAndHashCode(callSuper = true)
+public class FlashItemQuery extends BaseQueryCondition {
     /**
      * 秒杀活动ID
      */

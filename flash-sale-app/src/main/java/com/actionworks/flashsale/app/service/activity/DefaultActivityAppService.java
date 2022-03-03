@@ -74,7 +74,7 @@ public class DefaultActivityAppService implements FlashActivityAppService {
                 FlashActivityAppConvertor.toFlashActivityQueryCondition(flashActivitiesQuery);
 
         PageResult<FlashActivity> flashActivities =
-                flashActivityDomainService.getFlashActivities(flashActivityQueryCondition);
+                flashActivityDomainService.listByQueryCondition(flashActivityQueryCondition);
 
         // stream 完成对象转换
         List<FlashActivityDTO> result = flashActivities.getData()

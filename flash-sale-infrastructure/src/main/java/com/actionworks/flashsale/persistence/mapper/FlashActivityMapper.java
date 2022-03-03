@@ -13,7 +13,7 @@ public interface FlashActivityMapper extends BaseMapper<FlashActivityDO> {
     /**
      * 条件查询秒杀活动
      */
-    List<FlashActivityDO> getByQueryCondition(FlashActivityQueryCondition condition);
+    List<FlashActivityDO> listByQueryCondition(FlashActivityQueryCondition condition);
 
     /**
      * 条件查询计数

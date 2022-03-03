@@ -23,9 +23,6 @@
         select <include refid="ALL_COLUMNS"></include>
         from flash_item
         <where>
-            <if test="id != null">
-                id = #{id}
-            </if>
             <if test="activityId != null">
                 and activity_id = #{activityId}
             </if>
@@ -45,15 +42,14 @@
                 and status = #{status}
             </if>
         </where>
+        order by create_time desc
+        limit #{offset}, #{pageSize}
     </select>
 
     <select id="countByQueryCondition" resultType="int">
         select count(*)
         from flash_item
         <where>
-            <if test="id != null">
-                id = #{id}
-            </if>
             <if test="activityId != null">
                 and activity_id = #{activityId}
             </if>
@@ -73,5 +69,6 @@
                 and status = #{status}
             </if>
         </where>
+        limit #{offset}, #{pageSize}
     </select>
 </mapper>
