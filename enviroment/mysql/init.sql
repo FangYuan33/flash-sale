@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS flash_sale.`flash_order` (
     `flash_price`   bigint(20)  NOT NULL COMMENT '秒杀价',
     `quantity`      int(11)     NOT NULL COMMENT '数量',
     `total_amount`  bigint(20)  NOT NULL COMMENT '总价格',
-    `status`        int(11)     NOT NULL DEFAULT '0' COMMENT '订单状态',
+    `status`        tinyint(2)  NOT NULL COMMENT '订单状态 10-已创建 20-已取消',
     `modified_time` datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
     `create_time`   datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     PRIMARY KEY (`id`),
