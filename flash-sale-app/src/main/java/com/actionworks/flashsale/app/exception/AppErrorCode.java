@@ -17,7 +17,8 @@ public enum AppErrorCode implements ErrorCodeI {
     FREQUENTLY_ERROR("FREQUENTLY_ERROR", "操作频繁，稍后再试"),
     BUSINESS_ERROR("BUSINESS_ERROR", "未知错误"),
 
-    ACTIVITY_NOT_EXIST("ACTIVITY_NOT_EXIST", "秒杀活动不存在");
+    ACTIVITY_NOT_EXIST("ACTIVITY_NOT_EXIST", "秒杀活动不存在"),
+    DO_PLACE_ORDER("DO_PLACE_ORDER", "秒杀失败");
 
     /**
      * 错误码

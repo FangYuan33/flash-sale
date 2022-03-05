@@ -70,4 +70,9 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
     public int countByQueryCondition(FlashItemQueryCondition queryCondition) {
         return flashItemMapper.countByQueryCondition(queryCondition);
     }
+
+    @Override
+    public boolean decreaseItemStock(Long itemId, Integer quantity) {
+        return flashItemMapper.decreaseItemStock(itemId, quantity) == 1;
+    }
 }

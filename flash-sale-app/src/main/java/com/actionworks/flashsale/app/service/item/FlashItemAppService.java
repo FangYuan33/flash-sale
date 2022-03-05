@@ -37,4 +37,11 @@ public interface FlashItemAppService {
      * 条件查询秒杀商品
      */
     <T> AppResult<T> getFlashItems(FlashItemQuery query);
+
+    /**
+     * 获取秒杀商品是否允许下单
+     *
+     * @param itemId 商品ID
+     */
+    boolean isAllowPlaceOrderOrNot(Long itemId);
 }

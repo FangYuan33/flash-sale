@@ -41,4 +41,11 @@ public interface FlashActivityAppService {
      * 根据条件获取秒杀活动
      */
     <T> AppResult<List<T>> getFlashActivities(FlashActivitiesQuery flashActivitiesQuery);
+
+    /**
+     * 获取是否允许下单的条件
+     *
+     * @param activityId 活动ID
+     */
+    boolean isAllowPlaceOrderOrNot(Long activityId);
 }

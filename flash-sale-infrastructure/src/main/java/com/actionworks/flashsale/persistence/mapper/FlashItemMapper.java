@@ -4,6 +4,7 @@ import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 import com.actionworks.flashsale.persistence.model.FlashItemDO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,4 +20,12 @@ public interface FlashItemMapper extends BaseMapper<FlashItemDO> {
      * 条件计数
      */
     int countByQueryCondition(FlashItemQueryCondition queryCondition);
+
+    /**
+     * 扣减库存
+     *
+     * @param itemId 商品ID
+     * @param quantity 商品数量
+     */
+    int decreaseItemStock(@Param("itemId") Long itemId, @Param("quantity") Integer quantity);
 }

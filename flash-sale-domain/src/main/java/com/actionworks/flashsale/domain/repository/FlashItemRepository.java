@@ -34,4 +34,12 @@ public interface FlashItemRepository {
      * 条件计数
      */
     int countByQueryCondition(FlashItemQueryCondition queryCondition);
+
+    /**
+     * 扣减商品库存
+     *
+     * @param itemId 商品ID
+     * @param quantity 商品数量
+     */
+    boolean decreaseItemStock(Long itemId, Integer quantity);
 }

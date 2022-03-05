@@ -71,4 +71,10 @@
         </where>
         limit #{offset}, #{pageSize}
     </select>
+
+    <update id="decreaseItemStock">
+        update flash_item
+        set available_stock = available_stock - #{quantity}
+        where id = #{itemId} and available_stock >= #{quantity}
+    </update>
 </mapper>

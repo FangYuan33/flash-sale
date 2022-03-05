@@ -7,6 +7,7 @@ import com.actionworks.flashsale.app.model.dto.FlashActivityDTO;
 import com.actionworks.flashsale.app.model.query.FlashActivitiesQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
+import com.actionworks.flashsale.domain.model.enums.FlashActivityStatus;
 import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
 import com.actionworks.flashsale.domain.model.query.PageResult;
 import com.actionworks.flashsale.domain.service.FlashActivityDomainService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,5 +83,26 @@ public class DefaultActivityAppService implements FlashActivityAppService {
                 .stream().map(FlashActivityAppConvertor::toFlashActivityDTO).collect(Collectors.toList());
 
         return AppResult.success(result);
+    }
+
+    @Override
+    public boolean isAllowPlaceOrderOrNot(Long activityId) {
+        FlashActivity flashActivity = flashActivityDomainService.getFlashActivity(activityId);
+
+        if (flashActivity == null) {
+            log.error("isAllowPlaceOrderOrNot|秒杀活动不存在");
+            return false;
+        }
+        if (!FlashActivityStatus.ONLINE.getCode().equals(flashActivity.getStatus())) {
+            log.error("isAllowPlaceOrderOrNot|秒杀活动未上线");
+            return false;
+        }
+        if (LocalDateTime.now().isAfter(flashActivity.getEndTime())
+                || LocalDateTime.now().isBefore(flashActivity.getStartTime())) {
+            log.error("isAllowPlaceOrderOrNot|未在秒杀活动时间");
+            return false;
+        }
+
+        return true;
     }
 }

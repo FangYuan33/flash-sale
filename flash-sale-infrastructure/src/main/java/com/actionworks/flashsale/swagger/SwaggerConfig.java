@@ -13,7 +13,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class SwaggerConfig {
     @Bean
     public Docket createRestApi() {
-        log.info("Please go to this url to use swagger: http://localhost:8090/api/swagger-ui | Can you find this info?");
+        log.info("Please go to this url to use swagger: http://localhost:8090/api/swagger-ui/ | Can you find this info?");
 
         ApiInfo apiInfo = new ApiInfo("高并发秒杀系统", "方便的API调用", ApiInfo.DEFAULT.getVersion(),
                 ApiInfo.DEFAULT.getTermsOfServiceUrl(), ApiInfo.DEFAULT.getContact(), ApiInfo.DEFAULT.getLicense(),
