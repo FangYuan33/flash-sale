@@ -1,7 +1,9 @@
 package com.actionworks.flashsale.domain.repository;
 
 import com.actionworks.flashsale.domain.model.entity.FlashOrder;
+import com.actionworks.flashsale.domain.model.query.FlashOrderQueryCondition;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface FlashOrderRepository {
@@ -23,4 +25,14 @@ public interface FlashOrderRepository {
      * @throws RuntimeException 否则抛出RepositoryException异常信息
      */
     void updateById(FlashOrder flashOrder);
+
+    /**
+     * 条件查询秒杀订单
+     */
+    Optional<List<FlashOrder>> listByQueryCondition(FlashOrderQueryCondition queryCondition);
+
+    /**
+     * 条件查询计数
+     */
+    int countByQueryCondition(FlashOrderQueryCondition queryCondition);
 }

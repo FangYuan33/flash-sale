@@ -3,7 +3,7 @@ package com.actionworks.flashsale.controller.model.request;
 import lombok.Data;
 
 @Data
-public class FlashPlaceOrderRequest {
+public class FlashOrderPlaceRequest {
 
     /**
      * 商品ID

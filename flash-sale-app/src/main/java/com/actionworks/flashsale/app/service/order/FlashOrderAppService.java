@@ -1,6 +1,7 @@
 package com.actionworks.flashsale.app.service.order;
 
 import com.actionworks.flashsale.app.model.command.FlashPlaceOrderCommand;
+import com.actionworks.flashsale.app.model.query.FlashOrderQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
 
 public interface FlashOrderAppService {
@@ -18,4 +19,9 @@ public interface FlashOrderAppService {
      * @param orderId 订单ID
      */
     <T> AppResult<T> cancelOrder(Long orderId);
+
+    /**
+     * 条件查询秒杀订单
+     */
+    <T> AppResult<T> getFlashOrders(FlashOrderQuery flashOrderQuery);
 }
