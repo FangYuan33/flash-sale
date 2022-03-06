@@ -24,7 +24,12 @@ public enum DomainErrorCode implements ErrorCodeI {
      * 秒杀活动相关错误码
      */
     PUBLISH_FLASH_ITEM_PARAMS_INVALID("401", "待发布的秒杀活动参数无效"),
-    FLASH_ITEM_NOT_EXIST("402", "秒杀商品不存在");
+    FLASH_ITEM_NOT_EXIST("402", "秒杀商品不存在"),
+    /**
+     * 秒杀订单相关错误码
+     */
+    FLASH_ORDER_NOT_EXIST("501", "秒杀订单不存在");
+
 
     private final String errCode;
     private final String errDesc;

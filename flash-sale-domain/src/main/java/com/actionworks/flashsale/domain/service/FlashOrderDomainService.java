@@ -7,4 +7,11 @@ public interface FlashOrderDomainService {
      * 下单！
      */
     void doPlaceOrder(FlashOrder flashOrder);
+
+    /**
+     * 取消！
+     *
+     * @param orderId 订单ID
+     */
+    void cancelOrder(Long orderId);
 }

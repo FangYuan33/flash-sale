@@ -11,4 +11,11 @@ public interface FlashOrderAppService {
      * @param userId 用户ID
      */
     <T> AppResult<T> placeOrder(Long userId, FlashPlaceOrderCommand command);
+
+    /**
+     * 取消订单
+     *
+     * @param orderId 订单ID
+     */
+    <T> AppResult<T> cancelOrder(Long orderId);
 }

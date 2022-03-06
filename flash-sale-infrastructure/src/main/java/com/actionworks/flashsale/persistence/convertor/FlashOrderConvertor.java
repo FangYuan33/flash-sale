@@ -15,4 +15,14 @@ public class FlashOrderConvertor {
         BeanUtils.copyProperties(flashOrder, flashOrderDO);
         return flashOrderDO;
     }
+
+    public static FlashOrder toDomainObject(FlashOrderDO flashOrderDO) {
+        if (flashOrderDO == null) {
+            return null;
+        }
+
+        FlashOrder flashOrder = new FlashOrder();
+        BeanUtils.copyProperties(flashOrderDO, flashOrder);
+        return flashOrder;
+    }
 }

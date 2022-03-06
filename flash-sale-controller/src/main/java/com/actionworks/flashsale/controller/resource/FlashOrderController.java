@@ -7,10 +7,9 @@ import com.actionworks.flashsale.controller.model.convertor.FlashOrderConvertor;
 import com.actionworks.flashsale.controller.model.convertor.ResponseConvertor;
 import com.actionworks.flashsale.controller.model.request.FlashPlaceOrderRequest;
 import com.alibaba.cola.dto.SingleResponse;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -37,6 +36,20 @@ public class FlashOrderController {
         FlashPlaceOrderCommand command = FlashOrderConvertor.toCommand(request);
 
         AppResult<T> appResult = flashOrderAppService.placeOrder(request.getUserId(), command);
+
+        return ResponseConvertor.with(appResult);
+    }
+
+    /**
+     * 取消秒杀订单
+     *
+     * @param orderId 订单ID
+     */
+    @ApiOperation(value = "取消秒杀订单")
+    @PutMapping("/flash-orders/{orderId}/cancelOrder")
+    @ApiImplicitParam(name = "orderId", value = "秒杀订单ID", dataTypeClass = Long.class)
+    public <T> SingleResponse<T> cancelOrder(@PathVariable Long orderId) {
+        AppResult<T> appResult = flashOrderAppService.cancelOrder(orderId);
 
         return ResponseConvertor.with(appResult);
     }

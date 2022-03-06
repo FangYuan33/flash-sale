@@ -32,4 +32,18 @@ public class DefaultFlashOrderAppService implements FlashOrderAppService {
 
         return placeOrderService.doPlaceOrder(userId, command);
     }
+
+    @Override
+    public <T> AppResult<T> cancelOrder(Long orderId) {
+        log.info("cancelOrder|取消秒杀订单|{}", orderId);
+
+        if (orderId == null) {
+            throw new BizException(INVALID_PARAMS);
+        }
+
+        flashOrderDomainService.cancelOrder(orderId);
+        log.info("cancelOrder|取消秒杀订单|成功");
+
+        return AppResult.success();
+    }
 }
