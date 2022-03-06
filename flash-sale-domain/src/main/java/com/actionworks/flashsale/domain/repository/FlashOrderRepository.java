@@ -34,5 +34,5 @@ public interface FlashOrderRepository {
     /**
      * 条件查询计数
      */
-    int countByQueryCondition(FlashOrderQueryCondition queryCondition);
+    Integer countByQueryCondition(FlashOrderQueryCondition queryCondition);
 }

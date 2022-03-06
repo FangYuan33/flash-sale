@@ -37,7 +37,7 @@
         limit #{offset}, #{pageSize}
     </select>
 
-    <select id="countByQueryCondition" resultType="int"
+    <select id="countByQueryCondition" resultType="java.lang.Integer"
             parameterType="com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition">
         select count(*)
         from flash_activity

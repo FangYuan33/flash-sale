@@ -50,7 +50,7 @@ public class FlashOrderDomainServiceImpl implements FlashOrderDomainService {
         queryCondition.buildParams();
 
         Optional<List<FlashOrder>> flashOrders = flashOrderRepository.listByQueryCondition(queryCondition);
-        int totalCount = flashOrderRepository.countByQueryCondition(queryCondition);
+        Integer totalCount = flashOrderRepository.countByQueryCondition(queryCondition);
 
         return PageResult.with(flashOrders.orElse(Collections.EMPTY_LIST), totalCount);
     }

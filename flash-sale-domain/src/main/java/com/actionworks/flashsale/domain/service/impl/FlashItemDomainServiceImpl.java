@@ -88,7 +88,7 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
         queryCondition.buildParams();
 
         Optional<List<FlashItem>> flashItems = flashItemRepository.listByQueryCondition(queryCondition);
-        int count = flashItemRepository.countByQueryCondition(queryCondition);
+        Integer count = flashItemRepository.countByQueryCondition(queryCondition);
 
         return PageResult.with(flashItems.orElse(Collections.EMPTY_LIST), count);
     }

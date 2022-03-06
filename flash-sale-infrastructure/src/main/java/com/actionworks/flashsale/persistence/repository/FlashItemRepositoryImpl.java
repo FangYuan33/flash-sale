@@ -67,7 +67,7 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
     }
 
     @Override
-    public int countByQueryCondition(FlashItemQueryCondition queryCondition) {
+    public Integer countByQueryCondition(FlashItemQueryCondition queryCondition) {
         return flashItemMapper.countByQueryCondition(queryCondition);
     }
 

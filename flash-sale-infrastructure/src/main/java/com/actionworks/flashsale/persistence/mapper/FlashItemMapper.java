@@ -19,7 +19,7 @@ public interface FlashItemMapper extends BaseMapper<FlashItemDO> {
     /**
      * 条件计数
      */
-    int countByQueryCondition(FlashItemQueryCondition queryCondition);
+    Integer countByQueryCondition(FlashItemQueryCondition queryCondition);
 
     /**
      * 扣减库存

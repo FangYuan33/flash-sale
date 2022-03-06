@@ -55,7 +55,14 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
      * 校验发布商品的参数
      */
     private void checkPublishParams(Long activityId, FlashItemPublishCommand command) {
-        if (command == null) {
+        if (command == null || command.getInitialStock() == null || command.getAvailableStock() == null
+                || command.getItemTitle() == null || command.getOriginalPrice() == null || command.getFlashPrice() == null) {
+            throw new BizException(INVALID_PARAMS);
+        }
+
+        // 校验库存参数
+        if (command.getInitialStock() < 0 || command.getAvailableStock() < 0
+                || command.getInitialStock() < command.getAvailableStock()) {
             throw new BizException(INVALID_PARAMS);
         }
 

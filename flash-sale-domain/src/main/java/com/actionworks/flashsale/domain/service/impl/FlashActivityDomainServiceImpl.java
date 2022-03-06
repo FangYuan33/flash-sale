@@ -90,7 +90,7 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
         // 查询实体对象和计数
         Optional<List<FlashActivity>> flashActivities =
                 flashActivityRepository.listByQueryCondition(flashActivityQueryCondition);
-        int count = flashActivityRepository.countByQueryCondition(flashActivityQueryCondition);
+        Integer count = flashActivityRepository.countByQueryCondition(flashActivityQueryCondition);
 
         return PageResult.with(flashActivities.orElse(Collections.EMPTY_LIST), count);
     }

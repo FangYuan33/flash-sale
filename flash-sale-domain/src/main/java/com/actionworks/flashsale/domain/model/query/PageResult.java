@@ -12,14 +12,14 @@ import java.util.List;
 @Accessors(chain = true)
 public class PageResult<T> {
     private List<T> data;
-    private int total;
+    private Integer total;
 
-    private PageResult(int total, List<T> data) {
+    private PageResult(Integer total, List<T> data) {
         this.setData(data);
         this.total = total;
     }
 
-    public static <T> PageResult<T> with(List<T> data, int total) {
+    public static <T> PageResult<T> with(List<T> data, Integer total) {
         return new PageResult<>(total, data);
     }
 }

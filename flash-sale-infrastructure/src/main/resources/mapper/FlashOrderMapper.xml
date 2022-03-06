@@ -34,7 +34,7 @@
         limit #{offset}, #{pageSize}
     </select>
 
-    <select id="countByQueryCondition" resultType="int">
+    <select id="countByQueryCondition" resultType="java.lang.Integer">
         select count(*)
         from flash_order
         <where>

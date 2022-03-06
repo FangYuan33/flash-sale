@@ -18,5 +18,5 @@ public interface FlashActivityMapper extends BaseMapper<FlashActivityDO> {
     /**
      * 条件查询计数
      */
-    int countByQueryCondition(FlashActivityQueryCondition queryCondition);
+    Integer countByQueryCondition(FlashActivityQueryCondition queryCondition);
 }

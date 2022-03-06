@@ -61,7 +61,7 @@ public class FlashActivityRepositoryImpl implements FlashActivityRepository {
     }
 
     @Override
-    public int countByQueryCondition(FlashActivityQueryCondition queryCondition) {
+    public Integer countByQueryCondition(FlashActivityQueryCondition queryCondition) {
         return flashActivityMapper.countByQueryCondition(queryCondition);
     }
 }

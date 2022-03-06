@@ -18,5 +18,5 @@ public interface FlashOrderMapper extends BaseMapper<FlashOrderDO> {
     /**
      * 条件计数
      */
-    int countByQueryCondition(FlashOrderQueryCondition queryCondition);
+    Integer countByQueryCondition(FlashOrderQueryCondition queryCondition);
 }

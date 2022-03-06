@@ -24,6 +24,11 @@ public class BaseQueryCondition {
     private static final Integer NORMAL_PAGE_NUM = 1;
 
     /**
+     * 最大页数
+     */
+    private static final Integer MAX_PAGE_NUM = 10;
+
+    /**
      * 每页数量
      */
     protected Integer pageSize;
@@ -42,10 +47,11 @@ public class BaseQueryCondition {
      * 校正pageSize和pageNum分页参数
      */
     protected void buildParams() {
-        pageSize = pageSize == null ? NORMAL_PAGE_SIZE : pageSize;
+        pageSize = pageSize == null ? NORMAL_PAGE_SIZE : pageSize < 0 ? -pageSize : pageSize;
         pageSize = pageSize > MAX_PAGE_SIZE ? MAX_PAGE_SIZE : pageSize;
 
-        pageNum = pageNum == null ? NORMAL_PAGE_NUM : pageNum;
+        pageNum = pageNum == null ? NORMAL_PAGE_NUM : pageNum < 0 ? -pageNum : pageNum;
+        pageNum = pageNum > MAX_PAGE_NUM ? MAX_PAGE_NUM : pageNum;
 
         offset = (pageNum - 1) * pageSize;
     }

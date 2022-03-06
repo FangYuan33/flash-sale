@@ -62,7 +62,7 @@ public class FlashOrderRepositoryImpl implements FlashOrderRepository {
     }
 
     @Override
-    public int countByQueryCondition(FlashOrderQueryCondition queryCondition) {
+    public Integer countByQueryCondition(FlashOrderQueryCondition queryCondition) {
         return flashOrderMapper.countByQueryCondition(queryCondition);
     }
 }

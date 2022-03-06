@@ -41,5 +41,5 @@ public interface FlashActivityRepository {
     /**
      * 条件查询计数
      */
-    int countByQueryCondition(FlashActivityQueryCondition flashActivityQueryCondition);
+    Integer countByQueryCondition(FlashActivityQueryCondition flashActivityQueryCondition);
 }
