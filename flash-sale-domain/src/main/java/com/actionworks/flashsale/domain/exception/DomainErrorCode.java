@@ -1,6 +1,5 @@
 package com.actionworks.flashsale.domain.exception;
 
-
 import com.alibaba.cola.dto.ErrorCodeI;
 
 /**

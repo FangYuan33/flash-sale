@@ -55,7 +55,9 @@ public class SnowflakeIdUtil {
                 TIMESTAMP_LEFT_SHIFT, DATACENTER_ID_BITS, WORKER_ID_BITS, SEQUENCE_BITS, WORKER_ID);
     }
 
-    // ID生成算法
+    /**
+     * ID生成算法
+     */
     public static synchronized long nextId() {
         long currentTimestamp = System.currentTimeMillis();
 
