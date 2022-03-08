@@ -8,7 +8,16 @@ public enum RepositoryErrorCode {
     /**
      * 通用异常枚举
      */
-    ID_NOT_EXIST("ID为空");
+    ID_NOT_EXIST("ID为空"),
+
+    /**
+     * 缓存异常枚举
+     */
+    DATA_NOT_FOUND("查询数据不存在"),
+    /**
+     *请稍后尝试
+     */
+    TRY_LATTER("请稍后尝试");
 
     private final String errorDesc;
 

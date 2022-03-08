@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * 秒杀活动查询条件
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class FlashActivityQueryCondition extends BaseQueryCondition {
 
     /**
