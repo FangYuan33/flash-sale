@@ -86,11 +86,16 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- swagger 3.0 -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
             <version>3.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
         </dependency>
     </dependencies>
 </project>
