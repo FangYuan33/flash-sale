@@ -7,6 +7,6 @@ package com.actionworks.flashsale.app.exception;
  */
 public class BizException extends AppException {
     public BizException(AppErrorCode appErrorCode) {
-        super(appErrorCode.getErrDesc());
+        super(appErrorCode.getErrorDesc());
     }
 }

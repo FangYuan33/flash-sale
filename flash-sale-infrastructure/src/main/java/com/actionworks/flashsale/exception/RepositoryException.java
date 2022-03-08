@@ -5,6 +5,6 @@ package com.actionworks.flashsale.exception;
  */
 public class RepositoryException extends RuntimeException {
     public RepositoryException(RepositoryErrorCode errorCode) {
-        super(errorCode.getErrDesc());
+        super(errorCode.getErrorDesc());
     }
 }
