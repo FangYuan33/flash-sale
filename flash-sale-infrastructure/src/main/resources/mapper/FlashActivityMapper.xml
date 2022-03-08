@@ -13,28 +13,51 @@
         create_time
     </sql>
 
-    <insert id="insert" parameterType="com.actionworks.flashsale.persistence.model.FlashActivityDO"
-            useGeneratedKeys="true" keyProperty="flashActivityDO.id">
-        INSERT INTO flash_activity
-        (activity_name,
-        start_time,
-        end_time,
-        activity_desc,
-        status,
-        modified_time,
-        create_time)
-        VALUES (
-        #{activityName,jdbcType=VARCHAR},
-        #{startTime,jdbcType=TIMESTAMP},
-        #{endTime,jdbcType=TIMESTAMP},
-        #{activityDesc,jdbcType=LONGVARCHAR},
-        #{status,jdbcType=INTEGER},
-        now(),
-        now()
-        )
-        <selectKey keyProperty="id" resultType="java.lang.Long" order="AFTER">
-            SELECT LAST_INSERT_ID();
-        </selectKey>
-    </insert>
+    <select id="listByQueryCondition" resultType="com.actionworks.flashsale.persistence.model.FlashActivityDO">
+        select <include refid="ALL_COLUMNS"/>
+        from flash_activity
+        <where>
+            <if test="activityName != null and activityName != ''">
+                activity_name like concat('%', #{activityName}, '%')
+            </if>
+            <if test="activityDesc != null and activityDesc != ''">
+                and activity_desc like concat('%', #{activityDesc}, '%')
+            </if>
+            <if test="startTime != null">
+                and start_time = #{startTime}
+            </if>
+            <if test="endTime != null">
+                and end_time = #{endTime}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        order by create_time desc
+        limit #{offset}, #{pageSize}
+    </select>
 
+    <select id="countByQueryCondition" resultType="java.lang.Integer"
+            parameterType="com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition">
+        select count(*)
+        from flash_activity
+        <where>
+            <if test="activityName != null and activityName != ''">
+                activity_name like concat('%', #{activityName}, '%')
+            </if>
+            <if test="activityDesc != null and activityDesc != ''">
+                and activity_desc like concat('%', #{activityDesc}, '%')
+            </if>
+            <if test="startTime != null">
+                and start_time = #{startTime}
+            </if>
+            <if test="endTime != null">
+                and end_time = #{endTime}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status}
+            </if>
+        </where>
+        limit #{offset}, #{pageSize}
+    </select>
 </mapper>

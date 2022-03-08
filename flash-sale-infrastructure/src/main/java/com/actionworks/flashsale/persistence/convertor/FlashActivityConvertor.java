@@ -19,6 +19,7 @@ public class FlashActivityConvertor {
     public static FlashActivity toDomainObject(FlashActivityDO flashActivityDO) {
         FlashActivity flashActivity = new FlashActivity();
         BeanUtils.copyProperties(flashActivityDO, flashActivity);
+
         return flashActivity;
     }
 }

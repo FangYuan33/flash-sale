@@ -24,6 +24,11 @@ server:
     threads:
       max: 500
 
+# 配置mybatis打印SQL日志,其中路径为其Mapper接口所在的包
+logging:
+  level:
+    com.actionworks.flashsale.persistence.mapper: debug
+
 management:
   metrics:
     export:
