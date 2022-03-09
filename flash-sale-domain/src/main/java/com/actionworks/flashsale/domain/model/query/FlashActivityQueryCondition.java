@@ -2,6 +2,7 @@ package com.actionworks.flashsale.domain.model.query;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
  * 秒杀活动查询条件
  */
 @Data
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class FlashActivityQueryCondition extends BaseQueryCondition {
 

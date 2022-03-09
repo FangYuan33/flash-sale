@@ -6,10 +6,10 @@ import com.actionworks.flashsale.app.model.command.FlashActivityPublishCommand;
 import com.actionworks.flashsale.app.model.dto.FlashActivityDTO;
 import com.actionworks.flashsale.app.model.query.FlashActivitiesQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
+import com.actionworks.flashsale.app.service.cache.CacheService;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.model.enums.FlashActivityStatus;
 import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
-import com.actionworks.flashsale.domain.model.query.PageResult;
 import com.actionworks.flashsale.domain.service.FlashActivityDomainService;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +29,8 @@ public class DefaultActivityAppService implements FlashActivityAppService {
 
     @Resource
     private FlashActivityDomainService flashActivityDomainService;
+    @Resource
+    private CacheService<List<FlashActivity>> cacheService;
 
     @Override
     public <T> AppResult<T> publishFlashActivity(FlashActivityPublishCommand activityPublishCommand) {
@@ -75,12 +77,11 @@ public class DefaultActivityAppService implements FlashActivityAppService {
         FlashActivityQueryCondition flashActivityQueryCondition =
                 FlashActivityAppConvertor.toFlashActivityQueryCondition(flashActivitiesQuery);
 
-        PageResult<FlashActivity> flashActivities =
-                flashActivityDomainService.listByQueryCondition(flashActivityQueryCondition);
+        List<FlashActivity> caches = cacheService.getCaches(flashActivityQueryCondition);
 
         // stream 完成对象转换
-        List<FlashActivityDTO> result = flashActivities.getData()
-                .stream().map(FlashActivityAppConvertor::toFlashActivityDTO).collect(Collectors.toList());
+        List<FlashActivityDTO> result = caches.stream()
+                .map(FlashActivityAppConvertor::toFlashActivityDTO).collect(Collectors.toList());
 
         return AppResult.success(result);
     }
