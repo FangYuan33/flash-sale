@@ -3,6 +3,8 @@ package com.actionworks.flashsale.app.service.cache.model;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 @Data
 @Accessors(chain = true)
 public class EntityCache<T> {
@@ -13,7 +15,7 @@ public class EntityCache<T> {
     private boolean exist;
 
     /**
-     * 实体类数据
+     * 实体类数据列表，单个值和多个值都用这个存
      */
-    private T data;
+    private List<T> dataList;
 }

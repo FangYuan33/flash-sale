@@ -13,16 +13,21 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class FlashActivityCacheServiceImpl extends AbstractCacheService<List<FlashActivity>> {
+public class FlashActivityCacheServiceImpl extends AbstractCacheService<FlashActivity> {
 
     @Resource
     private FlashActivityDomainService flashActivityDomainService;
 
     @Override
     protected List<FlashActivity> getDataFromDataBase(BaseQueryCondition queryCondition) {
-        // 查库获取数据
         PageResult<FlashActivity> flashActivityPageResult =
                 flashActivityDomainService.listByQueryCondition((FlashActivityQueryCondition) queryCondition);
+
         return flashActivityPageResult.getData();
+    }
+
+    @Override
+    protected FlashActivity getSingleDataFromDataBase(BaseQueryCondition queryCondition) {
+        return flashActivityDomainService.getFlashActivity(((FlashActivityQueryCondition) queryCondition).getActivityId());
     }
 }

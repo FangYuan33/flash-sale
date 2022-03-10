@@ -2,6 +2,7 @@ package com.actionworks.flashsale.domain.model.query;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -10,9 +11,19 @@ import java.time.LocalDateTime;
  * 秒杀活动查询条件
  */
 @Data
+@NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class FlashActivityQueryCondition extends BaseQueryCondition {
+
+    public FlashActivityQueryCondition(Long activityId) {
+        this.activityId = activityId;
+    }
+
+    /**
+     * 秒杀活动ID
+     */
+    private Long activityId;
 
     /**
      * 活动名称

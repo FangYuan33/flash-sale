@@ -30,7 +30,7 @@ public class DefaultActivityAppService implements FlashActivityAppService {
     @Resource
     private FlashActivityDomainService flashActivityDomainService;
     @Resource
-    private CacheService<List<FlashActivity>> cacheService;
+    private CacheService<FlashActivity> cacheService;
 
     @Override
     public <T> AppResult<T> publishFlashActivity(FlashActivityPublishCommand activityPublishCommand) {
@@ -66,7 +66,7 @@ public class DefaultActivityAppService implements FlashActivityAppService {
     @Override
     @SuppressWarnings("unchecked")
     public AppResult<FlashActivityDTO> getFlashActivity(Long activityId) {
-        FlashActivity flashActivity = flashActivityDomainService.getFlashActivity(activityId);
+        FlashActivity flashActivity = cacheService.getCache(new FlashActivityQueryCondition(activityId));
 
         return AppResult.success(FlashActivityAppConvertor.toFlashActivityDTO(flashActivity));
     }
