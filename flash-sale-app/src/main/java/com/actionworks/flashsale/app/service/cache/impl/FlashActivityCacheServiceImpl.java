@@ -1,6 +1,5 @@
 package com.actionworks.flashsale.app.service.cache.impl;
 
-import com.actionworks.flashsale.app.service.cache.model.EntityCache;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.model.query.BaseQueryCondition;
 import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
@@ -20,19 +19,10 @@ public class FlashActivityCacheServiceImpl extends AbstractCacheService<List<Fla
     private FlashActivityDomainService flashActivityDomainService;
 
     @Override
-    protected List<FlashActivity> saveLocalCacheAndGetData(BaseQueryCondition queryCondition, String key) {
+    protected List<FlashActivity> getDataFromDataBase(BaseQueryCondition queryCondition) {
         // 查库获取数据
         PageResult<FlashActivity> flashActivityPageResult =
                 flashActivityDomainService.listByQueryCondition((FlashActivityQueryCondition) queryCondition);
-        List<FlashActivity> flashActivityList = flashActivityPageResult.getData();
-
-        // 创建缓存对象，并设置所差数据是否存在
-        EntityCache<List<FlashActivity>> entityCache = new EntityCache<>();
-        entityCache.setData(flashActivityList).setExist(!flashActivityList.isEmpty());
-
-        // 存在本地缓存中， key: 查询条件的JSON字符串
-        FLASH_ACTIVITY_LOCAL_CACHE.put(key, entityCache);
-
-        return flashActivityList;
+        return flashActivityPageResult.getData();
     }
 }
