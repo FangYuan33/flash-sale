@@ -19,7 +19,7 @@ public class FlashActivityCacheServiceImpl extends AbstractCacheService<FlashAct
     private FlashActivityDomainService flashActivityDomainService;
 
     @Override
-    protected List<FlashActivity> getDataFromDataBase(BaseQueryCondition queryCondition) {
+    protected List<FlashActivity> getDataListFromDataBase(BaseQueryCondition queryCondition) {
         PageResult<FlashActivity> flashActivityPageResult =
                 flashActivityDomainService.listByQueryCondition((FlashActivityQueryCondition) queryCondition);
 

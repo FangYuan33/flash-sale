@@ -112,7 +112,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
      * @return 返回查询条件对应的对象
      */
     private List<T> saveLocalCacheAndGetDataList(BaseQueryCondition queryCondition, String key) {
-        List<T> data = getDataFromDataBase(queryCondition);
+        List<T> data = getDataListFromDataBase(queryCondition);
 
         saveLocalCache(data, key);
 
@@ -142,5 +142,5 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     /**
      * 根据不同的服务做具体的实现，多个对象
      */
-    protected abstract List<T> getDataFromDataBase(BaseQueryCondition queryCondition);
+    protected abstract List<T> getDataListFromDataBase(BaseQueryCondition queryCondition);
 }
