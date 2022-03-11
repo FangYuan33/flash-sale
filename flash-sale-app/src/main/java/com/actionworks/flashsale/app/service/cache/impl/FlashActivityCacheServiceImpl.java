@@ -5,13 +5,11 @@ import com.actionworks.flashsale.domain.model.query.BaseQueryCondition;
 import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
 import com.actionworks.flashsale.domain.model.query.PageResult;
 import com.actionworks.flashsale.domain.service.FlashActivityDomainService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 
-@Slf4j
 @Service
 public class FlashActivityCacheServiceImpl extends AbstractCacheService<FlashActivity> {
 

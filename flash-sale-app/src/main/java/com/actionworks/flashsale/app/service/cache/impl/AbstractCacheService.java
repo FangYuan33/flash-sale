@@ -25,7 +25,7 @@ import static com.actionworks.flashsale.exception.RepositoryErrorCode.DATA_NOT_F
  * 而存缓存的时候，只有查询数据库的操作是不同的，针对不同的服务做实现
  * 所以定义了一个抽象方法针对各个服务查数据库的操作，供不同的服务自己实现
  *
- * @param <T> 泛型，在具体的实现类上再去指定
+ * @param <T> 泛型，在具体地实现类上再去指定
  */
 @Slf4j
 public abstract class AbstractCacheService<T> implements CacheService<T> {
@@ -58,10 +58,8 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
         EntityCache<T> flashActivityCaches = flashLocalCache.getIfPresent(key);
 
         if (flashActivityCaches != null) {
-            // 命中缓存
             return hitLocalCache(flashActivityCaches);
         } else {
-            // 未命中缓存
             return saveLocalCacheAndGetDataList(queryCondition, key);
         }
     }
@@ -133,7 +131,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
         EntityCache<T> entityCache = new EntityCache<>();
         entityCache.setDataList(dataList).setExist(!CollectionUtils.isEmpty(dataList));
 
-        // 存在本地缓存中， key: 查询条件的JSON字符串
+        // 存在本地缓存中， key: 查询条件的toString字符串
         flashLocalCache.put(key, entityCache);
         log.info("存入本地缓存, {}", JSONObject.toJSONString(entityCache));
     }
