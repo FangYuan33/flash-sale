@@ -54,4 +54,11 @@ public class FlashOrderDomainServiceImpl implements FlashOrderDomainService {
 
         return PageResult.with(flashOrders.orElse(Collections.EMPTY_LIST), totalCount);
     }
+
+    @Override
+    public FlashOrder getById(Long orderId) {
+        Optional<FlashOrder> flashOrderOptional = flashOrderRepository.getById(orderId);
+
+        return flashOrderOptional.orElseThrow(() -> new DomainException(FLASH_ORDER_NOT_EXIST));
+    }
 }

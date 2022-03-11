@@ -55,8 +55,7 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
      * 校验发布商品的参数
      */
     private void checkPublishParams(Long activityId, FlashItemPublishCommand command) {
-        if (command == null || command.getInitialStock() == null || command.getAvailableStock() == null
-                || command.getItemTitle() == null || command.getOriginalPrice() == null || command.getFlashPrice() == null) {
+        if (publishParamsIsNull(command)) {
             throw new BizException(INVALID_PARAMS);
         }
 
@@ -71,6 +70,14 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
         if (flashActivity == null) {
             throw new BizException(ACTIVITY_NOT_EXIST);
         }
+    }
+
+    /**
+     * 发布秒杀商品的必填参数中有空即返回TRUE
+     */
+    private boolean publishParamsIsNull(FlashItemPublishCommand command) {
+        return command == null || command.getInitialStock() == null || command.getAvailableStock() == null
+                || command.getItemTitle() == null || command.getOriginalPrice() == null || command.getFlashPrice() == null;
     }
 
     @Override
