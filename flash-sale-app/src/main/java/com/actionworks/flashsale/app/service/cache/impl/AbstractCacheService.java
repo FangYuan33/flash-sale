@@ -2,6 +2,7 @@ package com.actionworks.flashsale.app.service.cache.impl;
 
 import com.actionworks.flashsale.app.service.cache.CacheService;
 import com.actionworks.flashsale.app.service.cache.model.EntityCache;
+import com.actionworks.flashsale.domain.exception.DomainException;
 import com.actionworks.flashsale.domain.model.query.BaseQueryCondition;
 import com.actionworks.flashsale.exception.RepositoryException;
 import com.alibaba.fastjson.JSONObject;
@@ -96,8 +97,13 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
             data = getSingleDataFromDataBase(queryCondition);
 
             saveLocalCache(Collections.singletonList(data), key);
-        } catch (Exception e) {
+        } catch (DomainException e) {
+            log.error(e.getMessage(), e);
             saveLocalCache(Collections.emptyList(), key);
+
+            throw new RepositoryException(DATA_NOT_FOUND);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
 
         return data;

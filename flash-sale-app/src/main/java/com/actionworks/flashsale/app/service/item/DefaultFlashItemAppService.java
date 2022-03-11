@@ -6,11 +6,11 @@ import com.actionworks.flashsale.app.model.convertor.FlashItemAppConvertor;
 import com.actionworks.flashsale.app.model.dto.FlashItemDTO;
 import com.actionworks.flashsale.app.model.query.FlashItemQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
+import com.actionworks.flashsale.app.service.cache.CacheService;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
-import com.actionworks.flashsale.domain.model.query.PageResult;
 import com.actionworks.flashsale.domain.service.FlashActivityDomainService;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import com.alibaba.fastjson.JSON;
@@ -34,6 +34,8 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
     private FlashActivityDomainService flashActivityDomainService;
     @Resource
     private FlashItemDomainService flashItemDomainService;
+    @Resource
+    private CacheService<FlashItem> cacheService;
 
     @Override
     public <T> AppResult<T> publishFlashItem(Long activityId, FlashItemPublishCommand command) {
@@ -101,7 +103,7 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
     @Override
     @SuppressWarnings("unchecked")
     public AppResult<FlashItemDTO> getById(Long itemId) {
-        FlashItem flashItem = flashItemDomainService.getById(itemId);
+        FlashItem flashItem = cacheService.getCache(new FlashItemQueryCondition(itemId));
 
         FlashItemDTO flashItemDTO = FlashItemAppConvertor.toFlashItemDTO(flashItem);
 
@@ -113,10 +115,10 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
     public AppResult<List<FlashItemDTO>> getFlashItems(FlashItemQuery query) {
         FlashItemQueryCondition queryCondition = FlashItemAppConvertor.toFlashItemQueryCondition(query);
 
-        PageResult<FlashItem> flashItemPageResult = flashItemDomainService.listByQueryCondition(queryCondition);
+        List<FlashItem> flashItems = cacheService.getCaches(queryCondition);
 
         // stream 转换对象类型
-        List<FlashItemDTO> itemDTOS = flashItemPageResult.getData().stream()
+        List<FlashItemDTO> itemDTOS = flashItems.stream()
                 .map(FlashItemAppConvertor::toFlashItemDTO).collect(Collectors.toList());
 
         return AppResult.success(itemDTOS);

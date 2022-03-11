@@ -2,12 +2,26 @@ package com.actionworks.flashsale.domain.model.query;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class FlashItemQueryCondition extends BaseQueryCondition {
+
+    public FlashItemQueryCondition(Long itemId) {
+        this.itemId = itemId;
+    }
+
+    /**
+     * 秒杀商品ID
+     */
+    private Long itemId;
+
     /**
      * 秒杀活动ID
      */
