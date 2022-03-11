@@ -53,6 +53,12 @@ public class FlashOrderController {
         return ResponseConvertor.with(appResult);
     }
 
+    @ApiOperation(value = "根据ID获取订单")
+    @GetMapping("/flash-orders/{orderId}")
+    @ApiImplicitParam(name = "orderId", value = "秒杀订单ID", dataTypeClass = Long.class)
+    public SingleResponse<FlashOrderResponse> getFlashOrder(@PathVariable Long orderId) {
+        return ResponseConvertor.with(flashOrderAppService.getFlashOrder(orderId));
+    }
 
     @PostMapping("/flash-orders")
     @ApiOperation(value = "多条件查询秒杀订单")

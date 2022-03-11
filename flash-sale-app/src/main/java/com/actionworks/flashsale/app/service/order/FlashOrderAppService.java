@@ -21,6 +21,11 @@ public interface FlashOrderAppService {
     <T> AppResult<T> cancelOrder(Long orderId);
 
     /**
+     * 通过秒杀订单ID查询订单
+     */
+    <T> AppResult<T> getFlashOrder(Long orderId);
+
+    /**
      * 条件查询秒杀订单
      */
     <T> AppResult<T> getFlashOrders(FlashOrderQuery flashOrderQuery);

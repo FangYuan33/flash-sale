@@ -58,6 +58,16 @@ public class DefaultFlashOrderAppService implements FlashOrderAppService {
 
     @Override
     @SuppressWarnings("unchecked")
+    public AppResult<FlashOrderDTO> getFlashOrder(Long orderId) {
+        FlashOrder flashOrder = flashOrderDomainService.getById(orderId);
+
+        FlashOrderDTO flashOrderDTO = FlashOrderAppConvertor.toFlashOrderDTO(flashOrder);
+
+        return AppResult.success(flashOrderDTO);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public AppResult<List<FlashOrderDTO>> getFlashOrders(FlashOrderQuery flashOrderQuery) {
         FlashOrderQueryCondition queryCondition = FlashOrderAppConvertor.toQueryCondition(flashOrderQuery);
         PageResult<FlashOrder> flashOrderPageResult = flashOrderDomainService.listByQueryCondition(queryCondition);

@@ -21,4 +21,9 @@ public interface FlashOrderDomainService {
      * 条件查询秒杀订单
      */
     PageResult<FlashOrder> listByQueryCondition(FlashOrderQueryCondition queryCondition);
+
+    /**
+     * 通过ID查询秒杀订单
+     */
+    FlashOrder getById(Long orderId);
 }
