@@ -8,12 +8,18 @@ spring:
   application:
     # 应用名称
     name: flash-sale
+  # mysql
   datasource:
     type: org.apache.commons.dbcp2.BasicDataSource
     url: jdbc:mysql://localhost:3306/learn_mybatis?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: root
     password: xxxxxx
     driver-class-name: com.mysql.cj.jdbc.Driver
+  # redis
+  redis:
+    host: xxx
+    password: xxx
+    address: redis://xxx
 
 # 应用服务 WEB 访问端口
 server:
