@@ -114,6 +114,13 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
         }
     }
 
+    /**
+     * 从Redis分布式缓存获取
+     *
+     * @param queryCondition
+     * @param key
+     * @return
+     */
     @SuppressWarnings("unchecked")
     private T getFromDistributedCache(BaseQueryCondition queryCondition, String key) {
         EntityCache<T> distributedCache = (EntityCache<T>) redisTemplate.opsForValue().get(key);
@@ -122,6 +129,19 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
             return hitDistributedCache(distributedCache).get(0);
         } else {
             return getFromDataBaseAndSaveDistributedCache(queryCondition, key);
+        }
+    }
+
+    /**
+     * 命中分布式缓存，直接返回缓存对象
+     */
+    protected List<T> hitDistributedCache(EntityCache<T> distributedCache) {
+        log.info("命中分布式缓存, {}", JSONObject.toJSONString(distributedCache));
+
+        if (distributedCache.isExist()) {
+            return distributedCache.getDataList();
+        } else {
+            throw new RepositoryException(DATA_NOT_FOUND);
         }
     }
 
@@ -146,16 +166,6 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
         }
 
         return data;
-    }
-
-    protected List<T> hitDistributedCache(EntityCache<T> distributedCache) {
-        log.info("命中分布式缓存, {}", JSONObject.toJSONString(distributedCache));
-
-        if (distributedCache.isExist()) {
-            return distributedCache.getDataList();
-        } else {
-            throw new RepositoryException(DATA_NOT_FOUND);
-        }
     }
 
     /**
