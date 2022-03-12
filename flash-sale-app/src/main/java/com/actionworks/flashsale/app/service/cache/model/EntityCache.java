@@ -3,11 +3,12 @@ package com.actionworks.flashsale.app.service.cache.model;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @Accessors(chain = true)
-public class EntityCache<T> {
+public class EntityCache<T> implements Serializable {
 
     /**
      * 该查询条件下的数据是否存在

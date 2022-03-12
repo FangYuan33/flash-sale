@@ -9,8 +9,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +34,31 @@ import static com.actionworks.flashsale.exception.RepositoryErrorCode.DATA_NOT_F
 @Slf4j
 public abstract class AbstractCacheService<T> implements CacheService<T> {
 
+    /**
+     * 分布式锁的key前缀, key: 前缀 + 查询条件toString
+     */
+    private static final String UPDATE_LOCK_PREFIX = "UPDATE_LOCK_PREFIX_%s";
+
+    /**
+     * 分布式获取锁的等待时间
+     */
+    private static final long WAIT_TIME = 1L;
+
+    /**
+     * 分布式锁最大的持有时间，超过自动释放锁
+     */
+    private static final long LEASE_TIME = 5L;
+
+    /**
+     * 分布式缓存的持续时间
+     */
+    private static final long DISTRIBUTED_CACHE_LIVE_TIME = 60;
+
+    @Resource
+    private RedissonClient redissonClient;
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
     private final Cache<String, EntityCache<T>> flashLocalCache;
 
     {
@@ -47,7 +76,15 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
         if (flashActivityCaches != null) {
             return hitLocalCache(flashActivityCaches).get(0);
         } else {
-            return saveLocalCacheAndGetData(queryCondition, key);
+            T data = getFromDistributedCache(queryCondition, key);
+
+            if (data == null) {
+                saveLocalCache(Collections.emptyList(), key);
+            } else {
+                saveLocalCache(Collections.singletonList(data), key);
+            }
+
+            return data;
         }
     }
 
@@ -72,6 +109,50 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
 
         if (flashActivityCaches.isExist()) {
             return flashActivityCaches.getDataList();
+        } else {
+            throw new RepositoryException(DATA_NOT_FOUND);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private T getFromDistributedCache(BaseQueryCondition queryCondition, String key) {
+        EntityCache<T> distributedCache = (EntityCache<T>) redisTemplate.opsForValue().get(key);
+
+        if (distributedCache != null) {
+            return hitDistributedCache(distributedCache).get(0);
+        } else {
+            return getFromDataBaseAndSaveDistributedCache(queryCondition, key);
+        }
+    }
+
+    protected T getFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
+        RLock lock = redissonClient.getLock(String.format(UPDATE_LOCK_PREFIX, key));
+
+        T data = null;
+        try {
+            if (lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS)) {
+                data = getSingleDataFromDataBase(queryCondition);
+
+                saveDistributedCache(Collections.singletonList(data), key);
+            }
+        } catch (InterruptedException e) {
+            log.error("分布式锁获取失败", e);
+        } catch (DomainException e) {
+            saveDistributedCache(Collections.emptyList(), key);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            lock.unlock();
+        }
+
+        return data;
+    }
+
+    protected List<T> hitDistributedCache(EntityCache<T> distributedCache) {
+        log.info("命中分布式缓存, {}", JSONObject.toJSONString(distributedCache));
+
+        if (distributedCache.isExist()) {
+            return distributedCache.getDataList();
         } else {
             throw new RepositoryException(DATA_NOT_FOUND);
         }
@@ -121,6 +202,15 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
         saveLocalCache(data, key);
 
         return data;
+    }
+
+    protected void saveDistributedCache(List<T> dataList, String key) {
+        // 创建缓存对象，并设置所查数据是否存在
+        EntityCache<T> entityCache = new EntityCache<>();
+        entityCache.setDataList(dataList).setExist(!CollectionUtils.isEmpty(dataList));
+
+        redisTemplate.opsForValue().set(key, entityCache, DISTRIBUTED_CACHE_LIVE_TIME, TimeUnit.SECONDS);
+        log.info("分布式缓存已更新, {}", JSONObject.toJSONString(entityCache));
     }
 
     /**
