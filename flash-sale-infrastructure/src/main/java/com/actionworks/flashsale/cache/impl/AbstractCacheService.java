@@ -33,9 +33,10 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     private final Cache<String, EntityCache<T>> flashLocalCache;
 
     {
-        // 初始化最小大小为10, 允许并发修改的线程数是5, 过期时间指定10s
+        // 初始化最小大小为10, 最大大小暂定33，允许并发修改的线程数是5, 过期时间指定10s
         flashLocalCache = CacheBuilder.newBuilder()
-                .initialCapacity(10).concurrencyLevel(5).expireAfterWrite(10, TimeUnit.SECONDS).build();
+                .initialCapacity(10).maximumSize(33)
+                .concurrencyLevel(5).expireAfterWrite(10, TimeUnit.SECONDS).build();
     }
 
     @Override
