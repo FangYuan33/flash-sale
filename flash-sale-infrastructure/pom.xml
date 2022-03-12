@@ -98,5 +98,10 @@
             <artifactId>redisson-spring-boot-starter</artifactId>
             <version>3.16.8</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>20.0</version>
+        </dependency>
     </dependencies>
 </project>

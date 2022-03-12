@@ -1,4 +1,4 @@
-package com.actionworks.flashsale.app.service.cache.model;
+package com.actionworks.flashsale.cache.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
