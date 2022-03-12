@@ -24,11 +24,6 @@ import static com.actionworks.flashsale.exception.RepositoryErrorCode.TRY_LATTER
 
 /**
  * 缓存服务的抽象类，这里使用了模板方法模式
- * 因为我在写代码的时候，发现读取本地缓存的步骤是固定的: 1. 先取 2. 取不到再存
- * 发现第一步获取缓存的操作，在不同的服务上（秒杀活动、商品、订单）都是会重复的
- * 所以我就把这一方法定义了默认实现
- * 而存缓存的时候，只有查询数据库的操作是不同的，针对不同的服务做实现
- * 所以定义了一个抽象方法针对各个服务查数据库的操作，供不同的服务自己实现
  *
  * @param <T> 泛型，在具体地实现类上再去指定
  */
@@ -90,7 +85,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
         if (flashActivityCaches != null) {
             return hitLocalCache(flashActivityCaches);
         } else {
-            return saveLocalCacheAndGetDataList(queryCondition, key);
+            return getDataListFromDistributedCacheAndSaveLocalCache(queryCondition, key);
         }
     }
 
@@ -108,10 +103,10 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     }
 
     /**
-     * 从分布式缓存中取，取出后进行本地缓存
+     * 从分布式缓存中取单个对象，取出后进行本地缓存
      */
     protected T getDataFromDistributedCacheAndSaveLocalCache(BaseQueryCondition queryCondition, String key) {
-        T data = getFromDistributedCache(queryCondition, key);
+        T data = getDataFromDistributedCache(queryCondition, key);
 
         if (data == null) {
             saveLocalCache(Collections.emptyList(), key);
@@ -123,19 +118,47 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     }
 
     /**
-     * 从Redis分布式缓存获取
+     * 从分布式缓存中取列表对象，取出后进行本地缓存
+     */
+    private List<T> getDataListFromDistributedCacheAndSaveLocalCache(BaseQueryCondition queryCondition, String key) {
+        List<T> dataList = getDataListFromDistributedCache(queryCondition, key);
+
+        saveLocalCache(dataList, key);
+
+        return dataList;
+    }
+
+    /**
+     * 从Redis分布式缓存获取单条数据
      *
      * @param queryCondition 查询条件 仅是ID而已
-     * @param key 缓存对应的key，还是传过来吧
+     * @param key 缓存对应的key，还是传过来吧，虽然它是从queryCondition来的，显得有些冗余
      */
     @SuppressWarnings("unchecked")
-    private T getFromDistributedCache(BaseQueryCondition queryCondition, String key) {
+    private T getDataFromDistributedCache(BaseQueryCondition queryCondition, String key) {
         EntityCache<T> distributedCache = (EntityCache<T>) redisTemplate.opsForValue().get(key);
 
         if (distributedCache != null) {
             return hitDistributedCache(distributedCache, key).get(0);
         } else {
-            return getFromDataBaseAndSaveDistributedCache(queryCondition, key);
+            return getDataFromDataBaseAndSaveDistributedCache(queryCondition, key);
+        }
+    }
+
+    /**
+     * 从Redis分布式缓存获取列表数据
+     *
+     * @param queryCondition 包含多个查询条件
+     * @param key 缓存对应的key
+     */
+    @SuppressWarnings("unchecked")
+    private List<T> getDataListFromDistributedCache(BaseQueryCondition queryCondition, String key) {
+        EntityCache<T> distributedCache = (EntityCache<T>) redisTemplate.opsForValue().get(key);
+
+        if (distributedCache != null) {
+            return hitDistributedCache(distributedCache, key);
+        } else {
+            return getDataListFromDataBaseAndSaveDistributedCache(queryCondition, key);
         }
     }
 
@@ -159,7 +182,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
      * 未命中分布式缓存：先获取分布式锁，成功后在数据库中查，之后保存在分布式缓存中
      * 获取分布式锁失败，则抛出业务异常
      */
-    protected T getFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
+    protected T getDataFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
         RLock lock = redissonClient.getLock(String.format(UPDATE_LOCK_PREFIX, key));
 
         T data = null;
@@ -186,17 +209,29 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     }
 
     /**
-     * 多条件查询返回多个缓存对象时，调用该方法
-     * 未命中本地缓存，查库，并保存在本地缓存中
-     *
-     * @param queryCondition 多个查询条件
-     * @param key 缓存对应的key值
-     * @return 返回查询条件对应的对象
+     * 未命中分布式缓存：先获取分布式锁，成功后在数据库中查，之后保存在分布式缓存中
+     * 获取分布式锁失败，则抛出业务异常
+     * 只不过列表查询不存在的数据，不会抛出DomainException，少了一个catch语句
      */
-    private List<T> saveLocalCacheAndGetDataList(BaseQueryCondition queryCondition, String key) {
-        List<T> data = getDataListFromDataBase(queryCondition);
+    protected List<T> getDataListFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
+        RLock lock = redissonClient.getLock(String.format(UPDATE_LOCK_PREFIX, key));
 
-        saveLocalCache(data, key);
+        List<T> data = null;
+        try {
+            if (lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS)) {
+                try {
+                    data = getDataListFromDataBase(queryCondition);
+
+                    saveDistributedCache(data, key);
+                } finally {
+                    lock.unlock();
+                }
+            } else {
+                throw new RepositoryException(TRY_LATTER);
+            }
+        } catch (InterruptedException e) {
+            log.error("分布式锁获取失败", e);
+        }
 
         return data;
     }
