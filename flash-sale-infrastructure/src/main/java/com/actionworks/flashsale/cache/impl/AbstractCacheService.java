@@ -105,7 +105,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     /**
      * 从分布式缓存中取单个对象，取出后进行本地缓存
      */
-    protected T getDataFromDistributedCacheAndSaveLocalCache(BaseQueryCondition queryCondition, String key) {
+    private T getDataFromDistributedCacheAndSaveLocalCache(BaseQueryCondition queryCondition, String key) {
         T data = getDataFromDistributedCache(queryCondition, key);
 
         if (data == null) {
@@ -166,7 +166,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
      * 命中分布式缓存，直接返回缓存对象
      * 所查询数据不存在时，同样也再向本地缓存中重新存一下
      */
-    protected List<T> hitDistributedCache(EntityCache<T> distributedCache, String key) {
+    private List<T> hitDistributedCache(EntityCache<T> distributedCache, String key) {
         log.info("命中分布式缓存, {}", JSONObject.toJSONString(distributedCache));
 
         if (distributedCache.isExist()) {
@@ -182,7 +182,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
      * 未命中分布式缓存：先获取分布式锁，成功后在数据库中查，之后保存在分布式缓存中
      * 获取分布式锁失败，则抛出业务异常
      */
-    protected T getDataFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
+    private T getDataFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
         RLock lock = redissonClient.getLock(String.format(UPDATE_LOCK_PREFIX, key));
 
         T data = null;
@@ -213,7 +213,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
      * 获取分布式锁失败，则抛出业务异常
      * 只不过列表查询不存在的数据，不会抛出DomainException，少了一个catch语句
      */
-    protected List<T> getDataListFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
+    private List<T> getDataListFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
         RLock lock = redissonClient.getLock(String.format(UPDATE_LOCK_PREFIX, key));
 
         List<T> data = null;
@@ -239,7 +239,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     /**
      * 保存在分布式缓存中
      */
-    protected void saveDistributedCache(List<T> dataList, String key) {
+    private void saveDistributedCache(List<T> dataList, String key) {
         // 创建缓存对象，并设置所查数据是否存在
         EntityCache<T> entityCache = new EntityCache<>();
         entityCache.setDataList(dataList).setExist(!CollectionUtils.isEmpty(dataList));
