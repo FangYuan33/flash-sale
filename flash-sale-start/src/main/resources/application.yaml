@@ -17,9 +17,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   # redis
   redis:
-    host: xxx
+    host: 127.0.0.1
     password: xxx
-    address: redis://xxx
+    address: redis://127.0.0.1:6379
 
 # 应用服务 WEB 访问端口
 server:
