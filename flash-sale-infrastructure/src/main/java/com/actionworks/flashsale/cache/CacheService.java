@@ -1,4 +1,4 @@
-package com.actionworks.flashsale.app.service.cache;
+package com.actionworks.flashsale.cache;
 
 import com.actionworks.flashsale.domain.model.query.BaseQueryCondition;
 

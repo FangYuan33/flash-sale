@@ -1,4 +1,4 @@
-package com.actionworks.flashsale.app.service.cache.impl;
+package com.actionworks.flashsale.cache.impl;
 
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import com.actionworks.flashsale.domain.model.query.BaseQueryCondition;

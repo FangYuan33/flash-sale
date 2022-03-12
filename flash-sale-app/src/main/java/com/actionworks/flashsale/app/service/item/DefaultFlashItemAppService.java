@@ -6,7 +6,7 @@ import com.actionworks.flashsale.app.model.convertor.FlashItemAppConvertor;
 import com.actionworks.flashsale.app.model.dto.FlashItemDTO;
 import com.actionworks.flashsale.app.model.query.FlashItemQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
-import com.actionworks.flashsale.app.service.cache.CacheService;
+import com.actionworks.flashsale.cache.CacheService;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;

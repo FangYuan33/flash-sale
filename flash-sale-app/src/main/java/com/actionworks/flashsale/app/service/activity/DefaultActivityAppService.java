@@ -6,7 +6,7 @@ import com.actionworks.flashsale.app.model.command.FlashActivityPublishCommand;
 import com.actionworks.flashsale.app.model.dto.FlashActivityDTO;
 import com.actionworks.flashsale.app.model.query.FlashActivitiesQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
-import com.actionworks.flashsale.app.service.cache.CacheService;
+import com.actionworks.flashsale.cache.CacheService;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.model.enums.FlashActivityStatus;
 import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;

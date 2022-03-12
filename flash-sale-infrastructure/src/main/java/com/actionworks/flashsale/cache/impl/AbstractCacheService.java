@@ -1,7 +1,7 @@
-package com.actionworks.flashsale.app.service.cache.impl;
+package com.actionworks.flashsale.cache.impl;
 
-import com.actionworks.flashsale.app.service.cache.CacheService;
-import com.actionworks.flashsale.app.service.cache.model.EntityCache;
+import com.actionworks.flashsale.cache.CacheService;
+import com.actionworks.flashsale.cache.model.EntityCache;
 import com.actionworks.flashsale.domain.exception.DomainException;
 import com.actionworks.flashsale.domain.model.query.BaseQueryCondition;
 import com.actionworks.flashsale.exception.RepositoryException;
