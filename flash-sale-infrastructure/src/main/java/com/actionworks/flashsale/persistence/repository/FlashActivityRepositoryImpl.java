@@ -27,6 +27,7 @@ public class FlashActivityRepositoryImpl implements FlashActivityRepository {
         FlashActivityDO flashActivityDO = FlashActivityConvertor.toDataObjectForCreate(flashActivity);
 
         flashActivityMapper.insert(flashActivityDO);
+        flashActivity.setId(flashActivityDO.getId());
     }
 
     @Override

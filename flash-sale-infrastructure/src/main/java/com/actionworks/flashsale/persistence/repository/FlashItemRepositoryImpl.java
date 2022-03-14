@@ -27,6 +27,7 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
         FlashItemDO flashItemDO = FlashItemConvertor.toDataObject(flashItem);
 
         flashItemMapper.insert(flashItemDO);
+        flashItem.setId(flashItemDO.getId());
     }
 
     @Override

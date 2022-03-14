@@ -25,9 +25,9 @@ public class FlashOrderRepositoryImpl implements FlashOrderRepository {
 
     @Override
     public void save(FlashOrder flashOrder) {
-        FlashOrderDO flashOrderDO = FlashOrderConvertor.toDataObject(flashOrder);
         // 雪花算法生成ID
-        flashOrderDO.setId(SnowflakeIdUtil.nextId());
+        flashOrder.setId(SnowflakeIdUtil.nextId());
+        FlashOrderDO flashOrderDO = FlashOrderConvertor.toDataObject(flashOrder);
 
         flashOrderMapper.insert(flashOrderDO);
     }
