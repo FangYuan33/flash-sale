@@ -1,5 +1,7 @@
 package com.actionworks.flashsale.domain.service.impl;
 
+import com.actionworks.flashsale.domain.event.DomainEventPublisher;
+import com.actionworks.flashsale.domain.event.entity.FlashActivityEvent;
 import com.actionworks.flashsale.domain.exception.DomainException;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
@@ -16,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.actionworks.flashsale.domain.event.enums.ActivityEventType.PUBLISH;
 import static com.actionworks.flashsale.domain.exception.DomainErrorCode.*;
 import static com.actionworks.flashsale.domain.model.enums.FlashActivityStatus.*;
 
@@ -25,6 +28,8 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
 
     @Resource
     private FlashActivityRepository flashActivityRepository;
+    @Resource
+    private DomainEventPublisher domainEventPublisher;
 
     @Override
     public void publishActivity(FlashActivity flashActivity) {
@@ -35,6 +40,9 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
         // 状态为已发布
         flashActivityRepository.save(flashActivity.setStatus(PUBLISHED.getCode()));
         log.info("activityPublish|活动已发布|{}", JSON.toJSONString(flashActivity));
+
+        // 秒杀活动发布事件，更新缓存
+        domainEventPublisher.publish(new FlashActivityEvent(flashActivity.getId(), PUBLISH));
     }
 
     @Override

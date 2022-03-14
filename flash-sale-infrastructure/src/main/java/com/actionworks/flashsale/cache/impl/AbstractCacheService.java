@@ -183,7 +183,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
      * 未命中分布式缓存：先获取分布式锁，成功后在数据库中查，之后保存在分布式缓存中
      * 获取分布式锁失败，则抛出业务异常
      */
-    private T getDataFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
+    protected T getDataFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
         RLock lock = redissonClient.getLock(String.format(UPDATE_LOCK_PREFIX, key));
 
         T data = null;
