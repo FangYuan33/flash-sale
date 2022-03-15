@@ -23,7 +23,7 @@ public class FlashActivityEventHandler implements EventHandlerI<Response, FlashA
 
         if (flashActivityEvent.getId() == null) {
             log.error("秒杀活动事件参数错误");
-            return Response.buildSuccess();
+            return Response.buildFailure("500", "秒杀活动事件参数错误");
         }
 
         cacheService.refreshCache(flashActivityEvent.getId());

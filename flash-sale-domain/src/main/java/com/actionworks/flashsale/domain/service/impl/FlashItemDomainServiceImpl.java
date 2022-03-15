@@ -1,5 +1,8 @@
 package com.actionworks.flashsale.domain.service.impl;
 
+import com.actionworks.flashsale.domain.event.DomainEventPublisher;
+import com.actionworks.flashsale.domain.event.entity.FlashItemEvent;
+import com.actionworks.flashsale.domain.event.enums.ItemEventType;
 import com.actionworks.flashsale.domain.exception.DomainException;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
@@ -26,6 +29,8 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
 
     @Resource
     private FlashItemRepository flashItemRepository;
+    @Resource
+    private DomainEventPublisher domainEventPublisher;
 
     @Override
     public void publishFlashItem(FlashItem flashItem) {
@@ -37,6 +42,9 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
         flashItem.setStatus(FlashItemStatus.PUBLISHED.getCode());
         flashItemRepository.save(flashItem);
         log.info("activityPublish|秒杀商品已发布|{}", JSON.toJSONString(flashItem));
+
+        // 秒杀商品活动发布事件，更新分布式缓存
+        domainEventPublisher.publish(new FlashItemEvent(flashItem.getId(), ItemEventType.PUBLISH));
     }
 
     @Override
@@ -52,6 +60,9 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
         flashItem.setStatus(FlashItemStatus.ONLINE.getCode());
         flashItemRepository.updateById(flashItem);
         log.info("onlineFlashItem|秒杀商品已上线|{}", JSON.toJSONString(flashItem));
+
+        // 秒杀商品活动上线事件，更新分布式缓存
+        domainEventPublisher.publish(new FlashItemEvent(flashItem.getId(), ItemEventType.ONLINE));
     }
 
     @Override
@@ -67,6 +78,9 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
         flashItem.setStatus(FlashItemStatus.OFFLINE.getCode());
         flashItemRepository.updateById(flashItem);
         log.info("offlineFlashItem|秒杀商品已下线|{}", JSON.toJSONString(flashItem));
+
+        // 秒杀商品活动下线事件，更新分布式缓存
+        domainEventPublisher.publish(new FlashItemEvent(flashItem.getId(), ItemEventType.OFFLINE));
     }
 
     @Override
