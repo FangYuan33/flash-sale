@@ -2,6 +2,7 @@ package com.actionworks.flashsale.domain.service.impl;
 
 import com.actionworks.flashsale.domain.event.DomainEventPublisher;
 import com.actionworks.flashsale.domain.event.entity.FlashActivityEvent;
+import com.actionworks.flashsale.domain.event.enums.ActivityEventType;
 import com.actionworks.flashsale.domain.exception.DomainException;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
@@ -18,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.actionworks.flashsale.domain.event.enums.ActivityEventType.PUBLISH;
 import static com.actionworks.flashsale.domain.exception.DomainErrorCode.*;
 import static com.actionworks.flashsale.domain.model.enums.FlashActivityStatus.*;
 
@@ -42,7 +42,7 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
         log.info("activityPublish|活动已发布|{}", JSON.toJSONString(flashActivity));
 
         // 秒杀活动发布事件，更新缓存
-        domainEventPublisher.publish(new FlashActivityEvent(flashActivity.getId(), PUBLISH));
+        domainEventPublisher.publish(new FlashActivityEvent(flashActivity.getId(), ActivityEventType.PUBLISH));
     }
 
     @Override
@@ -55,6 +55,9 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
         // 更改状态为已上线
         flashActivityRepository.updateById(flashActivity.setStatus(ONLINE.getCode()));
         log.info("activityOnline|活动已上线|{}", activityId);
+
+        // 秒杀活动上线事件，更新缓存
+        domainEventPublisher.publish(new FlashActivityEvent(activityId, ActivityEventType.ONLINE));
     }
 
     @Override
@@ -71,6 +74,9 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
         // 更新状态为已下线
         flashActivityRepository.updateById(flashActivity.setStatus(OFFLINE.getCode()));
         log.info("activityOffline|活动已下线|{}", activityId);
+
+        // 秒杀活动下线事件，更新缓存
+        domainEventPublisher.publish(new FlashActivityEvent(activityId, ActivityEventType.OFFLINE));
     }
 
     @Override
