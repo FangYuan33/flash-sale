@@ -4,11 +4,12 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.util.StringUtils;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @Accessors(chain = true)
-public class FlashItem {
+public class FlashItem implements Serializable {
 
     /**
      * 秒杀品ID
