@@ -28,12 +28,4 @@ public class FlashItemCacheServiceImpl extends AbstractCacheService<FlashItem> {
 
         return flashItemPageResult.getData();
     }
-
-    @Override
-    public void refreshCache(Long itemId) {
-        FlashItemQueryCondition queryCondition = new FlashItemQueryCondition(itemId);
-
-        // 更新分布式缓存
-        getDataFromDataBaseAndSaveDistributedCache(queryCondition, queryCondition.toString());
-    }
 }

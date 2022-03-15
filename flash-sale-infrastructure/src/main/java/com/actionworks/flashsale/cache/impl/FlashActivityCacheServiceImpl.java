@@ -28,12 +28,4 @@ public class FlashActivityCacheServiceImpl extends AbstractCacheService<FlashAct
     protected FlashActivity getSingleDataFromDataBase(BaseQueryCondition queryCondition) {
         return flashActivityDomainService.getFlashActivity(((FlashActivityQueryCondition) queryCondition).getActivityId());
     }
-
-    @Override
-    public void refreshCache(Long activityId) {
-        FlashActivityQueryCondition queryCondition = new FlashActivityQueryCondition(activityId);
-
-        // 更新分布式缓存
-        getDataFromDataBaseAndSaveDistributedCache(queryCondition, queryCondition.toString());
-    }
 }

@@ -3,6 +3,7 @@ package com.actionworks.flashsale.event;
 import com.actionworks.flashsale.cache.CacheService;
 import com.actionworks.flashsale.domain.event.entity.FlashActivityEvent;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
+import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
 import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.event.EventHandler;
 import com.alibaba.cola.event.EventHandlerI;
@@ -26,7 +27,7 @@ public class FlashActivityEventHandler implements EventHandlerI<Response, FlashA
             return Response.buildFailure("500", "秒杀活动事件参数错误");
         }
 
-        cacheService.refreshCache(flashActivityEvent.getId());
+        cacheService.refreshCache(new FlashActivityQueryCondition(flashActivityEvent.getId()));
 
         return Response.buildSuccess();
     }

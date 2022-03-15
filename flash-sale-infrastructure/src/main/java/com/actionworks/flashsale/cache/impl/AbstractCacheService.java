@@ -90,6 +90,13 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
         }
     }
 
+    @Override
+    public void refreshCache(BaseQueryCondition queryCondition) {
+        String key = queryCondition.toString();
+
+        getDataFromDataBaseAndSaveDistributedCache(queryCondition, key);
+    }
+
     /**
      * 命中本地缓存直接返回缓存对象
      */

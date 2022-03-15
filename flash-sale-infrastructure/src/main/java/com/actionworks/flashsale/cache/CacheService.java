@@ -17,9 +17,10 @@ public interface CacheService<T> {
     List<T> getCaches(BaseQueryCondition queryCondition);
 
     /**
-     * 更新缓存
+     * 更新单条缓存
      *
-     * @param id 对应秒杀活动或秒杀商品的ID
+     * @param queryCondition 这里构造的是queryCondition
+     *                       更新单条缓存，该条件中只包含ID信息
      */
-    void refreshCache(Long id);
+    void refreshCache(BaseQueryCondition queryCondition);
 }
