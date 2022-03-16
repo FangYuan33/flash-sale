@@ -14,6 +14,7 @@ public enum RepositoryErrorCode {
      * 缓存异常枚举
      */
     DATA_NOT_FOUND("查询数据不存在"),
+    FLASH_ITEM_STOCK_CACHE_FAILED("秒杀商品库存缓存失败"),
     /**
      *请稍后尝试
      */
