@@ -3,7 +3,7 @@ package com.actionworks.flashsale.domain.event;
 import com.alibaba.cola.event.DomainEventI;
 
 /**
- * 领域时间发布接口
+ * 领域事件发布接口
  *
  * @author fangyuan
  */
