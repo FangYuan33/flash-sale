@@ -31,17 +31,16 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
 
     static {
         /*
-         * 如果该缓存对应的分布式锁的key存在 说明有线程在修改该缓存
-         * 否则为该缓存添加对应的锁key并将值设置为 1
-         * 之后则是更新该商品的缓存的库存值 更新成功返回 1
+         * 如果该缓存库存已经存在，返回-1
+         * 不存在则添加在缓存中
          */
         INIT_ITEM_STOCK_LUA =
                 "if (redis.call('exists', KEYS[1]) == 1) then" +
-                        "    return -1;" +
-                        "end;" +
-                        "local stockNumber = tonumber(ARGV[1]);" +
-                        "redis.call('set', KEYS[1] , stockNumber);" +
-                        "return 1";
+                "    return -1;" +
+                "end;" +
+                "local stockNumber = tonumber(ARGV[1]);" +
+                "redis.call('set', KEYS[1] , stockNumber);" +
+                "return 1";
     }
 
     @Resource
@@ -87,7 +86,7 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
         Long result = redisTemplate.execute(redisScript, Collections.singletonList(cacheKey), stock);
 
         if (result == null) {
-            log.error("校正库存缓存出错，秒杀品ID {}", itemId);
+            log.error("初始化库存缓存出错，秒杀品ID {}", itemId);
             return false;
         }
         if (result == -1L) {
@@ -95,7 +94,7 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
             return false;
         }
         if (result == 1L) {
-            log.info("校正缓存成功，秒杀品ID {}", itemId);
+            log.info("初始化缓存成功，秒杀品ID {}", itemId);
             return true;
         }
 
