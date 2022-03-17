@@ -20,8 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.actionworks.flashsale.domain.exception.DomainErrorCode.FLASH_ITEM_NOT_EXIST;
-import static com.actionworks.flashsale.domain.exception.DomainErrorCode.PUBLISH_FLASH_ITEM_PARAMS_INVALID;
+import static com.actionworks.flashsale.domain.exception.DomainErrorCode.*;
 
 @Slf4j
 @Service
@@ -105,5 +104,14 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
         Integer count = flashItemRepository.countByQueryCondition(queryCondition);
 
         return PageResult.with(flashItems.orElse(Collections.EMPTY_LIST), count);
+    }
+
+    @Override
+    public void updateById(FlashItem flashItem) {
+        if (flashItem.getId() == null) {
+            throw new DomainException(PARAMS_INVALID);
+        }
+
+        flashItemRepository.updateById(flashItem);
     }
 }

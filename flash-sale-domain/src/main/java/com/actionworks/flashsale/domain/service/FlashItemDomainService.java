@@ -37,4 +37,11 @@ public interface FlashItemDomainService {
      * 条件查询秒杀商品
      */
     PageResult<FlashItem> listByQueryCondition(FlashItemQueryCondition queryCondition);
+
+    /**
+     * 根据ID对秒杀商品进行更新
+     *
+     * @param flashItem 必须包含ID信息
+     */
+    void updateById(FlashItem flashItem);
 }

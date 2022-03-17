@@ -41,6 +41,9 @@
             <if test="status != null">
                 and status = #{status}
             </if>
+            <if test="warmUp != null">
+                and warm_up = #{warmUp}
+            </if>
         </where>
         order by create_time desc
         limit #{offset}, #{pageSize}
