@@ -72,6 +72,11 @@ public class FlashItem implements Serializable {
     private Integer status;
 
     /**
+     * 库存预热情况 0-未预热 1-已预热
+     */
+    private Integer warmUp;
+
+    /**
      * 校验发布秒杀商品的参数
      * 商品标题、开始时间、结束时间非空
      * 结束时间在开始之间之后、结束时间大于当前时间

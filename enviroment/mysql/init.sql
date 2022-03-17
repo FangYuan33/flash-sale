@@ -48,3 +48,6 @@ CREATE TABLE IF NOT EXISTS flash_sale.`flash_order` (
     PRIMARY KEY (`id`),
     KEY `flash_order_user_id_idx` (`user_id`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '秒杀订单表';
+
+-- 新增秒杀商品预热情况字段
+alter table `flash_item` add column `warm_up` tinyint(1) default 0 comment '库存预热情况 0-未预热 1-已预热' after activity_id;

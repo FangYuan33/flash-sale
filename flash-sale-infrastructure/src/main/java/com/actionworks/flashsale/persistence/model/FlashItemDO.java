@@ -64,4 +64,9 @@ public class FlashItemDO extends BaseDO {
      * 秒杀商品状态 10-已发布 20-已上线 30-已下线
      */
     private Integer status;
+
+    /**
+     * 库存预热情况 0-未预热 1-已预热
+     */
+    private Integer warmUp;
 }
