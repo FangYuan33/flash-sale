@@ -24,10 +24,10 @@
                 and activity_desc like concat('%', #{activityDesc}, '%')
             </if>
             <if test="startTime != null">
-                and start_time = #{startTime}
+                and start_time &lt;= #{startTime}
             </if>
             <if test="endTime != null">
-                and end_time = #{endTime}
+                and end_time >= #{endTime}
             </if>
             <if test="status != null and status != ''">
                 and status = #{status}
@@ -49,10 +49,10 @@
                 and activity_desc like concat('%', #{activityDesc}, '%')
             </if>
             <if test="startTime != null">
-                and start_time = #{startTime}
+                and start_time &lt;= #{startTime}
             </if>
             <if test="endTime != null">
-                and end_time = #{endTime}
+                and end_time >= #{endTime}
             </if>
             <if test="status != null and status != ''">
                 and status = #{status}
