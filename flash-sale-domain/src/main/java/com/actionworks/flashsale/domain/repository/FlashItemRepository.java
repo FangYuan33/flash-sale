@@ -31,6 +31,11 @@ public interface FlashItemRepository {
     Optional<List<FlashItem>> listByQueryCondition(FlashItemQueryCondition queryCondition);
 
     /**
+     * 条件查询秒杀商品不分页
+     */
+    List<FlashItem> listByQueryConditionWithoutPageSize(FlashItemQueryCondition queryCondition);
+
+    /**
      * 条件计数
      */
     Integer countByQueryCondition(FlashItemQueryCondition queryCondition);

@@ -107,6 +107,11 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
     }
 
     @Override
+    public List<FlashItem> listByQueryConditionWithoutPageSize(FlashItemQueryCondition queryCondition) {
+        return flashItemRepository.listByQueryConditionWithoutPageSize(queryCondition);
+    }
+
+    @Override
     public void updateById(FlashItem flashItem) {
         if (flashItem.getId() == null) {
             throw new DomainException(PARAMS_INVALID);

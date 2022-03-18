@@ -22,6 +22,11 @@ public interface FlashItemMapper extends BaseMapper<FlashItemDO> {
     Integer countByQueryCondition(FlashItemQueryCondition queryCondition);
 
     /**
+     * 条件查询秒杀秒杀活动不分页
+     */
+    List<FlashItemDO> listByQueryConditionWithoutPageSize(FlashItemQueryCondition queryCondition);
+
+    /**
      * 扣减库存
      *
      * @param itemId 商品ID

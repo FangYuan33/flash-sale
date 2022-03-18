@@ -39,6 +39,11 @@ public interface FlashItemDomainService {
     PageResult<FlashItem> listByQueryCondition(FlashItemQueryCondition queryCondition);
 
     /**
+     * 条件查询秒杀商品 不包含分页参数
+     */
+    List<FlashItem> listByQueryConditionWithoutPageSize(FlashItemQueryCondition queryCondition);
+
+    /**
      * 根据ID对秒杀商品进行更新
      *
      * @param flashItem 必须包含ID信息

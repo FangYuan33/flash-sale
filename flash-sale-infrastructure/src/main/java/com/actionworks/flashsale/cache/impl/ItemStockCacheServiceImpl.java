@@ -90,8 +90,8 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
             return false;
         }
         if (result == -1L) {
-            log.error("库存已经写入，秒杀品ID {}", itemId);
-            return false;
+            log.info("库存已经写入，秒杀品ID {}", itemId);
+            return true;
         }
         if (result == 1L) {
             log.info("初始化缓存成功，秒杀品ID {}", itemId);

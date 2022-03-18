@@ -20,7 +20,7 @@
         create_time
     </sql>
 
-    <select id="listByQueryCondition" resultType="com.actionworks.flashsale.persistence.model.FlashItemDO">
+    <sql id="listByQueryCondition">
         select <include refid="ALL_COLUMNS"></include>
         from flash_item
         <where>
@@ -47,7 +47,15 @@
             </if>
         </where>
         order by create_time desc
+    </sql>
+
+    <select id="listByQueryCondition" resultType="com.actionworks.flashsale.persistence.model.FlashItemDO">
+        <include refid="listByQueryCondition"></include>
         limit #{offset}, #{pageSize}
+    </select>
+
+    <select id="listByQueryConditionWithoutPageSize" resultType="com.actionworks.flashsale.persistence.model.FlashItemDO">
+        <include refid="listByQueryCondition"></include>
     </select>
 
     <select id="countByQueryCondition" resultType="java.lang.Integer">

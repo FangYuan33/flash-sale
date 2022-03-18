@@ -68,6 +68,14 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
     }
 
     @Override
+    public List<FlashItem> listByQueryConditionWithoutPageSize(FlashItemQueryCondition queryCondition) {
+        List<FlashItemDO> flashItemDOList = flashItemMapper.listByQueryConditionWithoutPageSize(queryCondition);
+
+        // stream 转换对象类型
+        return flashItemDOList.stream().map(FlashItemConvertor::toDomainObject).collect(Collectors.toList());
+    }
+
+    @Override
     public Integer countByQueryCondition(FlashItemQueryCondition queryCondition) {
         return flashItemMapper.countByQueryCondition(queryCondition);
     }
