@@ -17,7 +17,6 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.actionworks.flashsale.exception.RepositoryErrorCode.DATA_NOT_FOUND;
@@ -100,12 +99,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
 
     @Override
     public void refreshCaches(String keyPrefix) {
-        String key = String.format(keyPrefix, "*");
-        Set<String> keys = redisTemplate.keys(key);
-
-        if (keys != null) {
-            redisTemplate.delete(keys);
-        }
+        redisCacheService.deleteByPrefix(keyPrefix);
     }
 
     /**
@@ -153,9 +147,8 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
      * @param id 秒杀活动or秒杀商品 ID
      * @param key 缓存对应的key
      */
-    @SuppressWarnings("unchecked")
     private T getDataFromDistributedCache(Long id, String key) {
-        EntityCache<T> distributedCache = (EntityCache<T>) redisTemplate.opsForValue().get(key);
+        EntityCache<T> distributedCache = redisCacheService.getValue(key);
 
         if (distributedCache != null) {
             return hitDistributedCache(distributedCache, key).get(0);

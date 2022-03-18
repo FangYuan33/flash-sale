@@ -4,7 +4,6 @@ import com.actionworks.flashsale.cache.CacheService;
 import com.actionworks.flashsale.cache.constants.CacheConstants;
 import com.actionworks.flashsale.domain.event.entity.FlashActivityEvent;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
-import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
 import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.event.EventHandler;
 import com.alibaba.cola.event.EventHandlerI;

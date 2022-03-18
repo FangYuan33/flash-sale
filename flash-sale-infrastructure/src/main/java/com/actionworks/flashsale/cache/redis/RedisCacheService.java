@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -34,5 +35,17 @@ public class RedisCacheService<T> {
      */
     public void setValue(String key, Object value, Long second) {
         redisTemplate.opsForValue().set(key, value, second, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 根据前缀模糊删除所有相关的缓存
+     */
+    public void deleteByPrefix(String keyPrefix) {
+        String key = String.format(keyPrefix, "*");
+        Set<String> keys = redisTemplate.keys(key);
+
+        if (keys != null) {
+            redisTemplate.delete(keys);
+        }
     }
 }
