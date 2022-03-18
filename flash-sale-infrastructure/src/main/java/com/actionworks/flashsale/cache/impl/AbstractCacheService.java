@@ -12,7 +12,6 @@ import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -53,8 +52,6 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
 
     @Resource
     private RedissonClient redissonClient;
-    @Resource
-    private RedisTemplate<String, Object> redisTemplate;
     @Resource
     private RedisCacheService<T> redisCacheService;
 

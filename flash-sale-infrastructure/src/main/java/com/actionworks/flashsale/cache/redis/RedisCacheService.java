@@ -1,7 +1,6 @@
 package com.actionworks.flashsale.cache.redis;
 
 import com.actionworks.flashsale.cache.model.EntityCache;
-import com.alibaba.fastjson.JSONObject;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +17,7 @@ public class RedisCacheService<T> {
 
     @SuppressWarnings("unchecked")
     public EntityCache<T> getValue(String key) {
-        Object o = redisTemplate.opsForValue().get(key);
-
-        // TODO
-        if (o != null) {
-            return (EntityCache<T>) JSONObject.parseObject(o.toString(), EntityCache.class);
-        } else {
-            return null;
-        }
+        return (EntityCache<T>) redisTemplate.opsForValue().get(key);
     }
 
     /**
