@@ -1,4 +1,4 @@
-package com.actionworks.flashsale.cache.redis;
+package com.actionworks.flashsale.cache.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;

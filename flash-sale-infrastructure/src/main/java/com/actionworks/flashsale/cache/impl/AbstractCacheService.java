@@ -2,6 +2,7 @@ package com.actionworks.flashsale.cache.impl;
 
 import com.actionworks.flashsale.cache.CacheService;
 import com.actionworks.flashsale.cache.model.EntityCache;
+import com.actionworks.flashsale.cache.redis.RedisCacheService;
 import com.actionworks.flashsale.domain.exception.DomainException;
 import com.actionworks.flashsale.domain.model.query.BaseQueryCondition;
 import com.actionworks.flashsale.exception.RepositoryException;
@@ -54,6 +55,8 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     private RedissonClient redissonClient;
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    private RedisCacheService<T> redisCacheService;
 
     private final Cache<String, EntityCache<T>> flashLocalCache;
 
@@ -135,9 +138,8 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
      * @param queryCondition 查询条件 仅是ID而已
      * @param key 缓存对应的key，还是传过来吧，虽然它是从queryCondition来的，显得有些冗余
      */
-    @SuppressWarnings("unchecked")
     private T getDataFromDistributedCache(BaseQueryCondition queryCondition, String key) {
-        EntityCache<T> distributedCache = (EntityCache<T>) redisTemplate.opsForValue().get(key);
+        EntityCache<T> distributedCache = redisCacheService.getValue(key);
 
         if (distributedCache != null) {
             return hitDistributedCache(distributedCache, key).get(0);
@@ -152,9 +154,8 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
      * @param queryCondition 包含多个查询条件
      * @param key 缓存对应的key
      */
-    @SuppressWarnings("unchecked")
     private List<T> getDataListFromDistributedCache(BaseQueryCondition queryCondition, String key) {
-        EntityCache<T> distributedCache = (EntityCache<T>) redisTemplate.opsForValue().get(key);
+        EntityCache<T> distributedCache = redisCacheService.getValue(key);
 
         if (distributedCache != null) {
             return hitDistributedCache(distributedCache, key);
@@ -245,7 +246,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
         EntityCache<T> entityCache = new EntityCache<>();
         entityCache.setDataList(dataList).setExist(!CollectionUtils.isEmpty(dataList));
 
-        redisTemplate.opsForValue().set(key, entityCache, DISTRIBUTED_CACHE_LIVE_TIME, TimeUnit.SECONDS);
+        redisCacheService.setValue(key, entityCache, DISTRIBUTED_CACHE_LIVE_TIME);
         log.info("分布式缓存已更新, {}", JSONObject.toJSONString(entityCache));
     }
 
