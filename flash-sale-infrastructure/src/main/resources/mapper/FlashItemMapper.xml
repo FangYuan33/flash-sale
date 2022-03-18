@@ -33,10 +33,10 @@
                 and item_sub_title = #{itemSubTitle}
             </if>
             <if test="startTime != null">
-                and start_time >= #{startTime}
+                and start_time &lt;= #{startTime}
             </if>
             <if test="endTime != null">
-                and end_time &lt;= #{endTime}
+                and end_time >= #{endTime}
             </if>
             <if test="status != null">
                 and status = #{status}
@@ -60,10 +60,10 @@
                 and item_sub_title = #{itemSubTitle}
             </if>
             <if test="startTime != null">
-                and start_time >= #{startTime}
+                and start_time &lt;= #{startTime}
             </if>
             <if test="endTime != null">
-                and end_time &lt;= #{endTime}
+                and end_time >= #{endTime}
             </if>
             <if test="status != null">
                 and status = #{status}
