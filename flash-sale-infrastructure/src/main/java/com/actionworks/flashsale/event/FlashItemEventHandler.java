@@ -1,6 +1,7 @@
 package com.actionworks.flashsale.event;
 
 import com.actionworks.flashsale.cache.CacheService;
+import com.actionworks.flashsale.cache.constants.CacheConstants;
 import com.actionworks.flashsale.domain.event.entity.FlashItemEvent;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
@@ -27,7 +28,9 @@ public class FlashItemEventHandler implements EventHandlerI<Response, FlashItemE
             return Response.buildFailure("500", "秒杀活动事件参数错误");
         }
 
+        // 刷新单条缓存和清除列表缓存
         cacheService.refreshCache(new FlashItemQueryCondition(flashItemEvent.getId()));
+        cacheService.refreshCaches(CacheConstants.FLASH_ITEM_CACHE_LIST_PREFIX);
 
         return Response.buildSuccess();
     }

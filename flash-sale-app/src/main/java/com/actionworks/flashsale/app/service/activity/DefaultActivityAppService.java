@@ -7,6 +7,7 @@ import com.actionworks.flashsale.app.model.dto.FlashActivityDTO;
 import com.actionworks.flashsale.app.model.query.FlashActivitiesQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
 import com.actionworks.flashsale.cache.CacheService;
+import com.actionworks.flashsale.cache.constants.CacheConstants;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.model.enums.FlashActivityStatus;
 import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
@@ -77,7 +78,8 @@ public class DefaultActivityAppService implements FlashActivityAppService {
         FlashActivityQueryCondition flashActivityQueryCondition =
                 FlashActivityAppConvertor.toFlashActivityQueryCondition(flashActivitiesQuery);
 
-        List<FlashActivity> caches = cacheService.getCaches(flashActivityQueryCondition);
+        List<FlashActivity> caches = cacheService
+                .getCaches(CacheConstants.FLASH_ACTIVITY_CACHE_LIST_PREFIX, flashActivityQueryCondition);
 
         // stream 完成对象转换
         List<FlashActivityDTO> result = caches.stream()

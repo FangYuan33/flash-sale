@@ -17,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static com.actionworks.flashsale.exception.RepositoryErrorCode.DATA_NOT_FOUND;
@@ -78,8 +79,8 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     }
 
     @Override
-    public List<T> getCaches(BaseQueryCondition queryCondition) {
-        String key = queryCondition.toString();
+    public List<T> getCaches(String keyPrefix, BaseQueryCondition queryCondition) {
+        String key = String.format(keyPrefix, queryCondition.toString());
 
         EntityCache<T> flashActivityCaches = flashLocalCache.getIfPresent(key);
 
@@ -95,6 +96,16 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
         String key = queryCondition.toString();
 
         getDataFromDataBaseAndSaveDistributedCache(queryCondition, key);
+    }
+
+    @Override
+    public void refreshCaches(String keyPrefix) {
+        String key = String.format(keyPrefix, "*");
+        Set<String> keys = redisTemplate.keys(key);
+
+        if (keys != null) {
+            redisTemplate.delete(keys);
+        }
     }
 
     /**

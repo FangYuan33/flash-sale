@@ -13,8 +13,10 @@ public interface CacheService<T> {
 
     /**
      * 根据查询条件读取本地缓存
+     *
+     * @param keyPrefix 列表缓存key前缀
      */
-    List<T> getCaches(BaseQueryCondition queryCondition);
+    List<T> getCaches(String keyPrefix, BaseQueryCondition queryCondition);
 
     /**
      * 更新单条缓存
@@ -23,4 +25,11 @@ public interface CacheService<T> {
      *                       更新单条缓存，该条件中只包含ID信息
      */
     void refreshCache(BaseQueryCondition queryCondition);
+
+    /**
+     * 更新列表查询缓存 (将所有列表查询的缓存清除)
+     *
+     * @param keyPrefix 列表缓存key前缀
+     */
+    void refreshCaches(String keyPrefix);
 }
