@@ -1,9 +1,9 @@
 package com.actionworks.flashsale.event;
 
 import com.actionworks.flashsale.cache.CacheService;
+import com.actionworks.flashsale.cache.constants.CacheConstants;
 import com.actionworks.flashsale.domain.event.entity.FlashActivityEvent;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
-import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
 import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.event.EventHandler;
 import com.alibaba.cola.event.EventHandlerI;
@@ -27,7 +27,9 @@ public class FlashActivityEventHandler implements EventHandlerI<Response, FlashA
             return Response.buildFailure("500", "秒杀活动事件参数错误");
         }
 
-        cacheService.refreshCache(new FlashActivityQueryCondition(flashActivityEvent.getId()));
+        // 刷新单条缓存和清除列表缓存
+        cacheService.refreshCache(CacheConstants.FLASH_ACTIVITY_SINGLE_CACHE_PREFIX, flashActivityEvent.getId());
+        cacheService.refreshCaches(CacheConstants.FLASH_ACTIVITY_CACHE_LIST_PREFIX);
 
         return Response.buildSuccess();
     }

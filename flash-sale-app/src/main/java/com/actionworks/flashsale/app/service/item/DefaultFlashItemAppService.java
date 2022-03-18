@@ -7,6 +7,7 @@ import com.actionworks.flashsale.app.model.dto.FlashItemDTO;
 import com.actionworks.flashsale.app.model.query.FlashItemQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
 import com.actionworks.flashsale.cache.CacheService;
+import com.actionworks.flashsale.cache.constants.CacheConstants;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
@@ -103,7 +104,7 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
     @Override
     @SuppressWarnings("unchecked")
     public AppResult<FlashItemDTO> getById(Long itemId) {
-        FlashItem flashItem = cacheService.getCache(new FlashItemQueryCondition(itemId));
+        FlashItem flashItem = cacheService.getCache(CacheConstants.FLASH_ITEM_SINGLE_CACHE_PREFIX, itemId);
 
         FlashItemDTO flashItemDTO = FlashItemAppConvertor.toFlashItemDTO(flashItem);
 
@@ -115,7 +116,7 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
     public AppResult<List<FlashItemDTO>> getFlashItems(FlashItemQuery query) {
         FlashItemQueryCondition queryCondition = FlashItemAppConvertor.toFlashItemQueryCondition(query);
 
-        List<FlashItem> flashItems = cacheService.getCaches(queryCondition);
+        List<FlashItem> flashItems = cacheService.getCaches(CacheConstants.FLASH_ITEM_CACHE_LIST_PREFIX, queryCondition);
 
         // stream 转换对象类型
         List<FlashItemDTO> itemDTOS = flashItems.stream()

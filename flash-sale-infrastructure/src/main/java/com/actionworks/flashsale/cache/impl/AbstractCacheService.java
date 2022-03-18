@@ -2,6 +2,7 @@ package com.actionworks.flashsale.cache.impl;
 
 import com.actionworks.flashsale.cache.CacheService;
 import com.actionworks.flashsale.cache.model.EntityCache;
+import com.actionworks.flashsale.cache.redis.RedisCacheService;
 import com.actionworks.flashsale.domain.exception.DomainException;
 import com.actionworks.flashsale.domain.model.query.BaseQueryCondition;
 import com.actionworks.flashsale.exception.RepositoryException;
@@ -11,7 +12,6 @@ import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -53,7 +53,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     @Resource
     private RedissonClient redissonClient;
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisCacheService<T> redisCacheService;
 
     private final Cache<String, EntityCache<T>> flashLocalCache;
 
@@ -65,21 +65,21 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     }
 
     @Override
-    public T getCache(BaseQueryCondition queryCondition) {
-        String key = queryCondition.toString();
+    public T getCache(String keyPrefix, Long id) {
+        String key = String.format(keyPrefix, id);
 
         EntityCache<T> flashActivityCaches = flashLocalCache.getIfPresent(key);
 
         if (flashActivityCaches != null) {
             return hitLocalCache(flashActivityCaches).get(0);
         } else {
-            return getDataFromDistributedCacheAndSaveLocalCache(queryCondition, key);
+            return getDataFromDistributedCacheAndSaveLocalCache(id, key);
         }
     }
 
     @Override
-    public List<T> getCaches(BaseQueryCondition queryCondition) {
-        String key = queryCondition.toString();
+    public List<T> getCaches(String keyPrefix, BaseQueryCondition queryCondition) {
+        String key = String.format(keyPrefix, queryCondition.toString());
 
         EntityCache<T> flashActivityCaches = flashLocalCache.getIfPresent(key);
 
@@ -91,10 +91,15 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     }
 
     @Override
-    public void refreshCache(BaseQueryCondition queryCondition) {
-        String key = queryCondition.toString();
+    public void refreshCache(String keyPrefix, Long id) {
+        String key = String.format(keyPrefix, id);
 
-        getDataFromDataBaseAndSaveDistributedCache(queryCondition, key);
+        getDataFromDataBaseAndSaveDistributedCache(id, key);
+    }
+
+    @Override
+    public void refreshCaches(String keyPrefix) {
+        redisCacheService.deleteByPrefix(keyPrefix);
     }
 
     /**
@@ -113,8 +118,8 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     /**
      * 从分布式缓存中取单个对象，取出后进行本地缓存
      */
-    private T getDataFromDistributedCacheAndSaveLocalCache(BaseQueryCondition queryCondition, String key) {
-        T data = getDataFromDistributedCache(queryCondition, key);
+    private T getDataFromDistributedCacheAndSaveLocalCache(Long id, String key) {
+        T data = getDataFromDistributedCache(id, key);
 
         if (data == null) {
             saveLocalCache(Collections.emptyList(), key);
@@ -139,17 +144,16 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     /**
      * 从Redis分布式缓存获取单条数据
      *
-     * @param queryCondition 查询条件 仅是ID而已
-     * @param key 缓存对应的key，还是传过来吧，虽然它是从queryCondition来的，显得有些冗余
+     * @param id 秒杀活动or秒杀商品 ID
+     * @param key 缓存对应的key
      */
-    @SuppressWarnings("unchecked")
-    private T getDataFromDistributedCache(BaseQueryCondition queryCondition, String key) {
-        EntityCache<T> distributedCache = (EntityCache<T>) redisTemplate.opsForValue().get(key);
+    private T getDataFromDistributedCache(Long id, String key) {
+        EntityCache<T> distributedCache = redisCacheService.getValue(key);
 
         if (distributedCache != null) {
             return hitDistributedCache(distributedCache, key).get(0);
         } else {
-            return getDataFromDataBaseAndSaveDistributedCache(queryCondition, key);
+            return getDataFromDataBaseAndSaveDistributedCache(id, key);
         }
     }
 
@@ -159,9 +163,8 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
      * @param queryCondition 包含多个查询条件
      * @param key 缓存对应的key
      */
-    @SuppressWarnings("unchecked")
     private List<T> getDataListFromDistributedCache(BaseQueryCondition queryCondition, String key) {
-        EntityCache<T> distributedCache = (EntityCache<T>) redisTemplate.opsForValue().get(key);
+        EntityCache<T> distributedCache = redisCacheService.getValue(key);
 
         if (distributedCache != null) {
             return hitDistributedCache(distributedCache, key);
@@ -172,7 +175,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
 
     /**
      * 命中分布式缓存，直接返回缓存对象
-     * 所查询数据不存在时，同样也再向本地缓存中重新存一下
+     * 所查询数据不存在时，同样也再向本地缓存中存空的列表对象
      */
     private List<T> hitDistributedCache(EntityCache<T> distributedCache, String key) {
         log.info("命中分布式缓存, {}", JSONObject.toJSONString(distributedCache));
@@ -190,14 +193,14 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
      * 未命中分布式缓存：先获取分布式锁，成功后在数据库中查，之后保存在分布式缓存中
      * 获取分布式锁失败，则抛出业务异常
      */
-    private T getDataFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
+    private T getDataFromDataBaseAndSaveDistributedCache(Long id, String key) {
         RLock lock = redissonClient.getLock(String.format(UPDATE_LOCK_PREFIX, key));
 
         T data = null;
         try {
             if (lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS)) {
                 try {
-                    data = getSingleDataFromDataBase(queryCondition);
+                    data = getSingleDataFromDataBase(id);
 
                     saveDistributedCache(Collections.singletonList(data), key);
                 } catch (DomainException e) {
@@ -219,7 +222,9 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     /**
      * 未命中分布式缓存：先获取分布式锁，成功后在数据库中查，之后保存在分布式缓存中
      * 获取分布式锁失败，则抛出业务异常
-     * 只不过列表查询不存在的数据，不会抛出DomainException，少了一个catch语句
+     *
+     * 列表查询，数据不存在时，不会抛出DomainException
+     * 相比getDataFromDataBaseAndSaveDistributedCache方法少了一个catch语句
      */
     private List<T> getDataListFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
         RLock lock = redissonClient.getLock(String.format(UPDATE_LOCK_PREFIX, key));
@@ -252,7 +257,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
         EntityCache<T> entityCache = new EntityCache<>();
         entityCache.setDataList(dataList).setExist(!CollectionUtils.isEmpty(dataList));
 
-        redisTemplate.opsForValue().set(key, entityCache, DISTRIBUTED_CACHE_LIVE_TIME, TimeUnit.SECONDS);
+        redisCacheService.setValue(key, entityCache, DISTRIBUTED_CACHE_LIVE_TIME);
         log.info("分布式缓存已更新, {}", JSONObject.toJSONString(entityCache));
     }
 
@@ -271,10 +276,8 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
 
     /**
      * 根据不同的服务做具体地查询，单个对象
-     *
-     * @param queryCondition 仅仅包含ID信息
      */
-    protected abstract T getSingleDataFromDataBase(BaseQueryCondition queryCondition);
+    protected abstract T getSingleDataFromDataBase(Long id);
 
     /**
      * 根据不同的服务做具体地实现，多个对象
