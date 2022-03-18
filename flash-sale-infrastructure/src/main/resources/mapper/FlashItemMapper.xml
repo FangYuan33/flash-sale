@@ -15,6 +15,7 @@
         start_time,
         end_time,
         status,
+        warm_up,
         modified_time,
         create_time
     </sql>
