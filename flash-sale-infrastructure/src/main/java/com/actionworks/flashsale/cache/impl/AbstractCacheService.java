@@ -269,7 +269,6 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
         EntityCache<T> entityCache = new EntityCache<>();
         entityCache.setDataList(dataList).setExist(!CollectionUtils.isEmpty(dataList));
 
-        // 存在本地缓存中， key: 查询条件的toString字符串
         flashLocalCache.put(key, entityCache);
         log.info("本地缓存已更新, {}", JSONObject.toJSONString(entityCache));
     }

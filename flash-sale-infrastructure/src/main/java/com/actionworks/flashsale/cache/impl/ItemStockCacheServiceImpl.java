@@ -1,13 +1,12 @@
 package com.actionworks.flashsale.cache.impl;
 
 import com.actionworks.flashsale.cache.ItemStockCacheService;
+import com.actionworks.flashsale.cache.redis.RedisCacheService;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import com.actionworks.flashsale.exception.RepositoryException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -47,7 +46,7 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
     private FlashItemDomainService flashItemDomainService;
 
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisCacheService<Object> redisCacheService;
 
     @Override
     public boolean initialItemStocks(Long itemId) {
@@ -82,8 +81,7 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
     private boolean doInitialItemStocks(Long itemId, Integer stock) {
         String cacheKey = String.format(ITEM_STOCK_KEY, itemId);
 
-        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>(INIT_ITEM_STOCK_LUA, Long.class);
-        Long result = redisTemplate.execute(redisScript, Collections.singletonList(cacheKey), stock);
+        Long result = redisCacheService.executeLua(INIT_ITEM_STOCK_LUA, Collections.singletonList(cacheKey), stock);
 
         if (result == null) {
             log.error("初始化库存缓存出错，秒杀品ID {}", itemId);

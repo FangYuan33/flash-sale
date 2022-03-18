@@ -2,9 +2,11 @@ package com.actionworks.flashsale.cache.redis;
 
 import com.actionworks.flashsale.cache.model.EntityCache;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -47,5 +49,18 @@ public class RedisCacheService<T> {
         if (keys != null) {
             redisTemplate.delete(keys);
         }
+    }
+
+    /**
+     * 执行lua脚本
+     *
+     * @param luaStr lua脚本String
+     * @param keys 需要用到的key们
+     * @param args 参数们
+     */
+    public Long executeLua(String luaStr, List<String> keys, Object... args) {
+        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>(luaStr, Long.class);
+
+        return redisTemplate.execute(redisScript, keys, args);
     }
 }
