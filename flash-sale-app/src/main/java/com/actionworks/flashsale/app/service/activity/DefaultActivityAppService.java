@@ -67,7 +67,7 @@ public class DefaultActivityAppService implements FlashActivityAppService {
     @Override
     @SuppressWarnings("unchecked")
     public AppResult<FlashActivityDTO> getFlashActivity(Long activityId) {
-        FlashActivity flashActivity = cacheService.getCache(new FlashActivityQueryCondition(activityId));
+        FlashActivity flashActivity = cacheService.getCache(CacheConstants.FLASH_ACTIVITY_SINGLE_CACHE_PREFIX, activityId);
 
         return AppResult.success(FlashActivityAppConvertor.toFlashActivityDTO(flashActivity));
     }

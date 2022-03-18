@@ -4,7 +4,6 @@ import com.actionworks.flashsale.cache.CacheService;
 import com.actionworks.flashsale.cache.constants.CacheConstants;
 import com.actionworks.flashsale.domain.event.entity.FlashItemEvent;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
-import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.event.EventHandler;
 import com.alibaba.cola.event.EventHandlerI;
@@ -24,12 +23,12 @@ public class FlashItemEventHandler implements EventHandlerI<Response, FlashItemE
         log.info("开始处理秒杀商品事件, {}", flashItemEvent.toString());
 
         if (flashItemEvent.getId() == null) {
-            log.error("秒杀活动事件参数错误");
-            return Response.buildFailure("500", "秒杀活动事件参数错误");
+            log.error("秒杀商品事件参数错误");
+            return Response.buildFailure("500", "秒杀商品事件参数错误");
         }
 
         // 刷新单条缓存和清除列表缓存
-        cacheService.refreshCache(new FlashItemQueryCondition(flashItemEvent.getId()));
+        cacheService.refreshCache(CacheConstants.FLASH_ITEM_SINGLE_CACHE_PREFIX, flashItemEvent.getId());
         cacheService.refreshCaches(CacheConstants.FLASH_ITEM_CACHE_LIST_PREFIX);
 
         return Response.buildSuccess();

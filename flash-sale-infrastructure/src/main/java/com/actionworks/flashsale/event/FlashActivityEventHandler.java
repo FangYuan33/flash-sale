@@ -29,7 +29,7 @@ public class FlashActivityEventHandler implements EventHandlerI<Response, FlashA
         }
 
         // 刷新单条缓存和清除列表缓存
-        cacheService.refreshCache(new FlashActivityQueryCondition(flashActivityEvent.getId()));
+        cacheService.refreshCache(CacheConstants.FLASH_ACTIVITY_SINGLE_CACHE_PREFIX, flashActivityEvent.getId());
         cacheService.refreshCaches(CacheConstants.FLASH_ACTIVITY_CACHE_LIST_PREFIX);
 
         return Response.buildSuccess();

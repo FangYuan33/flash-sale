@@ -104,7 +104,7 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
     @Override
     @SuppressWarnings("unchecked")
     public AppResult<FlashItemDTO> getById(Long itemId) {
-        FlashItem flashItem = cacheService.getCache(new FlashItemQueryCondition(itemId));
+        FlashItem flashItem = cacheService.getCache(CacheConstants.FLASH_ITEM_SINGLE_CACHE_PREFIX, itemId);
 
         FlashItemDTO flashItemDTO = FlashItemAppConvertor.toFlashItemDTO(flashItem);
 

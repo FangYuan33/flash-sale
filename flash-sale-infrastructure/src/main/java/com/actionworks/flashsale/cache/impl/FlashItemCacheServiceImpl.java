@@ -17,8 +17,8 @@ public class FlashItemCacheServiceImpl extends AbstractCacheService<FlashItem> {
     private FlashItemDomainService flashItemDomainService;
 
     @Override
-    protected FlashItem getSingleDataFromDataBase(BaseQueryCondition queryCondition) {
-        return flashItemDomainService.getById(((FlashItemQueryCondition) queryCondition).getItemId());
+    protected FlashItem getSingleDataFromDataBase(Long id) {
+        return flashItemDomainService.getById(id);
     }
 
     @Override

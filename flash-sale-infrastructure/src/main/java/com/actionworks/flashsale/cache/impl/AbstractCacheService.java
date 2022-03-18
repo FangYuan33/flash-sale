@@ -66,15 +66,15 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     }
 
     @Override
-    public T getCache(BaseQueryCondition queryCondition) {
-        String key = queryCondition.toString();
+    public T getCache(String keyPrefix, Long id) {
+        String key = String.format(keyPrefix, id);
 
         EntityCache<T> flashActivityCaches = flashLocalCache.getIfPresent(key);
 
         if (flashActivityCaches != null) {
             return hitLocalCache(flashActivityCaches).get(0);
         } else {
-            return getDataFromDistributedCacheAndSaveLocalCache(queryCondition, key);
+            return getDataFromDistributedCacheAndSaveLocalCache(id, key);
         }
     }
 
@@ -92,10 +92,10 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     }
 
     @Override
-    public void refreshCache(BaseQueryCondition queryCondition) {
-        String key = queryCondition.toString();
+    public void refreshCache(String keyPrefix, Long id) {
+        String key = String.format(keyPrefix, id);
 
-        getDataFromDataBaseAndSaveDistributedCache(queryCondition, key);
+        getDataFromDataBaseAndSaveDistributedCache(id, key);
     }
 
     @Override
@@ -124,8 +124,8 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     /**
      * 从分布式缓存中取单个对象，取出后进行本地缓存
      */
-    private T getDataFromDistributedCacheAndSaveLocalCache(BaseQueryCondition queryCondition, String key) {
-        T data = getDataFromDistributedCache(queryCondition, key);
+    private T getDataFromDistributedCacheAndSaveLocalCache(Long id, String key) {
+        T data = getDataFromDistributedCache(id, key);
 
         if (data == null) {
             saveLocalCache(Collections.emptyList(), key);
@@ -150,17 +150,17 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     /**
      * 从Redis分布式缓存获取单条数据
      *
-     * @param queryCondition 查询条件 仅是ID而已
-     * @param key 缓存对应的key，还是传过来吧，虽然它是从queryCondition来的，显得有些冗余
+     * @param id 秒杀活动or秒杀商品 ID
+     * @param key 缓存对应的key
      */
     @SuppressWarnings("unchecked")
-    private T getDataFromDistributedCache(BaseQueryCondition queryCondition, String key) {
+    private T getDataFromDistributedCache(Long id, String key) {
         EntityCache<T> distributedCache = (EntityCache<T>) redisTemplate.opsForValue().get(key);
 
         if (distributedCache != null) {
             return hitDistributedCache(distributedCache, key).get(0);
         } else {
-            return getDataFromDataBaseAndSaveDistributedCache(queryCondition, key);
+            return getDataFromDataBaseAndSaveDistributedCache(id, key);
         }
     }
 
@@ -201,14 +201,14 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
      * 未命中分布式缓存：先获取分布式锁，成功后在数据库中查，之后保存在分布式缓存中
      * 获取分布式锁失败，则抛出业务异常
      */
-    private T getDataFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
+    private T getDataFromDataBaseAndSaveDistributedCache(Long id, String key) {
         RLock lock = redissonClient.getLock(String.format(UPDATE_LOCK_PREFIX, key));
 
         T data = null;
         try {
             if (lock.tryLock(WAIT_TIME, LEASE_TIME, TimeUnit.SECONDS)) {
                 try {
-                    data = getSingleDataFromDataBase(queryCondition);
+                    data = getSingleDataFromDataBase(id);
 
                     saveDistributedCache(Collections.singletonList(data), key);
                 } catch (DomainException e) {
@@ -230,7 +230,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     /**
      * 未命中分布式缓存：先获取分布式锁，成功后在数据库中查，之后保存在分布式缓存中
      * 获取分布式锁失败，则抛出业务异常
-     * 只不过列表查询不存在的数据，不会抛出DomainException，少了一个catch语句
+     * 只不过列表查询不存在的数据，不会抛出DomainException，相比少了一个catch语句
      */
     private List<T> getDataListFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
         RLock lock = redissonClient.getLock(String.format(UPDATE_LOCK_PREFIX, key));
@@ -282,10 +282,8 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
 
     /**
      * 根据不同的服务做具体地查询，单个对象
-     *
-     * @param queryCondition 仅仅包含ID信息
      */
-    protected abstract T getSingleDataFromDataBase(BaseQueryCondition queryCondition);
+    protected abstract T getSingleDataFromDataBase(Long id);
 
     /**
      * 根据不同的服务做具体地实现，多个对象
