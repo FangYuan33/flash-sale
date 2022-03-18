@@ -175,7 +175,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
 
     /**
      * 命中分布式缓存，直接返回缓存对象
-     * 所查询数据不存在时，同样也再向本地缓存中重新存一下
+     * 所查询数据不存在时，同样也再向本地缓存中存空的列表对象
      */
     private List<T> hitDistributedCache(EntityCache<T> distributedCache, String key) {
         log.info("命中分布式缓存, {}", JSONObject.toJSONString(distributedCache));
@@ -222,7 +222,9 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     /**
      * 未命中分布式缓存：先获取分布式锁，成功后在数据库中查，之后保存在分布式缓存中
      * 获取分布式锁失败，则抛出业务异常
-     * 只不过列表查询不存在的数据，不会抛出DomainException，相比少了一个catch语句
+     *
+     * 列表查询，数据不存在时，不会抛出DomainException
+     * 相比getDataFromDataBaseAndSaveDistributedCache方法少了一个catch语句
      */
     private List<T> getDataListFromDataBaseAndSaveDistributedCache(BaseQueryCondition queryCondition, String key) {
         RLock lock = redissonClient.getLock(String.format(UPDATE_LOCK_PREFIX, key));
