@@ -47,4 +47,9 @@ public interface FlashItemRepository {
      * @param quantity 商品数量
      */
     boolean decreaseItemStock(Long itemId, Integer quantity);
+
+    /**
+     * 增加商品库存
+     */
+    boolean increaseItemStock(Long itemId, Integer quantity);
 }

@@ -84,4 +84,9 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
     public boolean decreaseItemStock(Long itemId, Integer quantity) {
         return flashItemMapper.decreaseItemStock(itemId, quantity) == 1;
     }
+
+    @Override
+    public boolean increaseItemStock(Long itemId, Integer quantity) {
+        return flashItemMapper.increaseItemStock(itemId, quantity) == 1;
+    }
 }

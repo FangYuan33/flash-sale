@@ -17,4 +17,9 @@ public class StockDeductionDomainServiceImpl implements StockDeductionDomainServ
     public boolean decreaseItemStock(StockDeduction stockDeduction) {
         return flashItemRepository.decreaseItemStock(stockDeduction.getItemId(), stockDeduction.getQuantity());
     }
+
+    @Override
+    public boolean increaseItemStock(StockDeduction stockDeduction) {
+        return flashItemRepository.increaseItemStock(stockDeduction.getItemId(), stockDeduction.getQuantity());
+    }
 }

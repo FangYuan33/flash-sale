@@ -33,4 +33,9 @@ public interface FlashItemMapper extends BaseMapper<FlashItemDO> {
      * @param quantity 商品数量
      */
     int decreaseItemStock(@Param("itemId") Long itemId, @Param("quantity") Integer quantity);
+
+    /**
+     * 增加库存
+     */
+    int increaseItemStock(Long itemId, Integer quantity);
 }

@@ -8,4 +8,6 @@ public interface StockDeductionDomainService {
      * 扣减商品库存
      */
     boolean decreaseItemStock(StockDeduction stockDeduction);
+
+    boolean increaseItemStock(StockDeduction stockDeduction);
 }
