@@ -33,6 +33,16 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
      */
     private static final String GET_ITEM_STOCK_LUA;
 
+    /**
+     * 扣减库存的lua脚本
+     */
+    private static final String DECREASE_ITEM_STOCK_LUA;
+
+    /**
+     * 增加库存的lua脚本
+     */
+    private static final String INCREASE_ITEM_STOCK_LUA;
+
     static {
         /*
          * 如果该缓存库存已经存在，返回-1
@@ -51,6 +61,37 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
                 "    return redis.call('get', KEYS[1]);" +
                 "end;" +
                 "return -1";
+
+        /*
+         * 扣减库存成功 1
+         * 秒杀商品不存在 -1
+         * 库存不够 -3
+         * 其他 -2
+         */
+        DECREASE_ITEM_STOCK_LUA =
+                "if (redis.call('exists', KEYS[1]) == 1) then" +
+                "    local stock = tonumber(redis.call('get', KEYS[1]));" +
+                "    local num = tonumber(ARGV[1]);" +
+                "    if (stock < num) then" +
+                "        return -3" +
+                "    end;" +
+                "    if (stock >= num) then" +
+                "        redis.call('incrby', KEYS[1], 0 - num);" +
+                "        return 1" +
+                "    end;" +
+                "    return -2;" +
+                "end;" +
+                "return -1;";
+
+
+        INCREASE_ITEM_STOCK_LUA =
+                "if (redis.call('exists', KEYS[1]) == 1) then" +
+                "    local stock = tonumber(redis.call('get', KEYS[1]));" +
+                "    local num = tonumber(ARGV[1]);" +
+                "    redis.call('incrby', KEYS[1] , num);" +
+                "    return 1;" +
+                "end;" +
+                "return -1;";
     }
 
     @Resource
@@ -66,13 +107,6 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
 
         // 更新库存缓存
         return doInitialItemStocks(itemId, stock);
-    }
-
-    @Override
-    public Integer getAvailableItemStock(Long itemId) {
-        String key = String.format(ITEM_STOCK_KEY, itemId);
-
-        return redisCacheService.executeLuaWithoutArgs(GET_ITEM_STOCK_LUA, Collections.singletonList(key)).intValue();
     }
 
     /**
@@ -112,6 +146,103 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
         if (result == 1L) {
             log.info("初始化缓存成功，秒杀品ID {}", itemId);
             return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public Integer getAvailableItemStock(Long itemId) {
+        String key = String.format(ITEM_STOCK_KEY, itemId);
+
+        return redisCacheService.executeLuaWithoutArgs(GET_ITEM_STOCK_LUA, Collections.singletonList(key)).intValue();
+    }
+
+    @Override
+    public boolean decreaseItemStock(Long itemId, Integer itemNum) {
+        String key = String.format(ITEM_STOCK_KEY, itemId);
+
+        boolean exist = checkItemStockExist(key);
+
+        if (exist) {
+            return doDecreaseItemStock(key, itemNum);
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean increaseItemStock(Long itemId, Integer itemNum) {
+        String key = String.format(ITEM_STOCK_KEY, itemId);
+
+        boolean exist = checkItemStockExist(key);
+
+        if (exist) {
+            return doIncreaseItemStock(key, itemNum);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 校验秒杀库存缓存是否存在
+     */
+    private boolean checkItemStockExist(String key) {
+        if (!redisCacheService.hasKey(key)) {
+            log.info("秒杀品未预热，key {}", key);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 执行扣减库存并返回结果
+     */
+    private boolean doDecreaseItemStock(String key, Integer itemNum) {
+        Long result = redisCacheService.executeLua(DECREASE_ITEM_STOCK_LUA, Collections.singletonList(key), itemNum);
+
+        if (result == null) {
+            log.info("库存扣减失败, key {}", key);
+            return false;
+        }
+        if (result == 1L) {
+            log.info("库存扣减成功, key {}", key);
+            return true;
+        }
+        if (result == -3L) {
+            log.info("库存不足, key {}", key);
+            return false;
+        }
+        if (result == -1L) {
+            log.info("秒杀品不存在, key {}", key);
+            return false;
+        }
+        if (result == -2L) {
+            log.info("库存扣减异常, key {}", key);
+            return false;
+        }
+
+        return false;
+    }
+
+    /**
+     * 执行库存新增并返回结果
+     */
+    private boolean doIncreaseItemStock(String key, Integer itemNum) {
+        Long result = redisCacheService.executeLua(INCREASE_ITEM_STOCK_LUA, Collections.singletonList(key), itemNum);
+
+        if (result == null) {
+            log.info("库存增加失败, key {}", key);
+            return false;
+        }
+        if (result == 1L) {
+            log.info("库存增加成功, key {}", key);
+            return true;
+        }
+        if (result == -1L) {
+            log.info("秒杀品库存不存在, key {}", key);
+            return false;
         }
 
         return false;

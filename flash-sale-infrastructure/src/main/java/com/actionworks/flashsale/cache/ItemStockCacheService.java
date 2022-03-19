@@ -18,4 +18,16 @@ public interface ItemStockCacheService {
      * 获取商品的可用库存
      */
     Integer getAvailableItemStock(Long itemId);
+
+    /**
+     * 扣减库存
+     *
+     * @param itemNum 商品数量
+     */
+    boolean decreaseItemStock(Long itemId, Integer itemNum);
+
+    /**
+     * 增加库存
+     */
+    boolean increaseItemStock(Long itemId, Integer itemNum);
 }

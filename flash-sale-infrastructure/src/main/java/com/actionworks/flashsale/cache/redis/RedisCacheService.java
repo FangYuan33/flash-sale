@@ -73,4 +73,11 @@ public class RedisCacheService<T> {
         return redisTemplate.execute(redisScript, new FastJsonRedisSerializer<>(Integer.class),
                 new FastJsonRedisSerializer<>(Long.class), keys, args);
     }
+
+    /**
+     * 这个key在缓存里有吗？
+     */
+    public boolean hasKey(String key) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(key));
+    }
 }
