@@ -6,11 +6,14 @@ import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import com.actionworks.flashsale.exception.RepositoryException;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 import static com.actionworks.flashsale.exception.RepositoryErrorCode.FLASH_ITEM_STOCK_CACHE_FAILED;
 
@@ -100,6 +103,16 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
     @Resource
     private RedisCacheService<Object> redisCacheService;
 
+    /**
+     * 库存本地缓存
+     */
+    private final Cache<String, Integer> stockLocalCache;
+    {        // 初始化最小大小为10, 最大大小暂定33，允许并发修改的线程数是5, 过期时间指定10s
+        stockLocalCache = CacheBuilder.newBuilder()
+                .initialCapacity(10).maximumSize(33)
+                .concurrencyLevel(5).expireAfterWrite(10, TimeUnit.SECONDS).build();
+    }
+
     @Override
     public boolean initialItemStocks(Long itemId) {
         // 符合条件返回可用库存值
@@ -155,7 +168,18 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
     public Integer getAvailableItemStock(Long itemId) {
         String key = String.format(ITEM_STOCK_KEY, itemId);
 
-        return redisCacheService.executeLuaWithoutArgs(GET_ITEM_STOCK_LUA, Collections.singletonList(key)).intValue();
+        Integer localStock = stockLocalCache.getIfPresent(key);
+
+        // 优先拿本地缓存，拿不到再去读分布式缓存
+        if (localStock != null) {
+            return localStock;
+        } else {
+            int distributedCache = redisCacheService
+                    .executeLuaWithoutArgs(GET_ITEM_STOCK_LUA, Collections.singletonList(key)).intValue();
+            stockLocalCache.put(key, distributedCache);
+
+            return distributedCache;
+        }
     }
 
     @Override
