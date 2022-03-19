@@ -13,4 +13,9 @@ public interface ItemStockCacheService {
      * @param itemId 商品ID
      */
     boolean initialItemStocks(Long itemId);
+
+    /**
+     * 获取商品的可用库存
+     */
+    Integer getAvailableItemStock(Long itemId);
 }

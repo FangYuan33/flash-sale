@@ -28,6 +28,11 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
      */
     private static final String INIT_ITEM_STOCK_LUA;
 
+    /**
+     * 获取库存缓存的lua脚本
+     */
+    private static final String GET_ITEM_STOCK_LUA;
+
     static {
         /*
          * 如果该缓存库存已经存在，返回-1
@@ -40,6 +45,12 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
                 "local stockNumber = tonumber(ARGV[1]);" +
                 "redis.call('set', KEYS[1] , stockNumber);" +
                 "return 1";
+
+        GET_ITEM_STOCK_LUA =
+                "if (redis.call('exists', KEYS[1]) == 1) then" +
+                "    return redis.call('get', KEYS[1]);" +
+                "end;" +
+                "return -1";
     }
 
     @Resource
@@ -55,6 +66,13 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
 
         // 更新库存缓存
         return doInitialItemStocks(itemId, stock);
+    }
+
+    @Override
+    public Integer getAvailableItemStock(Long itemId) {
+        String key = String.format(ITEM_STOCK_KEY, itemId);
+
+        return redisCacheService.executeLuaWithoutArgs(GET_ITEM_STOCK_LUA, Collections.singletonList(key)).intValue();
     }
 
     /**

@@ -7,6 +7,7 @@ import com.actionworks.flashsale.app.model.dto.FlashItemDTO;
 import com.actionworks.flashsale.app.model.query.FlashItemQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
 import com.actionworks.flashsale.cache.CacheService;
+import com.actionworks.flashsale.cache.ItemStockCacheService;
 import com.actionworks.flashsale.cache.constants.CacheConstants;
 import com.actionworks.flashsale.domain.model.entity.FlashActivity;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
@@ -37,6 +38,8 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
     private FlashItemDomainService flashItemDomainService;
     @Resource
     private CacheService<FlashItem> cacheService;
+    @Resource
+    private ItemStockCacheService itemStockCacheService;
 
     @Override
     public <T> AppResult<T> publishFlashItem(Long activityId, FlashItemPublishCommand command) {
@@ -105,6 +108,12 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
     @SuppressWarnings("unchecked")
     public AppResult<FlashItemDTO> getById(Long itemId) {
         FlashItem flashItem = cacheService.getCache(CacheConstants.FLASH_ITEM_SINGLE_CACHE_PREFIX, itemId);
+
+        // 库存缓存已预热的话，则以库存缓存为准，否则取的仍然是商品缓存中的库存值
+        Integer availableItemStock = itemStockCacheService.getAvailableItemStock(itemId);
+        if (!availableItemStock.equals(-1)) {
+            flashItem.setAvailableStock(availableItemStock);
+        }
 
         FlashItemDTO flashItemDTO = FlashItemAppConvertor.toFlashItemDTO(flashItem);
 

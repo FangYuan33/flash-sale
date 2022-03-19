@@ -53,6 +53,13 @@ public class RedisCacheService<T> {
     }
 
     /**
+     * 执行lua脚本(不带参数)
+     */
+    public Long executeLuaWithoutArgs(String luaStr, List<String> keys) {
+        return executeLua(luaStr, keys, "");
+    }
+
+    /**
      * 执行lua脚本
      * 指定了args和result的Serializer，因为在RedisConfig里没有配置value的Serializer会导致lua脚本执行出错
      *
