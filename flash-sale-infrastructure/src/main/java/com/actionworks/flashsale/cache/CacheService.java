@@ -9,7 +9,7 @@ public interface CacheService<T> {
     /**
      * 查询单条本地缓存数据
      *
-     * @param keyPrefix 列表缓存key前缀
+     * @param keyPrefix 单条缓存key前缀
      * @param id 秒杀商品or秒杀活动 ID
      */
     T getCache(String keyPrefix, Long id);
