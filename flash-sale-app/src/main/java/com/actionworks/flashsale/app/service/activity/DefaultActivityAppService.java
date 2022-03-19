@@ -90,7 +90,7 @@ public class DefaultActivityAppService implements FlashActivityAppService {
 
     @Override
     public boolean isAllowPlaceOrderOrNot(Long activityId) {
-        FlashActivity flashActivity = flashActivityDomainService.getFlashActivity(activityId);
+        FlashActivity flashActivity = cacheService.getCache(CacheConstants.FLASH_ACTIVITY_SINGLE_CACHE_PREFIX, activityId);
 
         if (flashActivity == null) {
             log.error("isAllowPlaceOrderOrNot|秒杀活动不存在");

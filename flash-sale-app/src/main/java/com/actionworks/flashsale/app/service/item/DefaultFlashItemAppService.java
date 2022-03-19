@@ -136,7 +136,7 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
 
     @Override
     public boolean isAllowPlaceOrderOrNot(Long itemId) {
-        FlashItem flashItem = flashItemDomainService.getById(itemId);
+        FlashItem flashItem = cacheService.getCache(CacheConstants.FLASH_ITEM_SINGLE_CACHE_PREFIX, itemId);
 
         if (flashItem == null) {
             log.error("isAllowPlaceOrderOrNot|秒杀商品不存在");
