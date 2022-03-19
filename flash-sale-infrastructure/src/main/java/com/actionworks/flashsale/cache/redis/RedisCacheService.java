@@ -1,6 +1,7 @@
 package com.actionworks.flashsale.cache.redis;
 
 import com.actionworks.flashsale.cache.model.EntityCache;
+import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
@@ -53,14 +54,16 @@ public class RedisCacheService<T> {
 
     /**
      * 执行lua脚本
+     * 指定了args和result的Serializer，因为在RedisConfig里没有配置value的Serializer会导致lua脚本执行出错
      *
      * @param luaStr lua脚本String
-     * @param keys 需要用到的key们
-     * @param args 参数们
+     * @param keys   需要用到的key们
+     * @param args   参数们
      */
     public Long executeLua(String luaStr, List<String> keys, Object... args) {
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>(luaStr, Long.class);
 
-        return redisTemplate.execute(redisScript, keys, args);
+        return redisTemplate.execute(redisScript, new FastJsonRedisSerializer<>(Integer.class),
+                new FastJsonRedisSerializer<>(Long.class), keys, args);
     }
 }
