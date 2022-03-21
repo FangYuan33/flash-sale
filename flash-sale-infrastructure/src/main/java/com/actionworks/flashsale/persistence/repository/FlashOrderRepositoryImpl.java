@@ -41,13 +41,13 @@ public class FlashOrderRepositoryImpl implements FlashOrderRepository {
     }
 
     @Override
-    public void updateById(FlashOrder flashOrder) {
+    public boolean updateById(FlashOrder flashOrder) {
         FlashOrderDO flashOrderDO = FlashOrderConvertor.toDataObject(flashOrder);
         if (flashOrderDO.getId() == null) {
             throw new RepositoryException(ID_NOT_EXIST);
         }
 
-        flashOrderMapper.updateById(flashOrderDO);
+        return flashOrderMapper.updateById(flashOrderDO) == 1;
     }
 
     @Override

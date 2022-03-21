@@ -7,13 +7,17 @@ import com.actionworks.flashsale.app.model.dto.FlashOrderDTO;
 import com.actionworks.flashsale.app.model.query.FlashOrderQuery;
 import com.actionworks.flashsale.app.model.result.AppResult;
 import com.actionworks.flashsale.app.service.placeOrder.PlaceOrderService;
+import com.actionworks.flashsale.cache.ItemStockCacheService;
 import com.actionworks.flashsale.domain.model.entity.FlashOrder;
 import com.actionworks.flashsale.domain.model.query.FlashOrderQueryCondition;
 import com.actionworks.flashsale.domain.model.query.PageResult;
+import com.actionworks.flashsale.domain.model.stock.StockDeduction;
 import com.actionworks.flashsale.domain.service.FlashOrderDomainService;
+import com.actionworks.flashsale.domain.service.StockDeductionDomainService;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -21,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.actionworks.flashsale.app.exception.AppErrorCode.INVALID_PARAMS;
+import static com.actionworks.flashsale.app.exception.AppErrorCode.RECOVER_STOCK_FAILED;
 
 @Slf4j
 @Service
@@ -30,6 +35,10 @@ public class DefaultFlashOrderAppService implements FlashOrderAppService {
     private FlashOrderDomainService flashOrderDomainService;
     @Resource
     private PlaceOrderService placeOrderService;
+    @Resource
+    private StockDeductionDomainService stockDeductionDomainService;
+    @Resource
+    private ItemStockCacheService itemStockCacheService;
 
     @Override
     public <T> AppResult<T> placeOrder(Long userId, FlashPlaceOrderCommand command) {
@@ -43,6 +52,7 @@ public class DefaultFlashOrderAppService implements FlashOrderAppService {
     }
 
     @Override
+    @Transactional
     public <T> AppResult<T> cancelOrder(Long orderId) {
         log.info("cancelOrder|取消秒杀订单|{}", orderId);
 
@@ -50,10 +60,38 @@ public class DefaultFlashOrderAppService implements FlashOrderAppService {
             throw new BizException(INVALID_PARAMS);
         }
 
-        flashOrderDomainService.cancelOrder(orderId);
-        log.info("cancelOrder|取消秒杀订单|成功");
+        boolean success = flashOrderDomainService.cancelOrder(orderId);
+
+        if (success) {
+            log.info("cancelOrder|取消秒杀订单|成功");
+
+            recoverStockNum(orderId);
+        } else {
+            return AppResult.error("订单取消失败");
+        }
 
         return AppResult.success();
+    }
+
+    /**
+     * 恢复商品库存 缓存and数据库
+     *
+     * @param orderId 订单ID
+     */
+    private void recoverStockNum(Long orderId) {
+        try {
+            FlashOrder flashOrder = flashOrderDomainService.getById(orderId);
+
+            itemStockCacheService.increaseItemStock(flashOrder.getItemId(), flashOrder.getQuantity());
+
+            StockDeduction stockDeduction =
+                    new StockDeduction().setItemId(flashOrder.getItemId()).setQuantity(flashOrder.getQuantity());
+            stockDeductionDomainService.increaseItemStock(stockDeduction);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+
+            throw new BizException(RECOVER_STOCK_FAILED);
+        }
     }
 
     @Override

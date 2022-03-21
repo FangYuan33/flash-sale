@@ -24,7 +24,7 @@ public interface FlashOrderRepository {
      * @param flashOrder 必须包含ID信息
      * @throws RuntimeException 否则抛出RepositoryException异常信息
      */
-    void updateById(FlashOrder flashOrder);
+    boolean updateById(FlashOrder flashOrder);
 
     /**
      * 条件查询秒杀订单

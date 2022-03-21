@@ -13,7 +13,9 @@ public enum AppErrorCode {
     INVALID_PARAMS("参数错误"),
 
     ACTIVITY_NOT_EXIST("秒杀活动不存在"),
-    DO_PLACE_ORDER("秒杀失败");
+    DO_PLACE_ORDER("秒杀失败"),
+
+    RECOVER_STOCK_FAILED("库存恢复失败");
 
     /**
      * 错误信息

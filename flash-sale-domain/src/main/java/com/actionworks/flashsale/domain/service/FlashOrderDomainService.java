@@ -15,7 +15,7 @@ public interface FlashOrderDomainService {
      *
      * @param orderId 订单ID
      */
-    void cancelOrder(Long orderId);
+    boolean cancelOrder(Long orderId);
 
     /**
      * 条件查询秒杀订单

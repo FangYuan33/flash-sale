@@ -28,19 +28,19 @@ public class FlashOrderDomainServiceImpl implements FlashOrderDomainService {
     }
 
     @Override
-    public void cancelOrder(Long orderId) {
+    public boolean cancelOrder(Long orderId) {
         Optional<FlashOrder> optionalFlashOrder = flashOrderRepository.getById(orderId);
         FlashOrder flashOrder = optionalFlashOrder.orElseThrow(() -> new DomainException(FLASH_ORDER_NOT_EXIST));
 
         // 状态判断
         if (FlashOrderStatus.CANCEL.getCode().equals(flashOrder.getStatus())) {
-            return;
+            return false;
         }
 
         // 状态变更
         flashOrder.setStatus(FlashOrderStatus.CANCEL.getCode());
 
-        flashOrderRepository.updateById(flashOrder);
+        return flashOrderRepository.updateById(flashOrder);
     }
 
     @Override
