@@ -6,7 +6,6 @@ import com.actionworks.flashsale.cache.redis.RedisCacheService;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
-import com.actionworks.flashsale.exception.RepositoryException;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,7 @@ import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-import static com.actionworks.flashsale.exception.RepositoryErrorCode.FLASH_ITEM_STOCK_CACHE_FAILED;
+import static com.actionworks.flashsale.cache.enums.LuaResult.SUCCESS;
 
 @Slf4j
 @Service
@@ -126,23 +125,27 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
         // 符合条件返回可用库存值
         Integer stock = checkItemAndGetAvailableStock(itemId);
 
-        // 更新库存缓存
-        return doInitialItemStocks(cacheKey, stock);
+        if (stock != null) {
+            // 更新库存缓存
+            return doInitialItemStocks(cacheKey, stock);
+        } else {
+            return false;
+        }
     }
 
     /**
-     * 校验缓存商品是否符合条件，符合条件返回可用库存值
+     * 校验缓存商品是否符合条件，符合条件返回可用库存值，否则返回null
      */
     private Integer checkItemAndGetAvailableStock(Long itemId) {
         FlashItem flashItem = flashItemDomainService.getById(itemId);
 
         if (flashItem == null) {
             log.error("秒杀商品不存在, itemId {}", itemId);
-            throw new RepositoryException(FLASH_ITEM_STOCK_CACHE_FAILED);
+            return null;
         }
         if (!FlashItemStatus.ONLINE.getCode().equals(flashItem.getStatus())) {
             log.error("秒杀商品未上线 itemId {}", itemId);
-            throw new RepositoryException(FLASH_ITEM_STOCK_CACHE_FAILED);
+            return null;
         }
 
         return flashItem.getAvailableStock();
@@ -157,17 +160,7 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
         LuaResult result = LuaResult.parse(resultCode, cacheKey);
         log.info(result.toString());
 
-        switch (result) {
-            case SUCCESS:
-            case INIT_EXIST: {
-                return true;
-            }
-            case FAIL: {
-                return false;
-            }
-        }
-
-        return false;
+        return result.equals(SUCCESS);
     }
 
     @Override
@@ -237,19 +230,7 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
         LuaResult result = LuaResult.parse(resultCode, key);
         log.info(result.toString());
 
-        switch (result) {
-            case SUCCESS: {
-                return true;
-            }
-            case FAIL:
-            case FLASH_ITEM_STOCK_NOT_EXIST:
-            case DECREASE_NOT_ENOUGH:
-            case DECREASE_ERROR: {
-                return false;
-            }
-        }
-
-        return false;
+        return result.equals(SUCCESS);
     }
 
     /**
@@ -261,16 +242,6 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
         LuaResult result = LuaResult.parse(resultCode, key);
         log.info(result.toString());
 
-        switch (result) {
-            case SUCCESS: {
-                return true;
-            }
-            case FAIL:
-            case FLASH_ITEM_STOCK_NOT_EXIST: {
-                return false;
-            }
-        }
-
-        return false;
+        return result.equals(SUCCESS);
     }
 }

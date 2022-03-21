@@ -2,6 +2,11 @@ package com.actionworks.flashsale.cache.enums;
 
 import java.util.Objects;
 
+/**
+ * 执行lua脚本结果枚举
+ *
+ * @author fangyuan
+ */
 public enum LuaResult {
 
     SUCCESS(1L, "操作成功"),
