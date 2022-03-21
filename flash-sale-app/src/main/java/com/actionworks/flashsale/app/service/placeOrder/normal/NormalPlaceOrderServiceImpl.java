@@ -90,7 +90,7 @@ public class NormalPlaceOrderServiceImpl implements PlaceOrderService {
                 return false;
             }
 
-            // 扣减数据库缓存
+            // 扣减数据库
             dbSuccess = stockDeductionDomainService.decreaseItemStock(stockDeduction);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
