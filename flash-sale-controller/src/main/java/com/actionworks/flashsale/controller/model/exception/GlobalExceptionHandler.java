@@ -4,11 +4,13 @@ import com.actionworks.flashsale.app.exception.BizException;
 import com.actionworks.flashsale.app.model.result.AppResult;
 import com.actionworks.flashsale.domain.exception.DomainException;
 import com.actionworks.flashsale.exception.RepositoryException;
+import com.alibaba.csp.sentinel.slots.block.flow.FlowException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.lang.reflect.UndeclaredThrowableException;
 import java.sql.SQLException;
 
 /**
@@ -26,6 +28,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error(e.getMessage(), e);
 
         return AppResult.error(e.getMessage());
+    }
+
+    /**
+     * 处理sentinel限流异常
+     */
+    @ExceptionHandler(value = UndeclaredThrowableException.class)
+    public AppResult<Object> sentinelException(Exception e) {
+        if (e instanceof UndeclaredThrowableException) {
+            if (((UndeclaredThrowableException) e).getUndeclaredThrowable() instanceof FlowException) {
+                return AppResult.error("操作太快啦");
+            }
+        }
+
+        return AppResult.error("请稍后尝试");
     }
 
     @ExceptionHandler(value = {SQLException.class, NullPointerException.class, Exception.class})
