@@ -26,4 +26,9 @@
 
 
 ## 巨人的肩膀
-- [CENTOS7下 NACOS安装 以及可能会出现的问题启动成功无法访问](https://www.freesion.com/article/32891399747/)
+- [Nacos启动报错解决：which: no javac in ](https://blog.csdn.net/qq_44895681/article/details/105515025)
+- [centos7下 Nacos安装 以及可能会出现的问题启动成功无法访问](https://blog.csdn.net/dagedeshu/article/details/109209157)
+- [Error creating bean with name 'flow-sentinel-nacos-datasource'](https://www.yuque.com/yuqueyonghu4gseak/yc/gyft35)
+- [Sentinel 官方文档](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel)
+- [Nacos 官方文档](https://nacos.io/zh-cn/docs/quick-start-spring-cloud.html)
+- [NacosConfig 摆脱本地配置参考文档](https://github.com/alibaba/spring-cloud-alibaba/wiki/Nacos-config)
