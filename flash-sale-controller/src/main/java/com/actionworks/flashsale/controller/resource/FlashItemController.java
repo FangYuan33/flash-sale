@@ -10,6 +10,7 @@ import com.actionworks.flashsale.controller.model.request.FlashItemPublishReques
 import com.actionworks.flashsale.controller.model.request.FlashItemQueryRequest;
 import com.actionworks.flashsale.controller.model.response.FlashItemResponse;
 import com.alibaba.cola.dto.SingleResponse;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +59,7 @@ public class FlashItemController {
         return ResponseConvertor.with(appResult);
     }
 
+    @SentinelResource("getFlashItem")
     @GetMapping("/flash-items/{itemId}")
     @ApiOperation(value = "通过ID获取秒杀商品信息")
     @ApiImplicitParam(name = "itemId", value = "秒杀商品ID", dataTypeClass = Long.class)
@@ -66,6 +68,7 @@ public class FlashItemController {
     }
 
     @PostMapping("/flash-items")
+    @SentinelResource("getFlashItems")
     @ApiOperation(value = "条件查询秒杀商品")
     public SingleResponse<List<FlashItemResponse>> getFlashItems(@RequestBody FlashItemQueryRequest request) {
         FlashItemQuery query = FlashItemConvertor.toQuery(request);

@@ -10,6 +10,7 @@ import com.actionworks.flashsale.controller.model.request.FlashActivityPublishRe
 import com.actionworks.flashsale.controller.model.request.FlashActivityQueryRequest;
 import com.actionworks.flashsale.controller.model.response.FlashActivityResponse;
 import com.alibaba.cola.dto.SingleResponse;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -56,6 +57,7 @@ public class FlashActivityController {
         return ResponseConvertor.with(appResult);
     }
 
+    @SentinelResource("getFlashActivity")
     @ApiOperation(value = "根据ID获取活动")
     @GetMapping(value = "/flash-activities/{activityId}")
     @ApiImplicitParam(name = "activityId", value = "秒杀活动ID", dataTypeClass = Long.class)
@@ -63,6 +65,7 @@ public class FlashActivityController {
         return ResponseConvertor.with(flashActivityAppService.getFlashActivity(activityId));
     }
 
+    @SentinelResource("getFlashActivities")
     @ApiOperation(value = "根据条件获取秒杀活动")
     @PostMapping(value = "/flash-activities")
     public SingleResponse<List<FlashActivityResponse>> getFlashActivities(@RequestBody FlashActivityQueryRequest request) {
