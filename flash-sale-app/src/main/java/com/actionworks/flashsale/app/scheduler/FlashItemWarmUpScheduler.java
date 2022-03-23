@@ -7,6 +7,7 @@ import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,12 @@ import java.util.List;
 @Component
 public class FlashItemWarmUpScheduler {
 
+    /**
+     * nacos配置文件中添加如下参数，控制秒杀商品库存预热
+     */
+    @Value("${scheduler.warmUpFlag}")
+    private Boolean warmUpFlag;
+
     @Resource
     private ItemStockCacheService itemStockCacheService;
     @Resource
@@ -28,20 +35,22 @@ public class FlashItemWarmUpScheduler {
      */
     @Scheduled(cron = "*/5 * * * * ?")
     public void warmUpFlashItemTask() {
-        log.info("秒杀商品库存预热");
+        if (warmUpFlag) {
+            log.info("秒杀商品库存预热");
 
-        // 未预热 已上线 秒杀时间未结束 的秒杀商品
-        FlashItemQueryCondition queryCondition = new FlashItemQueryCondition().setWarmUp(BaseEnums.NO.getValue())
-                .setStatus(FlashItemStatus.ONLINE.getCode()).setEndTime(LocalDateTime.now());
-        List<FlashItem> flashItems = flashItemDomainService.listByQueryConditionWithoutPageSize(queryCondition);
+            // 未预热 已上线 秒杀时间未结束 的秒杀商品
+            FlashItemQueryCondition queryCondition = new FlashItemQueryCondition().setWarmUp(BaseEnums.NO.getValue())
+                    .setStatus(FlashItemStatus.ONLINE.getCode()).setEndTime(LocalDateTime.now());
+            List<FlashItem> flashItems = flashItemDomainService.listByQueryConditionWithoutPageSize(queryCondition);
 
-        // 更新缓存并重置预热标识
-        flashItems.forEach(item -> {
-            boolean success = itemStockCacheService.initialItemStocks(item.getId());
+            // 更新缓存并重置预热标识
+            flashItems.forEach(item -> {
+                boolean success = itemStockCacheService.initialItemStocks(item.getId());
 
-            if (success) {
-                flashItemDomainService.updateById(item.setWarmUp(BaseEnums.YES.getValue()));
-            }
-        });
+                if (success) {
+                    flashItemDomainService.updateById(item.setWarmUp(BaseEnums.YES.getValue()));
+                }
+            });
+        }
     }
 }
