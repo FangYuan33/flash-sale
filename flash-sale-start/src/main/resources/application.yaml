@@ -20,6 +20,25 @@ spring:
     host: 127.0.0.1
     password: xxx
     address: redis://127.0.0.1:6379
+  cloud:
+    sentinel:
+      eager: true
+      transport:
+        port: 8083
+        # sentinel dashboard的ip
+        dashboard: 127.0.0.1:8083
+        # sentinel的ip
+        client-ip: 127.0.0.1
+      datasource:
+        flow:
+          nacos:
+            # nacos用户名和密码
+            username: nacos
+            password: nacos
+            server-addr: 127.0.0.1:8848
+            dataId: FY-FLASH-ITEM
+            groupId: DEFAULT_GROUP
+            rule-type: flow
 
 # 应用服务 WEB 访问端口
 server:
