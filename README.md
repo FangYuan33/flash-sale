@@ -32,3 +32,4 @@
 - [Sentinel 官方文档](https://github.com/alibaba/spring-cloud-alibaba/wiki/Sentinel)
 - [Nacos 官方文档](https://nacos.io/zh-cn/docs/quick-start-spring-cloud.html)
 - [NacosConfig 摆脱本地配置参考文档](https://github.com/alibaba/spring-cloud-alibaba/wiki/Nacos-config)
+- [Nacos Spring-Cloud @RefreshScope 配置不生效问题](https://blog.csdn.net/fly_leopard/article/details/107489937)
