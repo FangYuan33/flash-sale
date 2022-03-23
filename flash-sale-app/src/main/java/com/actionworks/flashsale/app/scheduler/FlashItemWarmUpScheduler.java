@@ -6,8 +6,8 @@ import com.actionworks.flashsale.domain.model.enums.BaseEnums;
 import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
+import com.actionworks.flashsale.nacos.NacosProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +19,8 @@ import java.util.List;
 @Component
 public class FlashItemWarmUpScheduler {
 
-    /**
-     * nacos配置文件中添加如下参数，控制秒杀商品库存预热
-     */
-    @Value("${scheduler.warmUpFlag}")
-    private Boolean warmUpFlag;
+    @Resource
+    private NacosProperties nacosProperties;
 
     @Resource
     private ItemStockCacheService itemStockCacheService;
@@ -35,7 +32,7 @@ public class FlashItemWarmUpScheduler {
      */
     @Scheduled(cron = "*/5 * * * * ?")
     public void warmUpFlashItemTask() {
-        if (warmUpFlag) {
+        if (nacosProperties.getWarmUpFlag()) {
             log.info("秒杀商品库存预热");
 
             // 未预热 已上线 秒杀时间未结束 的秒杀商品
