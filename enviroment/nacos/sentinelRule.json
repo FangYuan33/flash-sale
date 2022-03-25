@@ -1,0 +1,47 @@
+[
+  {
+    "resource": "getFlashItem",
+    "limitApp": "default",
+    "grade": 1,
+    "count": 1,
+    "clusterMode": false,
+    "controlBehavior": 0,
+    "strategy": 0
+  },
+  {
+    "resource": "getFlashItems",
+    "limitApp": "default",
+    "grade": 1,
+    "count": 1,
+    "clusterMode": false,
+    "controlBehavior": 0,
+    "strategy": 0
+  },
+  {
+    "resource": "getFlashActivity",
+    "limitApp": "default",
+    "grade": 1,
+    "count": 1,
+    "clusterMode": false,
+    "controlBehavior": 0,
+    "strategy": 0
+  },
+  {
+    "resource": "getFlashActivities",
+    "limitApp": "default",
+    "grade": 1,
+    "count": 1,
+    "clusterMode": false,
+    "controlBehavior": 0,
+    "strategy": 0
+  },
+  {
+    "resource": "placeOrder",
+    "limitApp": "default",
+    "grade": 1,
+    "count": 1,
+    "clusterMode": false,
+    "controlBehavior": 0,
+    "strategy": 0
+  }
+]
