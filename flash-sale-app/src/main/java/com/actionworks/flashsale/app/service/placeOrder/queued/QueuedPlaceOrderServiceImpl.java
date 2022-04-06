@@ -22,7 +22,7 @@ import static com.actionworks.flashsale.app.exception.AppErrorCode.DO_PLACE_ORDE
  */
 @Slf4j
 @Service
-@ConditionalOnProperty(name = "place_order_type", havingValue = "queued")
+@ConditionalOnProperty(name = "placeOrder.type", havingValue = "queued")
 public class QueuedPlaceOrderServiceImpl implements PlaceOrderService {
 
     @Resource

@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 /**
  * 存一些Nacos配置中需要动态变更的参数
  */
@@ -18,4 +20,7 @@ public class NacosProperties {
      */
     @Value("${scheduler.warmUpFlag}")
     private Boolean warmUpFlag;
+
+    @Value("${placeOrder.permissionFactor}")
+    private BigDecimal permissionFactor;
 }

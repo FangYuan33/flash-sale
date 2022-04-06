@@ -25,7 +25,7 @@ import static com.actionworks.flashsale.domain.model.enums.FlashOrderStatus.CREA
 
 @Slf4j
 @Service
-@ConditionalOnProperty(name = "place_order_type", havingValue = "normal")
+@ConditionalOnProperty(name = "placeOrder.type", havingValue = "normal")
 public class NormalPlaceOrderServiceImpl implements PlaceOrderService {
 
     @Resource
