@@ -47,6 +47,9 @@ public class FlashItemWarmUpScheduler {
                 if (success) {
                     flashItemDomainService.updateById(item.setWarmUp(BaseEnums.YES.getValue()));
                 }
+
+                // 更新秒杀许可
+                itemStockCacheService.initialItemAvailablePermission(item.getId());
             });
         }
     }

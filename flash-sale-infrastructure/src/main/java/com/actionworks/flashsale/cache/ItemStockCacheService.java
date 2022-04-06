@@ -30,4 +30,11 @@ public interface ItemStockCacheService {
      * 增加库存
      */
     boolean increaseItemStock(Long itemId, Integer itemNum);
+
+    /**
+     * 初始化商品库存秒杀许可
+     *
+     * @param itemId 商品ID
+     */
+    boolean initialItemAvailablePermission(Long itemId);
 }
