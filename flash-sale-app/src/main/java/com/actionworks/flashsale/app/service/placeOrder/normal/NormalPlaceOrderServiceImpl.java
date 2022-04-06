@@ -15,6 +15,7 @@ import com.actionworks.flashsale.domain.service.FlashOrderDomainService;
 import com.actionworks.flashsale.domain.service.StockDeductionDomainService;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -24,6 +25,7 @@ import static com.actionworks.flashsale.domain.model.enums.FlashOrderStatus.CREA
 
 @Slf4j
 @Service
+@ConditionalOnProperty(name = "place_order_type", havingValue = "normal")
 public class NormalPlaceOrderServiceImpl implements PlaceOrderService {
 
     @Resource
