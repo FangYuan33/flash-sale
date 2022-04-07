@@ -118,6 +118,11 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
      */
     private static final String DECREASE_ITEM_PERMISSION_LUA;
 
+    /**
+     * 恢复秒杀许可缓存的lua脚本
+     */
+    private static final String RECOVER_ITEM_PERMISSION_LUA;
+
     static {
         /*
          * 操作成功 1
@@ -135,7 +140,6 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
          * 扣减许可成功 1
          * 秒杀许可不存在 -7
          * 秒杀许可不够 -6
-         * 其他 -8
          */
         DECREASE_ITEM_PERMISSION_LUA =
                 "if (redis.call('exists', KEYS[1]) == 1) then" +
@@ -147,9 +151,19 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
                 "        redis.call('incrby', KEYS[1], -1);" +
                 "        return 1" +
                 "    end;" +
-                "    return -8;" +
                 "end;" +
                 "return -7;";
+
+        /*
+         * 恢复成功 1
+         * 恢复失败 -9
+         */
+        RECOVER_ITEM_PERMISSION_LUA =
+                "if (redis.call('exists', KEYS[1]) == 1) then" +
+                "   redis.call('incrby', KEYS[1], 1);" +
+                "   return 1;" +
+                "end;" +
+                "return -9;";
     }
 
     @Resource
@@ -342,6 +356,7 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
     @Override
     public boolean decreaseItemAvailablePermission(Long itemId) {
         String key = String.format(ITEM_AVAILABLE_PERMISSION_KEY, itemId);
+        log.info("扣减秒杀许可, key {}", key);
 
         boolean keyExist = checkKeyExist(key);
 
@@ -357,6 +372,32 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
      */
     private boolean doDecreaseItemAvailablePermission(String key) {
         Long resultCode = redisCacheService.executeLua(DECREASE_ITEM_PERMISSION_LUA, Collections.singletonList(key));
+
+        LuaResult result = LuaResult.parse(resultCode, key);
+        log.info(result.toString());
+
+        return result.equals(SUCCESS);
+    }
+
+    @Override
+    public boolean recoverItemAvailablePermission(Long itemId) {
+        String key = String.format(ITEM_AVAILABLE_PERMISSION_KEY, itemId);
+        log.info("恢复秒杀许可, key {}", key);
+
+        boolean keyExist = checkKeyExist(key);
+
+        if (keyExist) {
+            return doRecoverItemAvailablePermission(key);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 执行秒杀许可恢复并返回结果
+     */
+    private boolean doRecoverItemAvailablePermission(String key) {
+        Long resultCode = redisCacheService.executeLua(RECOVER_ITEM_PERMISSION_LUA, Collections.singletonList(key));
 
         LuaResult result = LuaResult.parse(resultCode, key);
         log.info(result.toString());

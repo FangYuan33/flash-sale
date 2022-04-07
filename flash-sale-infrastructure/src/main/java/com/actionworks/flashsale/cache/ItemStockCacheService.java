@@ -42,4 +42,9 @@ public interface ItemStockCacheService {
      * 扣减秒杀许可
      */
     boolean decreaseItemAvailablePermission(Long itemId);
+
+    /**
+     * 恢复秒杀许可
+     */
+    boolean recoverItemAvailablePermission(Long itemId);
 }

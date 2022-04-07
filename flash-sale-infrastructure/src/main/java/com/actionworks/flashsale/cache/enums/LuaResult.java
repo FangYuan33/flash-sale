@@ -18,7 +18,7 @@ public enum LuaResult {
     INIT_PERMISSION_EXIST(-5L, "初始化秒杀许可已经存在"),
     DECREASE_PERMISSION_NOT_ENOUGH(-6L, "秒杀许可数量不足扣减"),
     ITEM_PERMISSION_NOT_EXIST(-7L, "秒杀许可不存在"),
-    DECREASE_PERMISSION_ERROR(-8L, "秒杀许可扣减异常");
+    RECOVER_PERMISSION_ERROR(-9L, "秒杀许可恢复失败");
 
     LuaResult(Long code, String msg) {
         this.code = code;
