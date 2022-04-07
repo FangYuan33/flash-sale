@@ -6,7 +6,7 @@ import com.actionworks.flashsale.app.model.result.AppResult;
 import com.actionworks.flashsale.app.service.activity.FlashActivityAppService;
 import com.actionworks.flashsale.app.service.item.FlashItemAppService;
 import com.actionworks.flashsale.app.service.placeOrder.PlaceOrderService;
-import com.actionworks.flashsale.cache.ItemStockCacheService;
+import com.actionworks.flashsale.cache.ItemPermissionCacheService;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -31,7 +31,7 @@ public class QueuedPlaceOrderServiceImpl implements PlaceOrderService {
     @Resource
     private FlashItemAppService flashItemAppService;
     @Resource
-    private ItemStockCacheService permissionCacheService;
+    private ItemPermissionCacheService itemPermissionCacheService;
 
     @Override
     public <T> AppResult<T> doPlaceOrder(Long userId, FlashPlaceOrderCommand command) {
@@ -43,7 +43,7 @@ public class QueuedPlaceOrderServiceImpl implements PlaceOrderService {
         // 校验同一个用户重复下单
 
         // 扣减下单许可
-        boolean decreaseSuccess = permissionCacheService.decreaseItemAvailablePermission(command.getItemId());
+        boolean decreaseSuccess = itemPermissionCacheService.decreaseItemPermission(command.getItemId());
 
         if (decreaseSuccess) {
             // 扣减下单许可成功，提交任务

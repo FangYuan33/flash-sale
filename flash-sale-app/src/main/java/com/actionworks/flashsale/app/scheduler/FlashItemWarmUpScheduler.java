@@ -1,5 +1,6 @@
 package com.actionworks.flashsale.app.scheduler;
 
+import com.actionworks.flashsale.cache.ItemPermissionCacheService;
 import com.actionworks.flashsale.cache.ItemStockCacheService;
 import com.actionworks.flashsale.domain.model.entity.FlashItem;
 import com.actionworks.flashsale.domain.model.enums.BaseEnums;
@@ -25,6 +26,8 @@ public class FlashItemWarmUpScheduler {
     @Resource
     private ItemStockCacheService itemStockCacheService;
     @Resource
+    private ItemPermissionCacheService itemPermissionCacheService;
+    @Resource
     private FlashItemDomainService flashItemDomainService;
 
     /**
@@ -46,10 +49,9 @@ public class FlashItemWarmUpScheduler {
 
                 if (success) {
                     flashItemDomainService.updateById(item.setWarmUp(BaseEnums.YES.getValue()));
+                    // 更新秒杀许可
+                    itemPermissionCacheService.initialItemPermission(item.getId());
                 }
-
-                // 更新秒杀许可
-                itemStockCacheService.initialItemAvailablePermission(item.getId());
             });
         }
     }
