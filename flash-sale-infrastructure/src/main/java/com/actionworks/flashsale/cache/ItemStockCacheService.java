@@ -37,4 +37,9 @@ public interface ItemStockCacheService {
      * @param itemId 商品ID
      */
     boolean initialItemAvailablePermission(Long itemId);
+
+    /**
+     * 扣减秒杀许可
+     */
+    boolean decreaseItemAvailablePermission(Long itemId, Integer permissionNum);
 }

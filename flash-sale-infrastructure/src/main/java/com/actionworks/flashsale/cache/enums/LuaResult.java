@@ -15,7 +15,10 @@ public enum LuaResult {
     FLASH_ITEM_STOCK_NOT_EXIST(-2L, "商品库存缓存不存在"),
     DECREASE_NOT_ENOUGH(-3L, "商品库存缓存数量不足扣减"),
     DECREASE_ERROR(-4L, "库存扣减异常"),
-    INIT_PERMISSION_EXIST(-5L, "初始化秒杀许可已经存在");
+    INIT_PERMISSION_EXIST(-5L, "初始化秒杀许可已经存在"),
+    DECREASE_PERMISSION_NOT_ENOUGH(-6L, "秒杀许可数量不足扣减"),
+    ITEM_PERMISSION_NOT_EXIST(-7L, "秒杀许可不存在"),
+    DECREASE_PERMISSION_ERROR(-8L, "秒杀许可扣减异常");
 
     LuaResult(Long code, String msg) {
         this.code = code;

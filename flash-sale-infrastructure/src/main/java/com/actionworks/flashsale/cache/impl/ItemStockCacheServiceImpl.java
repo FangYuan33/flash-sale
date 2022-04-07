@@ -113,7 +113,16 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
      */
     private static final String INIT_ITEM_PERMISSION_LUA;
 
+    /**
+     * 扣减秒杀许可缓存的lua脚本
+     */
+    private static final String DECREASE_ITEM_PERMISSION_LUA;
+
     static {
+        /*
+         * 操作成功 1
+         * 秒杀许可已经初始化 -5
+         */
         INIT_ITEM_PERMISSION_LUA =
                 "if (redis.call('exists', KEYS[1]) == 1) then" +
                         "    return -5;" +
@@ -121,6 +130,27 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
                         "local permissionNumber = tonumber(ARGV[1]);" +
                         "redis.call('set', KEYS[1] , permissionNumber);" +
                         "return 1";
+
+        /*
+         * 扣减许可成功 1
+         * 秒杀许可不存在 -7
+         * 秒杀许可不够 -6
+         * 其他 -8
+         */
+        DECREASE_ITEM_PERMISSION_LUA =
+                "if (redis.call('exists', KEYS[1]) == 1) then" +
+                "    local permissionNum = tonumber(redis.call('get', KEYS[1]));" +
+                "    local num = tonumber(ARGV[1]);" +
+                "    if (permissionNum < num) then" +
+                "        return -6" +
+                "    end;" +
+                "    if (permissionNum >= num) then" +
+                "        redis.call('incrby', KEYS[1], 0 - num);" +
+                "        return 1" +
+                "    end;" +
+                "    return -8;" +
+                "end;" +
+                "return -7;";
     }
 
     @Resource
@@ -213,7 +243,7 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
         String key = String.format(ITEM_STOCK_KEY, itemId);
         log.info("扣减商品库存缓存, key {} num {}", key, itemNum);
 
-        boolean exist = checkItemStockExist(key);
+        boolean exist = checkKeyExist(key);
 
         if (exist) {
             return doDecreaseItemStock(key, itemNum);
@@ -308,5 +338,31 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
         log.info(result.toString());
 
         return SUCCESS.equals(result);
+    }
+
+    @Override
+    public boolean decreaseItemAvailablePermission(Long itemId, Integer permissionNum) {
+        String key = String.format(ITEM_AVAILABLE_PERMISSION_KEY, itemId);
+
+        boolean keyExist = checkKeyExist(key);
+
+        if (keyExist) {
+            return doDecreaseItemAvailablePermission(key, permissionNum);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 扣减秒杀许可
+     */
+    private boolean doDecreaseItemAvailablePermission(String key, Integer permissionNum) {
+        Long resultCode = redisCacheService
+                .executeLua(DECREASE_ITEM_PERMISSION_LUA, Collections.singletonList(key), permissionNum);
+
+        LuaResult result = LuaResult.parse(resultCode, key);
+        log.info(result.toString());
+
+        return result.equals(SUCCESS);
     }
 }
