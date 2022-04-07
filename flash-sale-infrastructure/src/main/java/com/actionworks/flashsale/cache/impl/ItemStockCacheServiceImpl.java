@@ -227,7 +227,7 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
         String key = String.format(ITEM_STOCK_KEY, itemId);
         log.info("增加商品库存缓存, key {} num {}", key, itemNum);
 
-        boolean exist = checkItemStockExist(key);
+        boolean exist = checkKeyExist(key);
 
         if (exist) {
             return doIncreaseItemStock(key, itemNum);
@@ -237,11 +237,11 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
     }
 
     /**
-     * 校验秒杀库存缓存是否存在
+     * 校验缓存是否存在
      */
-    private boolean checkItemStockExist(String key) {
+    private boolean checkKeyExist(String key) {
         if (!redisCacheService.hasKey(key)) {
-            log.info("秒杀品未预热，key {}", key);
+            log.info("{} 缓存不存在", key);
             return false;
         }
 
