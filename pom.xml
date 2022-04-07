@@ -138,9 +138,9 @@
 
             <!-- kafka -->
             <dependency>
-                <groupId>io.github.susimsek</groupId>
-                <artifactId>spring-boot-kafka-starter</artifactId>
-                <version>1.0.1</version>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka</artifactId>
+                <version>2.1.8.RELEASE</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
