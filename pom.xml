@@ -135,6 +135,13 @@
                 <artifactId>sentinel-datasource-nacos</artifactId>
                 <version>1.8.1</version>
             </dependency>
+
+            <!-- kafka -->
+            <dependency>
+                <groupId>io.github.susimsek</groupId>
+                <artifactId>spring-boot-kafka-starter</artifactId>
+                <version>1.0.1</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
