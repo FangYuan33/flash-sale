@@ -23,4 +23,9 @@ public class CacheConstants {
      * 秒杀商品缓存列表key前缀
      */
     public static final String FLASH_ITEM_CACHE_LIST_PREFIX = "FLASH_ITEM_CACHE_LIST_%s";
+
+    /**
+     * 用户已经秒杀过某个商品 两个%s分别代表用户id和商品id
+     */
+    public static final String USER_HAS_FLASH_ITEM_PREFIX = "USER_%s_HAS_FLASH_ITEM_%s";
 }

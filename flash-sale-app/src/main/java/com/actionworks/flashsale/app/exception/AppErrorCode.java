@@ -14,6 +14,8 @@ public enum AppErrorCode {
 
     ACTIVITY_NOT_EXIST("秒杀活动不存在"),
     DO_PLACE_ORDER("秒杀失败"),
+    FLASH_SALE_NOT_BEGIN("秒杀未开始"),
+    USER_ALREADY_FLASH("请勿重复秒杀"),
 
     RECOVER_STOCK_FAILED("库存恢复失败");
 
