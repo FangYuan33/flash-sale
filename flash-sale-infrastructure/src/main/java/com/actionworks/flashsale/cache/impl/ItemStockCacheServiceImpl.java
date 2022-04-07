@@ -140,12 +140,11 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
         DECREASE_ITEM_PERMISSION_LUA =
                 "if (redis.call('exists', KEYS[1]) == 1) then" +
                 "    local permissionNum = tonumber(redis.call('get', KEYS[1]));" +
-                "    local num = tonumber(ARGV[1]);" +
-                "    if (permissionNum < num) then" +
+                "    if (permissionNum <= 0) then" +
                 "        return -6" +
                 "    end;" +
-                "    if (permissionNum >= num) then" +
-                "        redis.call('incrby', KEYS[1], 0 - num);" +
+                "    if (permissionNum > 0) then" +
+                "        redis.call('incrby', KEYS[1], -1);" +
                 "        return 1" +
                 "    end;" +
                 "    return -8;" +
@@ -341,13 +340,13 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
     }
 
     @Override
-    public boolean decreaseItemAvailablePermission(Long itemId, Integer permissionNum) {
+    public boolean decreaseItemAvailablePermission(Long itemId) {
         String key = String.format(ITEM_AVAILABLE_PERMISSION_KEY, itemId);
 
         boolean keyExist = checkKeyExist(key);
 
         if (keyExist) {
-            return doDecreaseItemAvailablePermission(key, permissionNum);
+            return doDecreaseItemAvailablePermission(key);
         } else {
             return false;
         }
@@ -356,9 +355,8 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
     /**
      * 扣减秒杀许可
      */
-    private boolean doDecreaseItemAvailablePermission(String key, Integer permissionNum) {
-        Long resultCode = redisCacheService
-                .executeLua(DECREASE_ITEM_PERMISSION_LUA, Collections.singletonList(key), permissionNum);
+    private boolean doDecreaseItemAvailablePermission(String key) {
+        Long resultCode = redisCacheService.executeLua(DECREASE_ITEM_PERMISSION_LUA, Collections.singletonList(key));
 
         LuaResult result = LuaResult.parse(resultCode, key);
         log.info(result.toString());
