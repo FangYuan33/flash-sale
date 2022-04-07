@@ -57,7 +57,7 @@ public enum LuaResult {
 
     @Override
     public String toString() {
-        return "LuaResult{" +
+        return "Lua脚本执行结果: {" +
                 "code=" + code +
                 ", msg='" + msg + '\'' +
                 ", key='" + key + '\'' +

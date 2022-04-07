@@ -168,10 +168,8 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
 
     @Resource
     private FlashItemDomainService flashItemDomainService;
-
     @Resource
     private RedisCacheService<Object> redisCacheService;
-
     @Resource
     private NacosProperties nacosProperties;
 
@@ -227,92 +225,7 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
     private boolean doInitialItemStocks(String cacheKey, Integer stock) {
         Long resultCode = redisCacheService.executeLua(INIT_ITEM_STOCK_LUA, Collections.singletonList(cacheKey), stock);
 
-        LuaResult result = LuaResult.parse(resultCode, cacheKey);
-        log.info(result.toString());
-
-        return result.equals(SUCCESS);
-    }
-
-    @Override
-    public Integer getAvailableItemStock(Long itemId) {
-        String key = String.format(ITEM_STOCK_KEY, itemId);
-
-        Integer localStock = stockLocalCache.getIfPresent(key);
-
-        // 优先拿本地缓存，拿不到再去读分布式缓存
-        if (localStock != null) {
-            return localStock;
-        } else {
-            int distributedCache = redisCacheService
-                    .executeLuaWithoutArgs(GET_ITEM_STOCK_LUA, Collections.singletonList(key)).intValue();
-            stockLocalCache.put(key, distributedCache);
-
-            return distributedCache;
-        }
-    }
-
-    @Override
-    public boolean decreaseItemStock(Long itemId, Integer itemNum) {
-        String key = String.format(ITEM_STOCK_KEY, itemId);
-        log.info("扣减商品库存缓存, key {} num {}", key, itemNum);
-
-        boolean exist = checkKeyExist(key);
-
-        if (exist) {
-            return doDecreaseItemStock(key, itemNum);
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public boolean increaseItemStock(Long itemId, Integer itemNum) {
-        String key = String.format(ITEM_STOCK_KEY, itemId);
-        log.info("增加商品库存缓存, key {} num {}", key, itemNum);
-
-        boolean exist = checkKeyExist(key);
-
-        if (exist) {
-            return doIncreaseItemStock(key, itemNum);
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 校验缓存是否存在
-     */
-    private boolean checkKeyExist(String key) {
-        if (!redisCacheService.hasKey(key)) {
-            log.info("{} 缓存不存在", key);
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * 执行扣减库存并返回结果
-     */
-    private boolean doDecreaseItemStock(String key, Integer itemNum) {
-        Long resultCode = redisCacheService.executeLua(DECREASE_ITEM_STOCK_LUA, Collections.singletonList(key), itemNum);
-
-        LuaResult result = LuaResult.parse(resultCode, key);
-        log.info(result.toString());
-
-        return result.equals(SUCCESS);
-    }
-
-    /**
-     * 执行库存新增并返回结果
-     */
-    private boolean doIncreaseItemStock(String key, Integer itemNum) {
-        Long resultCode = redisCacheService.executeLua(INCREASE_ITEM_STOCK_LUA, Collections.singletonList(key), itemNum);
-
-        LuaResult result = LuaResult.parse(resultCode, key);
-        log.info(result.toString());
-
-        return result.equals(SUCCESS);
+        return processLuaResultCode(resultCode, cacheKey);
     }
 
     @Override
@@ -347,10 +260,71 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
         Long resultCode = redisCacheService.executeLua(INIT_ITEM_PERMISSION_LUA,
                 Collections.singletonList(permissionKey), itemPermission.intValue());
 
-        LuaResult result = LuaResult.parse(resultCode, permissionKey);
-        log.info(result.toString());
+        return processLuaResultCode(resultCode, permissionKey);
+    }
 
-        return SUCCESS.equals(result);
+    @Override
+    public Integer getAvailableItemStock(Long itemId) {
+        String key = String.format(ITEM_STOCK_KEY, itemId);
+
+        Integer localStock = stockLocalCache.getIfPresent(key);
+
+        // 优先拿本地缓存，拿不到再去读分布式缓存
+        if (localStock != null) {
+            return localStock;
+        } else {
+            int distributedCache = redisCacheService
+                    .executeLuaWithoutArgs(GET_ITEM_STOCK_LUA, Collections.singletonList(key)).intValue();
+            stockLocalCache.put(key, distributedCache);
+
+            return distributedCache;
+        }
+    }
+
+    @Override
+    public boolean decreaseItemStock(Long itemId, Integer itemNum) {
+        String key = String.format(ITEM_STOCK_KEY, itemId);
+        log.info("扣减商品库存缓存, key {} num {}", key, itemNum);
+
+        boolean exist = checkKeyExist(key);
+
+        if (exist) {
+            return doDecreaseItemStock(key, itemNum);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 执行扣减库存并返回结果
+     */
+    private boolean doDecreaseItemStock(String key, Integer itemNum) {
+        Long resultCode = redisCacheService.executeLua(DECREASE_ITEM_STOCK_LUA, Collections.singletonList(key), itemNum);
+
+        return processLuaResultCode(resultCode, key);
+    }
+
+    @Override
+    public boolean increaseItemStock(Long itemId, Integer itemNum) {
+        String key = String.format(ITEM_STOCK_KEY, itemId);
+        log.info("增加商品库存缓存, key {} num {}", key, itemNum);
+
+        boolean exist = checkKeyExist(key);
+
+        if (exist) {
+            return doIncreaseItemStock(key, itemNum);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 执行库存新增并返回结果
+     */
+    private boolean doIncreaseItemStock(String key, Integer itemNum) {
+        Long resultCode = redisCacheService.executeLua(INCREASE_ITEM_STOCK_LUA, Collections.singletonList(key), itemNum);
+
+        return processLuaResultCode(resultCode, key);
     }
 
     @Override
@@ -373,10 +347,7 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
     private boolean doDecreaseItemAvailablePermission(String key) {
         Long resultCode = redisCacheService.executeLua(DECREASE_ITEM_PERMISSION_LUA, Collections.singletonList(key));
 
-        LuaResult result = LuaResult.parse(resultCode, key);
-        log.info(result.toString());
-
-        return result.equals(SUCCESS);
+        return processLuaResultCode(resultCode, key);
     }
 
     @Override
@@ -399,6 +370,28 @@ public class ItemStockCacheServiceImpl implements ItemStockCacheService {
     private boolean doRecoverItemAvailablePermission(String key) {
         Long resultCode = redisCacheService.executeLua(RECOVER_ITEM_PERMISSION_LUA, Collections.singletonList(key));
 
+        return processLuaResultCode(resultCode, key);
+    }
+
+    /**
+     * 校验缓存是否存在
+     */
+    private boolean checkKeyExist(String key) {
+        if (!redisCacheService.hasKey(key)) {
+            log.info("{} 缓存不存在", key);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * 处理LUA脚本返回值，使用 LuaResult 枚举解析并打印日志
+     *
+     * @param resultCode lua脚本返回值
+     * @param key        缓存key
+     */
+    private boolean processLuaResultCode(Long resultCode, String key) {
         LuaResult result = LuaResult.parse(resultCode, key);
         log.info(result.toString());
 
