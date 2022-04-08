@@ -3,14 +3,17 @@ package com.actionworks.flashsale.app.service.placeOrder.queued;
 import com.actionworks.flashsale.app.exception.BizException;
 import com.actionworks.flashsale.app.model.command.FlashPlaceOrderCommand;
 import com.actionworks.flashsale.app.model.result.AppResult;
+import com.actionworks.flashsale.app.mq.PlaceOrderTaskPostService;
 import com.actionworks.flashsale.app.service.activity.FlashActivityAppService;
 import com.actionworks.flashsale.app.service.item.FlashItemAppService;
 import com.actionworks.flashsale.app.service.placeOrder.PlaceOrderService;
 import com.actionworks.flashsale.cache.ItemPermissionCacheService;
 import com.actionworks.flashsale.cache.constants.CacheConstants;
 import com.actionworks.flashsale.cache.redis.RedisCacheService;
+import com.actionworks.flashsale.mq.message.PlaceOrderTask;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +37,8 @@ public class QueuedPlaceOrderServiceImpl implements PlaceOrderService {
     @Resource
     private FlashItemAppService flashItemAppService;
     @Resource
+    private PlaceOrderTaskPostService placeOrderTaskPostService;
+    @Resource
     private ItemPermissionCacheService itemPermissionCacheService;
     @Resource
     private RedisCacheService<Object> redisCacheService;
@@ -54,11 +59,20 @@ public class QueuedPlaceOrderServiceImpl implements PlaceOrderService {
 
         if (decreaseSuccess) {
             // 扣减下单许可成功，提交任务
+            PlaceOrderTask placeOrderTask = new PlaceOrderTask();
+            BeanUtils.copyProperties(command, placeOrderTask);
+            boolean postSuccess = placeOrderTaskPostService.post(placeOrderTask);
 
-            // 提交任务成功，添加上该用户的下单标识
-            redisCacheService.setValue(userFlashKey, 1);
+            if (postSuccess) {
+                // 提交任务成功，添加上该用户的下单标识
+                redisCacheService.setValue(userFlashKey, 1);
+                return AppResult.success("成功参加秒杀活动，请稍后查询秒杀结果");
+            } else {
+                // 恢复秒杀许可
+                itemPermissionCacheService.recoverItemPermission(command.getItemId());
 
-            return AppResult.success("成功参加秒杀活动，请稍后查询秒杀结果");
+                return AppResult.error("系统繁忙，参加秒杀活动失败");
+            }
         } else {
             return AppResult.error("库存不足");
         }

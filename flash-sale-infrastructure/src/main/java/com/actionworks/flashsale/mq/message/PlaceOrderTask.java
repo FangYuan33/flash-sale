@@ -1,11 +1,16 @@
-package com.actionworks.flashsale.app.mq.model;
+package com.actionworks.flashsale.mq.message;
+
+import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * 下单任务
  *
  * @author fangyuan
  */
-public class PlaceOrderTask {
+@Data
+public class PlaceOrderTask implements Serializable {
     /**
      * 商品ID
      */

@@ -26,8 +26,8 @@ public class KafkaConsumerConfig {
     private String groupId;
 
     @Bean
-    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Object>> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         // 设置消费者工厂
         factory.setConsumerFactory(consumerFactory());
         // 消费者组中线程数量
@@ -42,7 +42,7 @@ public class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, String> consumerFactory() {
+    public ConsumerFactory<String, Object> consumerFactory() {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
 
@@ -71,6 +71,9 @@ public class KafkaConsumerConfig {
         // earliest：当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，从头开始消费
         // none：topic各分区都存在已提交的offset时，从offset后开始消费；只要有一个分区不存在已提交的offset，则抛出异常
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+
+        // 添加信任的反序列化目录，否则会抛出反序列化异常
+        properties.put(JsonDeserializer.TRUSTED_PACKAGES, "com.actionworks.flashsale.mq.message");
 
         return properties;
     }
