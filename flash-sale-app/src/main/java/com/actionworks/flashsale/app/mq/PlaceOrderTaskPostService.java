@@ -1,6 +1,6 @@
-package com.actionworks.flashsale.mq;
+package com.actionworks.flashsale.app.mq;
 
-import com.actionworks.flashsale.mq.model.PlaceOrderTask;
+import com.actionworks.flashsale.app.mq.model.PlaceOrderTask;
 
 /**
  * 秒杀下单任务发布服务

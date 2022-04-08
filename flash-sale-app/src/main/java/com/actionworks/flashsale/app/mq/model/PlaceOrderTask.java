@@ -1,5 +1,10 @@
-package com.actionworks.flashsale.mq.model;
+package com.actionworks.flashsale.app.mq.model;
 
+/**
+ * 下单任务
+ *
+ * @author fangyuan
+ */
 public class PlaceOrderTask {
     /**
      * 商品ID
