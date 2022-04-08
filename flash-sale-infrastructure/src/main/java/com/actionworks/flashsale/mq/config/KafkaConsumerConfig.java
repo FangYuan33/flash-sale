@@ -27,8 +27,7 @@ public class KafkaConsumerConfig {
 
     @Bean
     KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, String>
-                factory = new ConcurrentKafkaListenerContainerFactory<>();
+        ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
         // 设置消费者工厂
         factory.setConsumerFactory(consumerFactory());
         // 消费者组中线程数量
@@ -47,8 +46,7 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(consumerConfigs());
     }
 
-    @Bean
-    public Map<String, Object> consumerConfigs() {
+    private Map<String, Object> consumerConfigs() {
         Map<String, Object> properties = new HashMap<>();
 
         // 配置kafka群组地址
