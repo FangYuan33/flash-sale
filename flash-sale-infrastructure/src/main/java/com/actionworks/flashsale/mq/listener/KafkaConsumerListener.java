@@ -7,7 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaConsumerListener {
 
-    @KafkaListener(topics = "flash-topic", groupId = "group.flashSale", containerFactory = "kafkaListenerContainerFactory")
+    @KafkaListener(topics = "${placeOrder.topic}", groupId = "${spring.kafka.consumer.group-id}",
+            containerFactory = "kafkaListenerContainerFactory")
     private void processOrderTask(PlaceOrderTask message) {
         System.out.println(message);
     }
