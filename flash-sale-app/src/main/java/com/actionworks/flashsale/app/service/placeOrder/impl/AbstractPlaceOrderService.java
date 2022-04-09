@@ -1,10 +1,11 @@
-package com.actionworks.flashsale.app.service.placeOrder;
+package com.actionworks.flashsale.app.service.placeOrder.impl;
 
 import com.actionworks.flashsale.app.exception.BizException;
 import com.actionworks.flashsale.app.model.command.FlashPlaceOrderCommand;
 import com.actionworks.flashsale.app.model.result.AppResult;
 import com.actionworks.flashsale.app.service.activity.FlashActivityAppService;
 import com.actionworks.flashsale.app.service.item.FlashItemAppService;
+import com.actionworks.flashsale.app.service.placeOrder.PlaceOrderService;
 import com.actionworks.flashsale.cache.constants.CacheConstants;
 import com.actionworks.flashsale.cache.redis.RedisCacheService;
 

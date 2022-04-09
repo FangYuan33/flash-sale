@@ -1,8 +1,8 @@
-package com.actionworks.flashsale.app.service.placeOrder.queued;
+package com.actionworks.flashsale.app.service.placeOrder.impl.queued;
 
 import com.actionworks.flashsale.app.model.command.FlashPlaceOrderCommand;
 import com.actionworks.flashsale.app.mq.PlaceOrderTaskPostService;
-import com.actionworks.flashsale.app.service.placeOrder.AbstractPlaceOrderService;
+import com.actionworks.flashsale.app.service.placeOrder.impl.AbstractPlaceOrderService;
 import com.actionworks.flashsale.cache.ItemPermissionCacheService;
 import com.actionworks.flashsale.mq.message.PlaceOrderTask;
 import com.alibaba.fastjson.JSON;
