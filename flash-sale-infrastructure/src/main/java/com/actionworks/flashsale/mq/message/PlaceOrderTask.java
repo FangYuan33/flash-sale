@@ -11,6 +11,12 @@ import java.io.Serializable;
  */
 @Data
 public class PlaceOrderTask implements Serializable {
+
+    /**
+     * 用户ID
+     */
+    private Long userId;
+
     /**
      * 商品ID
      */
