@@ -50,22 +50,20 @@ public class QueuedPlaceOrderServiceImpl implements PlaceOrderService {
 
         // 校验秒杀活动和秒杀商品的秒杀条件
         checkPlaceOrderCondition(command.getActivityId(), command.getItemId());
-
         // 校验同一个用户重复下单
         checkUserHasFlashed(userFlashKey);
 
         // 扣减下单许可
         boolean decreaseSuccess = itemPermissionCacheService.decreaseItemPermission(command.getItemId());
 
+        // 扣减下单许可成功，提交任务
         if (decreaseSuccess) {
-            // 扣减下单许可成功，提交任务
-            PlaceOrderTask placeOrderTask = new PlaceOrderTask();
-            BeanUtils.copyProperties(command, placeOrderTask);
-            boolean postSuccess = placeOrderTaskPostService.post(placeOrderTask);
+            boolean postSuccess = postPlaceOrderTask(command);
 
             if (postSuccess) {
                 // 提交任务成功，添加上该用户的下单标识
                 redisCacheService.setValue(userFlashKey, 1);
+
                 return AppResult.success("成功参加秒杀活动，请稍后查询秒杀结果");
             } else {
                 // 恢复秒杀许可
@@ -101,5 +99,15 @@ public class QueuedPlaceOrderServiceImpl implements PlaceOrderService {
         if (userAlreadyFlash) {
             throw new BizException(USER_ALREADY_FLASH);
         }
+    }
+
+    /**
+     * 提交下单任务
+     */
+    private boolean postPlaceOrderTask(FlashPlaceOrderCommand command) {
+        PlaceOrderTask placeOrderTask = new PlaceOrderTask();
+        BeanUtils.copyProperties(command, placeOrderTask);
+
+        return placeOrderTaskPostService.post(placeOrderTask);
     }
 }
