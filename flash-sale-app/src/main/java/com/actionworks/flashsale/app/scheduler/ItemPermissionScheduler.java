@@ -38,7 +38,7 @@ public class ItemPermissionScheduler {
                     .setStatus(FlashItemStatus.ONLINE.getCode()).setEndTime(LocalDateTime.now());
             List<FlashItem> flashItems = flashItemDomainService.listByQueryConditionWithoutPageSize(queryCondition);
 
-            // 更新秒杀许可
+            // 更新下单许可
             flashItems.forEach(item -> itemPermissionCacheService.initialItemPermission(item.getId()));
         }
     }

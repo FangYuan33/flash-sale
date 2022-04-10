@@ -10,7 +10,6 @@ import com.actionworks.flashsale.controller.model.request.FlashOrderPlaceRequest
 import com.actionworks.flashsale.controller.model.request.FlashOrderQueryRequest;
 import com.actionworks.flashsale.controller.model.response.FlashOrderResponse;
 import com.alibaba.cola.dto.SingleResponse;
-import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +34,7 @@ public class FlashOrderController {
      * @param request 秒杀请求
      *                用户ID 这里我们并没有创建用户管理系统，所以仅以此来作为用户唯一标识
      */
-    @SentinelResource("placeOrder")
+//    @SentinelResource("placeOrder")
     @ApiOperation(value = "秒杀商品下单")
     @PostMapping("/flash-orders/placeOrder")
     public <T> SingleResponse<T> placeOrder(@RequestBody FlashOrderPlaceRequest request) {

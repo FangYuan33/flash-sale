@@ -20,29 +20,29 @@ import static com.actionworks.flashsale.cache.enums.LuaResult.SUCCESS;
 public class ItemPermissionCacheServiceImpl implements ItemPermissionCacheService {
 
     /**
-     * 商品秒杀许可key %d拼接商品ID
+     * 商品下单许可key %d拼接商品ID
      */
     private static final String ITEM_PERMISSION_KEY = "ITEM_PERMISSION_%d";
 
     /**
-     * 初始化秒杀许可缓存的lua脚本
+     * 初始化下单许可缓存的lua脚本
      */
     private static final String INIT_ITEM_PERMISSION_LUA;
 
     /**
-     * 扣减秒杀许可缓存的lua脚本
+     * 扣减下单许可缓存的lua脚本
      */
     private static final String DECREASE_ITEM_PERMISSION_LUA;
 
     /**
-     * 恢复秒杀许可缓存的lua脚本
+     * 恢复下单许可缓存的lua脚本
      */
     private static final String RECOVER_ITEM_PERMISSION_LUA;
 
     static {
         /*
          * 操作成功 1
-         * 秒杀许可已经初始化 -5
+         * 下单许可已经初始化 -5
          */
         INIT_ITEM_PERMISSION_LUA =
                 "if (redis.call('exists', KEYS[1]) == 1) then" +
@@ -54,8 +54,8 @@ public class ItemPermissionCacheServiceImpl implements ItemPermissionCacheServic
 
         /*
          * 扣减许可成功 1
-         * 秒杀许可不存在 -7
-         * 秒杀许可不够 -6
+         * 下单许可不存在 -7
+         * 下单许可不够 -6
          */
         DECREASE_ITEM_PERMISSION_LUA =
                 "if (redis.call('exists', KEYS[1]) == 1) then" +
@@ -92,24 +92,23 @@ public class ItemPermissionCacheServiceImpl implements ItemPermissionCacheServic
     @Override
     public boolean initialItemPermission(Long itemId) {
         String permissionKey = String.format(ITEM_PERMISSION_KEY, itemId);
-        log.info("初始化商品秒杀许可, key {}", permissionKey);
+        log.info("初始化商品下单许可, key {}", permissionKey);
 
-        // 校验秒杀商品条件，并返回可用许可值
-        BigDecimal itemPermission = checkItemAndGetPermissionNum(itemId);
+        // 获取可用许可值
+        BigDecimal itemPermission = getPermissionNum(itemId);
         // 更新缓存
         return doInitialItemPermission(permissionKey, itemPermission);
     }
 
     /**
-     * 校验秒杀商品条件，并返回可用许可值
+     * 返回可用许可值
      */
-    private BigDecimal checkItemAndGetPermissionNum(Long itemId) {
-        // 获取可用库存值，这里没做校验，是因为该动作在初始化库存缓存之后，前者若成功这里就没有问题
+    private BigDecimal getPermissionNum(Long itemId) {
         Integer stock = flashItemDomainService.getById(itemId).getAvailableStock();
 
         BigDecimal permissionFactor = nacosProperties.getPermissionFactor();
 
-        // 根据系数计算出秒杀许可数量，并四舍五入不保留小数
+        // 根据系数计算出下单许可数量，并四舍五入不保留小数
         return permissionFactor.multiply(new BigDecimal(stock != null ? stock : 0))
                 .setScale(0, RoundingMode.HALF_UP);
     }
@@ -127,7 +126,7 @@ public class ItemPermissionCacheServiceImpl implements ItemPermissionCacheServic
     @Override
     public boolean decreaseItemPermission(Long itemId) {
         String key = String.format(ITEM_PERMISSION_KEY, itemId);
-        log.info("扣减秒杀许可, key {}", key);
+        log.info("扣减下单许可, key {}", key);
 
         boolean keyExist = checkKeyExist(key);
 
@@ -139,7 +138,7 @@ public class ItemPermissionCacheServiceImpl implements ItemPermissionCacheServic
     }
 
     /**
-     * 扣减秒杀许可
+     * 扣减下单许可
      */
     private boolean doDecreaseItemAvailablePermission(String key) {
         Long resultCode = redisCacheService.executeLua(DECREASE_ITEM_PERMISSION_LUA, Collections.singletonList(key));
@@ -150,7 +149,7 @@ public class ItemPermissionCacheServiceImpl implements ItemPermissionCacheServic
     @Override
     public boolean recoverItemPermission(Long itemId) {
         String key = String.format(ITEM_PERMISSION_KEY, itemId);
-        log.info("恢复秒杀许可, key {}", key);
+        log.info("恢复下单许可, key {}", key);
 
         boolean keyExist = checkKeyExist(key);
 
@@ -162,7 +161,7 @@ public class ItemPermissionCacheServiceImpl implements ItemPermissionCacheServic
     }
 
     /**
-     * 执行秒杀许可恢复并返回结果
+     * 执行下单许可恢复并返回结果
      */
     private boolean doRecoverItemAvailablePermission(String key) {
         Long resultCode = redisCacheService.executeLua(RECOVER_ITEM_PERMISSION_LUA, Collections.singletonList(key));

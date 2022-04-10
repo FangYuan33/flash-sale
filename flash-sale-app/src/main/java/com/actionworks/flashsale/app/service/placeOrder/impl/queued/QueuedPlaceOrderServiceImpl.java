@@ -42,7 +42,7 @@ public class QueuedPlaceOrderServiceImpl extends AbstractPlaceOrderService {
             if (postSuccess) {
                 return true;
             } else {
-                // 提交任务失败，恢复秒杀许可
+                // 提交任务失败，恢复下单许可
                 itemPermissionCacheService.recoverItemPermission(command.getItemId());
 
                 return false;
