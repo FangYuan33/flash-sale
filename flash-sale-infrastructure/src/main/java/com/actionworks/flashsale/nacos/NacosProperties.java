@@ -21,6 +21,15 @@ public class NacosProperties {
     @Value("${scheduler.warmUpFlag}")
     private Boolean warmUpFlag;
 
+    /**
+     * 控制秒杀商品下单许可初始化
+     */
+    @Value("${scheduler.initialItemPermissionFlag}")
+    private Boolean initialItemPermissionFlag;
+
+    /**
+     * 秒杀下单许可的系数
+     */
     @Value("${placeOrder.permissionFactor}")
     private BigDecimal permissionFactor;
 }
