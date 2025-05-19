@@ -21,9 +21,10 @@
     <modules>
         <module>flash-sale-domain</module>
         <module>flash-sale-infrastructure</module>
-        <module>flash-sale-app</module>
-        <module>flash-sale-controller</module>
-        <module>flash-sale-start</module>
+        <module>flash-sale-application</module>
+        <module>flash-sale-trigger</module>
+        <module>flash-sale-boot</module>
+        <module>flash-sale-base</module>
     </modules>
 
     <dependencyManagement>

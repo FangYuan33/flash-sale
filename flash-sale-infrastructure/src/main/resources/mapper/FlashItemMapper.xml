@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.actionworks.flashsale.persistence.mapper.FlashItemMapper">
+<mapper namespace="com.actionworks.flashsale.infrastructure.persistence.mapper.FlashItemMapper">
     <sql id="ALL_COLUMNS">
         id,
         activity_id,
@@ -49,12 +49,12 @@
         order by create_time desc
     </sql>
 
-    <select id="listByQueryCondition" resultType="com.actionworks.flashsale.persistence.model.FlashItemDO">
+    <select id="listByQueryCondition" resultType="com.actionworks.flashsale.infrastructure.persistence.model.FlashItemDO">
         <include refid="listByQueryCondition"></include>
         limit #{offset}, #{pageSize}
     </select>
 
-    <select id="listByQueryConditionWithoutPageSize" resultType="com.actionworks.flashsale.persistence.model.FlashItemDO">
+    <select id="listByQueryConditionWithoutPageSize" resultType="com.actionworks.flashsale.infrastructure.persistence.model.FlashItemDO">
         <include refid="listByQueryCondition"></include>
     </select>
 

@@ -19,17 +19,14 @@
 - **increae_mq**：借助MQ异步实现削峰
 
 ## 3. 项目介绍
+
 ### 3.1 DDD架构
-> 各个层次的依赖关系如下
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/b1131e1138624851b90709a6dc4fd9c2.png)
-
-1. **flash-sale-app** 应用层，主要放的是service实现
-2. **flash-sale-controller** controller层，处理API请求和业务异常的处理
-3. **flash-sale-domain** 领域层，在我们的系统中，它不依赖任何层级，是`最干脆和整洁`的一层
-4. **flash-sale-infrastructure** 基础设施层，为上面各层提供通用的技术能力，包括`消息处理`、`持久化机制`、`缓存处理`等
-5. **flash-fale-start** 启动服务，Application和配置都在这一层
-
+1. **flash-sale-boot**: 启动层，加载各种配置
+2. **flash-sale-trigger**: 触发器层，接口调用，消息监听和定时任务等都在这一层触发
+3. **flash-sale-application**: 应用服务层，相对比较薄的一层，它只做逻辑编排
+4. **flash-sale-domain**: 领域层，它不依赖任何层级，保证它的整洁，在这一层中定义业务领域相关内容，包括聚合对象和业务逻辑等
+5. **flash-sale-infrastructure**: 基础设施层，负责对接数据库、缓存、配置中心、RPC接口、HTTP接口、MQ等各项基础服务，并负责实现领域层的对外接口调用和 Repository，对领域层隐藏技术实现细节
 
 ### 3.2 使用的组件
 - mybatis-plus：为了避免手写简单SQL，集成进来再方便不过

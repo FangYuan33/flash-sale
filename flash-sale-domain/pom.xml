@@ -18,6 +18,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.actionworks</groupId>
+            <artifactId>flash-sale-base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
