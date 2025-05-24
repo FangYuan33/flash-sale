@@ -1,80 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.actionworks.flashsale.persistence.mapper.FlashItemMapper">
+<mapper namespace="com.actionworks.flashsale.infrastructure.persistence.mapper.FlashItemMapper">
     <sql id="ALL_COLUMNS">
         id,
-        activity_id,
+        code,
         item_title,
-        item_sub_title,
         item_desc,
-        initial_stock,
-        available_stock,
         original_price,
         flash_price,
-        start_time,
-        end_time,
         status,
         modified_time,
         create_time
     </sql>
 
-    <select id="listByQueryCondition" resultType="com.actionworks.flashsale.persistence.model.FlashItemDO">
-        select <include refid="ALL_COLUMNS"></include>
-        from flash_item
-        <where>
-            <if test="activityId != null">
-                and activity_id = #{activityId}
-            </if>
-            <if test="itemTitle != null">
-                and item_title = #{itemTitle}
-            </if>
-            <if test="itemSubTitle != null">
-                and item_sub_title = #{itemSubTitle}
-            </if>
-            <if test="startTime != null">
-                and start_time &lt;= #{startTime}
-            </if>
-            <if test="endTime != null">
-                and end_time >= #{endTime}
-            </if>
-            <if test="status != null">
-                and status = #{status}
-            </if>
-        </where>
-        order by create_time desc
-        limit #{offset}, #{pageSize}
-    </select>
-
-    <select id="countByQueryCondition" resultType="java.lang.Integer">
-        select count(*)
-        from flash_item
-        <where>
-            <if test="activityId != null">
-                and activity_id = #{activityId}
-            </if>
-            <if test="itemTitle != null">
-                and item_title = #{itemTitle}
-            </if>
-            <if test="itemSubTitle != null">
-                and item_sub_title = #{itemSubTitle}
-            </if>
-            <if test="startTime != null">
-                and start_time &lt;= #{startTime}
-            </if>
-            <if test="endTime != null">
-                and end_time >= #{endTime}
-            </if>
-            <if test="status != null">
-                and status = #{status}
-            </if>
-        </where>
-        limit #{offset}, #{pageSize}
-    </select>
-
-    <update id="decreaseItemStock">
-        update flash_item
-        set available_stock = available_stock - #{quantity}
-        where id = #{itemId} and available_stock >= #{quantity}
-    </update>
 </mapper>

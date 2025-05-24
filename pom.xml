@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.actionworks</groupId>
     <artifactId>flash-sale</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>flash-sale-fy</name>
     <description>fangYuanWantToBeTuring</description>
@@ -14,20 +14,48 @@
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
+        <spring-boot.version>2.7.18</spring-boot.version>
         <spring-cloud-alibaba.version>2.2.2.RELEASE</spring-cloud-alibaba.version>
     </properties>
 
     <modules>
         <module>flash-sale-domain</module>
         <module>flash-sale-infrastructure</module>
-        <module>flash-sale-app</module>
-        <module>flash-sale-controller</module>
-        <module>flash-sale-start</module>
+        <module>flash-sale-application</module>
+        <module>flash-sale-trigger</module>
+        <module>flash-sale-boot</module>
+        <module>flash-sale-common</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.actionworks</groupId>
+                <artifactId>flash-sale-trigger</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.actionworks</groupId>
+                <artifactId>flash-sale-application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.actionworks</groupId>
+                <artifactId>flash-sale-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.actionworks</groupId>
+                <artifactId>flash-sale-infrastructure</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.actionworks</groupId>
+                <artifactId>flash-sale-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- springboot -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -35,84 +63,18 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>com.aliyun</groupId>
-                <artifactId>cola-core</artifactId>
-                <version>3.0.0</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>com.aliyun</groupId>
-                <artifactId>cola-common</artifactId>
-                <version>3.0.0</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>3.1</version>
-                <type>jar</type>
-            </dependency>
+
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.72</version>
-                <type>jar</type>
+                <version>2.0.42</version>
             </dependency>
-            <dependency>
-                <groupId>com.taobao.arthas</groupId>
-                <artifactId>arthas-spring-boot-starter</artifactId>
-                <version>3.4.8</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring-cloud-alibaba.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+
+            <!-- mybatis -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>3.5.1</version>
-            </dependency>
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>2.11.0</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.cola</groupId>
-                <artifactId>cola-component-exception</artifactId>
-                <version>4.0.1</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.cola</groupId>
-                <artifactId>cola-component-extension-starter</artifactId>
-                <version>4.0.1</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.cola</groupId>
-                <artifactId>cola-framework-archetype-service</artifactId>
-                <version>4.0.1</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.cola</groupId>
-                <artifactId>cola-framework-archetype-web</artifactId>
-                <version>4.0.1</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-dbcp2</artifactId>
-                <version>2.9.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-pool2</artifactId>
-                <version>2.11.1</version>
             </dependency>
 
             <!-- swagger 3.0 -->
@@ -120,6 +82,12 @@
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-boot-starter</artifactId>
                 <version>3.0.0</version>
+            </dependency>
+            <!-- guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>32.0.1-android</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
