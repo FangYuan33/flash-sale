@@ -14,6 +14,7 @@ public class FlashItemAppAssembler {
 
         FlashItemDTO flashItemDTO = new FlashItemDTO();
         flashItemDTO.setId(flashItem.getId());
+        flashItemDTO.setCode(flashItem.getCode());
         flashItemDTO.setItemTitle(flashItem.getItemTitle());
         flashItemDTO.setItemDesc(flashItem.getItemDesc());
         if (flashItem.getStock() != null) {

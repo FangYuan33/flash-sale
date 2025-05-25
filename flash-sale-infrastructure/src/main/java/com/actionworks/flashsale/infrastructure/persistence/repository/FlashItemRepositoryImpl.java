@@ -5,7 +5,9 @@ import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.infrastructure.persistence.convertor.FlashItemConvertor;
 import com.actionworks.flashsale.infrastructure.persistence.mapper.FlashItemMapper;
+import com.actionworks.flashsale.infrastructure.persistence.mapper.StockMapper;
 import com.actionworks.flashsale.infrastructure.persistence.model.FlashItemPO;
+import com.actionworks.flashsale.infrastructure.persistence.model.StockPO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.collections4.*;
@@ -22,6 +24,8 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
 
     @Resource
     private FlashItemMapper flashItemMapper;
+    @Resource
+    private StockMapper stockMapper;
 
     @Override
     public Optional<FlashItem> findById(Long itemId) {
@@ -30,8 +34,15 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
         if (flashItemDO == null) {
             return Optional.empty();
         }
+        LambdaQueryWrapper<StockPO> stockPOLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        stockPOLambdaQueryWrapper.eq(StockPO::getCode, flashItemDO.getCode());
+        StockPO stockPO = stockMapper.selectOne(stockPOLambdaQueryWrapper);
 
-        return Optional.of(FlashItemConvertor.toDomainObject(flashItemDO));
+        if (stockPO != null) {
+            return Optional.of(FlashItemConvertor.toDomainObject(flashItemDO, stockPO));
+        } else {
+            return Optional.of(FlashItemConvertor.toDomainObject(flashItemDO));
+        }
     }
 
     @Override

@@ -16,6 +16,11 @@ public class FlashItemDTO {
     private Long id;
 
     /**
+     * 品编码
+     */
+    private String code;
+
+    /**
      * 秒杀品名称标题
      */
     private String itemTitle;
