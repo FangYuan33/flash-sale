@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class FlashOrderQueryCondition extends BaseQueryCondition {
+public class FlashOrderQueryCondition extends PageQueryCondition {
     /**
      * 商品ID
      */
@@ -21,8 +21,4 @@ public class FlashOrderQueryCondition extends BaseQueryCondition {
      */
     private Long activityId;
 
-    @Override
-    public void buildParams() {
-        super.buildParams();
-    }
 }

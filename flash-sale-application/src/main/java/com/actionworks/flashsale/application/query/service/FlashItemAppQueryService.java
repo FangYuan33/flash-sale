@@ -1,6 +1,9 @@
 package com.actionworks.flashsale.application.query.service;
 
 import com.actionworks.flashsale.application.query.model.dto.FlashItemDTO;
+import com.actionworks.flashsale.application.query.model.req.FlashItemQuery;
+
+import java.util.List;
 
 public interface FlashItemAppQueryService {
 
@@ -11,4 +14,5 @@ public interface FlashItemAppQueryService {
      */
     FlashItemDTO getById(Long itemId);
 
+    List<FlashItemDTO> getFlashItems(FlashItemQuery query);
 }

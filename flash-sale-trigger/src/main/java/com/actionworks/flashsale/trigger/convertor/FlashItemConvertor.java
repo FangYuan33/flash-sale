@@ -2,7 +2,6 @@ package com.actionworks.flashsale.trigger.convertor;
 
 import com.actionworks.flashsale.application.query.model.req.FlashItemQuery;
 import com.actionworks.flashsale.trigger.model.request.FlashItemQueryRequest;
-import org.springframework.beans.BeanUtils;
 
 public class FlashItemConvertor {
 
@@ -12,7 +11,12 @@ public class FlashItemConvertor {
         }
 
         FlashItemQuery query = new FlashItemQuery();
-        BeanUtils.copyProperties(request, query);
+        query.setItemTitle(request.getItemTitle());
+        query.setStatus(request.getStatus());
+        query.setPageNum(request.getPageNum());
+        query.setPageSize(request.getPageSize());
+
         return query;
     }
+
 }

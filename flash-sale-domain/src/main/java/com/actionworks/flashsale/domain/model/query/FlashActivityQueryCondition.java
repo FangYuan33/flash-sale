@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class FlashActivityQueryCondition extends BaseQueryCondition {
+public class FlashActivityQueryCondition extends PageQueryCondition {
 
     public FlashActivityQueryCondition(Long activityId) {
         this.activityId = activityId;
@@ -50,8 +50,4 @@ public class FlashActivityQueryCondition extends BaseQueryCondition {
      */
     private Integer status;
 
-    @Override
-    public void buildParams() {
-        super.buildParams();
-    }
 }
