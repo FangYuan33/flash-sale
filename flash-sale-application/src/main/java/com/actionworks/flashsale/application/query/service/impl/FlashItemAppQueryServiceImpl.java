@@ -1,7 +1,7 @@
 package com.actionworks.flashsale.application.query.service.impl;
 
-import com.actionworks.flashsale.application.query.assembler.FlashItemAppAssembler;
-import com.actionworks.flashsale.application.query.model.item.dto.FlashItemDTO;
+import com.actionworks.flashsale.application.assembler.FlashItemAppAssembler;
+import com.actionworks.flashsale.application.query.model.dto.FlashItemDTO;
 import com.actionworks.flashsale.application.query.service.FlashItemAppQueryService;
 import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;

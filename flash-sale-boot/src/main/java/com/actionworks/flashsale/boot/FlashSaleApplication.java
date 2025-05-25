@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Bean;
 import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @EnableOpenApi
-@MapperScan("com.actionworks.flashsale.persistence.mapper")
-@SpringBootApplication(scanBasePackages = {"com.actionworks.flashsale", "com.alibaba.cola"})
+@MapperScan("com.actionworks.flashsale.infrastructure.persistence.mapper")
+@SpringBootApplication(scanBasePackages = {"com.actionworks.flashsale"})
 public class FlashSaleApplication {
 
     public static void main(String[] args) {
@@ -19,8 +19,7 @@ public class FlashSaleApplication {
     }
 
     @Bean
-    MeterRegistryCustomizer<MeterRegistry> configurer(
-            @Value("${spring.application.name}") String applicationName) {
+    MeterRegistryCustomizer<MeterRegistry> configurer(@Value("${spring.application.name}") String applicationName) {
         return (registry) -> registry.config().commonTags("application", applicationName);
     }
 }

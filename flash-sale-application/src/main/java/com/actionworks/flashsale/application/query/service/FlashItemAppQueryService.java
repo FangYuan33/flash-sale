@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.application.query.service;
 
-import com.actionworks.flashsale.application.query.model.item.dto.FlashItemDTO;
+import com.actionworks.flashsale.application.query.model.dto.FlashItemDTO;
 
 public interface FlashItemAppQueryService {
 

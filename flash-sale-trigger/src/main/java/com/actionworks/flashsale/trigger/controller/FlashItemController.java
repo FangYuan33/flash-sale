@@ -1,7 +1,7 @@
 package com.actionworks.flashsale.trigger.controller;
 
 import com.actionworks.flashsale.application.query.service.FlashItemAppQueryService;
-import com.actionworks.flashsale.application.query.model.item.dto.FlashItemDTO;
+import com.actionworks.flashsale.application.query.model.dto.FlashItemDTO;
 import com.actionworks.flashsale.trigger.model.response.SingleResponse;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -27,4 +27,5 @@ public class FlashItemController {
         FlashItemDTO flashItemDTO = flashItemAppQueryService.getById(itemId);
         return SingleResponse.of(flashItemDTO);
     }
+
 }

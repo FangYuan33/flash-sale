@@ -1,6 +1,5 @@
-package com.actionworks.flashsale.application.query.model.item.qry;
+package com.actionworks.flashsale.application.query.model.req;
 
-import com.actionworks.flashsale.application.query.model.PageQuery;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

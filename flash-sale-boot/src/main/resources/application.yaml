@@ -10,10 +10,16 @@ spring:
     name: flash-sale
   datasource:
     type: org.apache.commons.dbcp2.BasicDataSource
-    url: jdbc:mysql://localhost:3306/learn_mybatis?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
-    username: root
-    password: xxxxxx
+    url: jdbc:mysql://localhost:3306/flash_sale?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: fangyuan
+    password: Mysql1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+    dbcp2:
+      initial-size: 30
+      max-total: 50
+      max-idle: 40
+      min-idle: 30
+      max-wait-millis: 10000
 
 # 应用服务 WEB 访问端口
 server:
@@ -27,7 +33,7 @@ server:
 # 配置mybatis打印SQL日志,其中路径为其Mapper接口所在的包
 logging:
   level:
-    com.actionworks.flashsale.persistence.mapper: debug
+    com.actionworks.flashsale.infrastructure.persistence.mapper: debug
 
 management:
   metrics:

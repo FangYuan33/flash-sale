@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.trigger.convertor;
 
-import com.actionworks.flashsale.application.query.model.item.qry.FlashItemQuery;
+import com.actionworks.flashsale.application.query.model.req.FlashItemQuery;
 import com.actionworks.flashsale.trigger.model.request.FlashItemQueryRequest;
 import org.springframework.beans.BeanUtils;
 

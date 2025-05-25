@@ -1,4 +1,4 @@
-package com.actionworks.flashsale.application.query.model;
+package com.actionworks.flashsale.application.query.model.req;
 
 import lombok.Data;
 
