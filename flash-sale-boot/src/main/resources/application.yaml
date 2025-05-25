@@ -20,6 +20,10 @@ spring:
       max-idle: 40
       min-idle: 30
       max-wait-millis: 10000
+  mvc:
+    pathmatch:
+      # 兼容 swagger 的配置
+      matching-strategy: ant_path_matcher
 
 # 应用服务 WEB 访问端口
 server:
