@@ -1,6 +1,7 @@
 package com.actionworks.flashsale.domain.model.item.aggregate;
 
 import com.actionworks.flashsale.common.model.AggregateRoot;
+import com.actionworks.flashsale.domain.adapter.ItemCodeGenerateService;
 import com.actionworks.flashsale.domain.model.item.entity.StockEntity;
 import com.actionworks.flashsale.domain.model.item.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.model.item.valobj.ItemPrice;
@@ -57,8 +58,8 @@ public class FlashItem implements AggregateRoot, Serializable {
     /**
      * 发布生成编码并初始化状态
      */
-    public void publish() {
-        this.code = UUID.randomUUID().toString();
+    public void publish(ItemCodeGenerateService itemCodeGenerateService) {
+        this.code = itemCodeGenerateService.generateCode();
         this.status = FlashItemStatus.PUBLISHED;
     }
 }
