@@ -10,6 +10,7 @@ import com.actionworks.flashsale.infrastructure.persistence.mapper.StockMapper;
 import com.actionworks.flashsale.infrastructure.persistence.model.FlashItemPO;
 import com.actionworks.flashsale.infrastructure.persistence.model.StockPO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.collections4.*;
 import org.springframework.stereotype.Repository;
@@ -71,7 +72,23 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
         flashItemMapper.insert(flashItemPO);
 
         StockPO stockPO = StockConvertor.toPersistentObject(flashItem.getStock());
-        stockPO.setCode(flashItemPO.getCode());
         stockMapper.insert(stockPO);
+    }
+
+    @Override
+    public void modifyStatus(FlashItem flashItem) {
+        LambdaUpdateWrapper<FlashItemPO> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper.set(FlashItemPO::getStatus, flashItem.getStatus().getCode())
+                .eq(FlashItemPO::getCode, flashItem.getCode());
+
+        flashItemMapper.update(updateWrapper);
+    }
+
+    @Override
+    public FlashItem findByCode(String code) {
+        LambdaQueryWrapper<FlashItemPO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(FlashItemPO::getCode, code);
+
+        return FlashItemConvertor.toDomainObject(flashItemMapper.selectOne(queryWrapper));
     }
 }

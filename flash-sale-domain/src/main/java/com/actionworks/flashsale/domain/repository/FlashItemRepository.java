@@ -16,4 +16,9 @@ public interface FlashItemRepository {
     List<FlashItem> findByCondition(FlashItemQueryCondition condition);
 
     void save(FlashItem flashItem);
+
+    FlashItem findByCode(String code);
+
+    void modifyStatus(FlashItem flashItem);
+
 }

@@ -1,5 +1,6 @@
 package com.actionworks.flashsale.domain.model.item.enums;
 
+import com.actionworks.flashsale.common.exception.DomainException;
 import lombok.Getter;
 
 @Getter
@@ -30,6 +31,6 @@ public enum FlashItemStatus {
             }
         }
 
-        return null;
+        throw new DomainException("解析商品状态 " + code + " 失败");
     }
 }

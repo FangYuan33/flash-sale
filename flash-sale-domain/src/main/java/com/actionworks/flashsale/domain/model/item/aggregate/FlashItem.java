@@ -1,5 +1,6 @@
 package com.actionworks.flashsale.domain.model.item.aggregate;
 
+import com.actionworks.flashsale.common.exception.DomainException;
 import com.actionworks.flashsale.common.model.AggregateRoot;
 import com.actionworks.flashsale.domain.adapter.ItemCodeGenerateService;
 import com.actionworks.flashsale.domain.model.item.entity.StockEntity;
@@ -11,7 +12,6 @@ import lombok.Data;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -61,5 +61,24 @@ public class FlashItem implements AggregateRoot, Serializable {
     public void publish(ItemCodeGenerateService itemCodeGenerateService) {
         this.code = itemCodeGenerateService.generateCode();
         this.status = FlashItemStatus.PUBLISHED;
+        this.stock.relateCode(this.code);
     }
+
+    public void changeStatus(FlashItemStatus status) {
+        // 发布只能上线
+        if (this.status.equals(FlashItemStatus.PUBLISHED) && FlashItemStatus.ONLINE.equals(status)) {
+            this.status = status;
+        }
+        // 下线也能上线
+        else if (this.status.equals(FlashItemStatus.OFFLINE) && FlashItemStatus.ONLINE.equals(status)) {
+            this.status = status;
+        }
+        // 上线能下线
+        else if (this.status.equals(FlashItemStatus.ONLINE) && FlashItemStatus.OFFLINE.equals(status)) {
+            this.status = status;
+        } else {
+            throw new DomainException("[变更商品状态] 状态异常 source: " + this.status + " target: " + status);
+        }
+    }
+
 }

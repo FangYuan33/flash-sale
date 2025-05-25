@@ -1,5 +1,6 @@
 package com.actionworks.flashsale.application.command.service.impl;
 
+import com.actionworks.flashsale.application.command.model.FlashItemOperateCommand;
 import com.actionworks.flashsale.application.command.model.FlashItemPublishCommand;
 import com.actionworks.flashsale.application.command.service.FlashItemAppCommandService;
 import com.actionworks.flashsale.application.convertor.FlashItemConvertor;
@@ -23,4 +24,9 @@ public class FlashItemAppCommandServiceImpl implements FlashItemAppCommandServic
         flashItemDomainService.publish(flashItem);
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void operateFlashItem(FlashItemOperateCommand command) {
+        flashItemDomainService.changeItemStatus(command.getCode(), command.getStatus());
+    }
 }

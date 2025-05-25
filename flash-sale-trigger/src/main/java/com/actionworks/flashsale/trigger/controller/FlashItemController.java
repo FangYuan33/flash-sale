@@ -1,5 +1,6 @@
 package com.actionworks.flashsale.trigger.controller;
 
+import com.actionworks.flashsale.application.command.model.FlashItemOperateCommand;
 import com.actionworks.flashsale.application.command.model.FlashItemPublishCommand;
 import com.actionworks.flashsale.application.command.service.FlashItemAppCommandService;
 import com.actionworks.flashsale.application.query.model.req.FlashItemQuery;
@@ -7,6 +8,7 @@ import com.actionworks.flashsale.application.query.service.FlashItemAppQueryServ
 import com.actionworks.flashsale.application.query.model.dto.FlashItemDTO;
 import com.actionworks.flashsale.common.exception.AppException;
 import com.actionworks.flashsale.trigger.convertor.FlashItemConvertor;
+import com.actionworks.flashsale.trigger.model.request.FlashItemOperateRequest;
 import com.actionworks.flashsale.trigger.model.request.FlashItemPublishRequest;
 import com.actionworks.flashsale.trigger.model.request.FlashItemQueryRequest;
 import com.actionworks.flashsale.trigger.model.response.Response;
@@ -33,7 +35,7 @@ public class FlashItemController {
     private FlashItemAppQueryService flashItemAppQueryService;
 
     @ApiOperation(value = "发布秒杀商品")
-    @PostMapping("/activities/{activityId}/flash-items/publish")
+    @PostMapping("/activities/flash-items/publish")
     public Response publishFlashItem(@RequestBody FlashItemPublishRequest request) {
         if (StringUtils.isBlank(request.getItemTitle())) {
             throw new AppException("[发布秒杀商品] 标题为空");
@@ -56,6 +58,21 @@ public class FlashItemController {
 
         FlashItemPublishCommand command = FlashItemConvertor.toPublishCommand(request);
         flashItemAppCommandService.publishFlashItem(command);
+        return Response.buildSuccess();
+    }
+
+    @ApiOperation(value = "操作秒杀商品：秒杀商品上架、下架")
+    @PostMapping("/activities/flash-items/operate")
+    public Response operateFlashItem(@RequestBody FlashItemOperateRequest request) {
+        if (StringUtils.isBlank(request.getCode())) {
+            throw new AppException("[操作秒杀商品] 商品编码为空");
+        }
+        if (request.getStatus() == null) {
+            throw new AppException("[操作秒杀商品] 操作状态为空");
+        }
+
+        FlashItemOperateCommand command = FlashItemConvertor.toOperateCommand(request);
+        flashItemAppCommandService.operateFlashItem(command);
         return Response.buildSuccess();
     }
 

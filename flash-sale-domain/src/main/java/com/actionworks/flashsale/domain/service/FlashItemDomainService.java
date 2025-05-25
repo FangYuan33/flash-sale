@@ -6,4 +6,5 @@ public interface FlashItemDomainService {
 
     void publish(FlashItem flashItem);
 
+    void changeItemStatus(String code, Integer status);
 }

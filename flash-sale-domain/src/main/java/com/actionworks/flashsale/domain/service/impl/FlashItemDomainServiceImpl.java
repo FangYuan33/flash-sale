@@ -1,7 +1,9 @@
 package com.actionworks.flashsale.domain.service.impl;
 
+import com.actionworks.flashsale.common.exception.DomainException;
 import com.actionworks.flashsale.domain.adapter.ItemCodeGenerateService;
 import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
+import com.actionworks.flashsale.domain.model.item.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,17 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
         // 执行发布逻辑
         flashItem.publish(itemCodeGenerateService);
         flashItemRepository.save(flashItem);
+    }
+
+    @Override
+    public void changeItemStatus(String code, Integer status) {
+        FlashItem flashItem = flashItemRepository.findByCode(code);
+        if (flashItem == null) {
+            throw new DomainException("[变更商品状态] 品：" + code + " 不存在");
+        }
+        // 变更状态
+        flashItem.changeStatus(FlashItemStatus.parseByCode(status));
+        flashItemRepository.modifyStatus(flashItem);
     }
 
 }

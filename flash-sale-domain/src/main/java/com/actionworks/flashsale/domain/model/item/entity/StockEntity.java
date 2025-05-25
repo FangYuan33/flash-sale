@@ -28,4 +28,9 @@ public class StockEntity implements Entity {
      */
     private Integer availableStock;
 
+    // 关联品编码
+    public void relateCode(String code) {
+        this.code = code;
+    }
+
 }
