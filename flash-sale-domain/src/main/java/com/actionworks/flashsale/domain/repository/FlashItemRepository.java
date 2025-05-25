@@ -14,4 +14,6 @@ public interface FlashItemRepository {
     Optional<FlashItem> findById(Long itemId);
 
     List<FlashItem> findByCondition(FlashItemQueryCondition condition);
+
+    void save(FlashItem flashItem);
 }

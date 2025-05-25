@@ -1,6 +1,8 @@
 package com.actionworks.flashsale.trigger.convertor;
 
+import com.actionworks.flashsale.application.command.model.FlashItemPublishCommand;
 import com.actionworks.flashsale.application.query.model.req.FlashItemQuery;
+import com.actionworks.flashsale.trigger.model.request.FlashItemPublishRequest;
 import com.actionworks.flashsale.trigger.model.request.FlashItemQueryRequest;
 
 public class FlashItemConvertor {
@@ -19,4 +21,15 @@ public class FlashItemConvertor {
         return query;
     }
 
+    public static FlashItemPublishCommand toPublishCommand(FlashItemPublishRequest request) {
+        FlashItemPublishCommand command = new FlashItemPublishCommand();
+        command.setItemTitle(request.getItemTitle());
+        command.setItemDesc(request.getItemDesc());
+        command.setInitialStock(request.getInitialStock());
+        command.setAvailableStock(request.getAvailableStock());
+        command.setOriginalPrice(request.getOriginalPrice());
+        command.setFlashPrice(request.getFlashPrice());
+
+        return command;
+    }
 }

@@ -6,7 +6,6 @@ import com.actionworks.flashsale.domain.model.item.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.model.item.valobj.ItemPrice;
 import com.actionworks.flashsale.infrastructure.persistence.model.FlashItemPO;
 import com.actionworks.flashsale.infrastructure.persistence.model.StockPO;
-import org.springframework.beans.BeanUtils;
 
 public class FlashItemConvertor {
 
@@ -16,7 +15,14 @@ public class FlashItemConvertor {
         }
 
         FlashItemPO flashItemDO = new FlashItemPO();
-        BeanUtils.copyProperties(flashItem, flashItemDO);
+        flashItemDO.setCode(flashItem.getCode());
+        flashItemDO.setItemTitle(flashItem.getItemTitle());
+        flashItemDO.setItemDesc(flashItem.getItemDesc());
+        ItemPrice itemPrice = flashItem.getItemPrice();
+        flashItemDO.setOriginalPrice(itemPrice.getOriginalPrice());
+        flashItemDO.setFlashPrice(itemPrice.getFlashPrice());
+        flashItemDO.setStatus(flashItem.getStatus().getCode());
+
         return flashItemDO;
     }
 

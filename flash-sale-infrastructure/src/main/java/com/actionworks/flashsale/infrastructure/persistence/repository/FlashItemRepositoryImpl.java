@@ -4,6 +4,7 @@ import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
 import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.infrastructure.persistence.convertor.FlashItemConvertor;
+import com.actionworks.flashsale.infrastructure.persistence.convertor.StockConvertor;
 import com.actionworks.flashsale.infrastructure.persistence.mapper.FlashItemMapper;
 import com.actionworks.flashsale.infrastructure.persistence.mapper.StockMapper;
 import com.actionworks.flashsale.infrastructure.persistence.model.FlashItemPO;
@@ -64,4 +65,13 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
                 flashItemPOList.stream().map(FlashItemConvertor::toDomainObject).collect(Collectors.toList());
     }
 
+    @Override
+    public void save(FlashItem flashItem) {
+        FlashItemPO flashItemPO = FlashItemConvertor.toPersistentObject(flashItem);
+        flashItemMapper.insert(flashItemPO);
+
+        StockPO stockPO = StockConvertor.toPersistentObject(flashItem.getStock());
+        stockPO.setCode(flashItemPO.getCode());
+        stockMapper.insert(stockPO);
+    }
 }

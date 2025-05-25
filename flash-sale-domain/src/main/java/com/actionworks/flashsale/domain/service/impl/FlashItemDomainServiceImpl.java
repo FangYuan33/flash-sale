@@ -1,5 +1,6 @@
 package com.actionworks.flashsale.domain.service.impl;
 
+import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,5 +14,12 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
 
     @Resource
     private FlashItemRepository flashItemRepository;
+
+    @Override
+    public void publish(FlashItem flashItem) {
+        // 执行发布逻辑
+        flashItem.publish();
+        flashItemRepository.save(flashItem);
+    }
 
 }

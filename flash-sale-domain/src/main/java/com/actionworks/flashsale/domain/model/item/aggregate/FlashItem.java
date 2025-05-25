@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -53,4 +54,11 @@ public class FlashItem implements AggregateRoot, Serializable {
      */
     private FlashItemStatus status;
 
+    /**
+     * 发布生成编码并初始化状态
+     */
+    public void publish() {
+        this.code = UUID.randomUUID().toString();
+        this.status = FlashItemStatus.PUBLISHED;
+    }
 }
