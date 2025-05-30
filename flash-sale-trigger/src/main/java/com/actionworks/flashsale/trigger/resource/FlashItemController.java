@@ -1,8 +1,9 @@
 package com.actionworks.flashsale.trigger.resource;
 
 import com.actionworks.flashsale.application.model.command.FlashItemPublishCommand;
-import com.actionworks.flashsale.application.model.query.FlashItemQuery;
+import com.actionworks.flashsale.application.query.model.FlashItemQuery;
 import com.actionworks.flashsale.application.model.result.AppResult;
+import com.actionworks.flashsale.application.query.FlashItemQueryAppService;
 import com.actionworks.flashsale.application.service.item.FlashItemAppService;
 import com.actionworks.flashsale.trigger.model.convertor.FlashItemConvertor;
 import com.actionworks.flashsale.trigger.model.convertor.ResponseConvertor;
@@ -28,6 +29,8 @@ public class FlashItemController {
 
     @Resource
     private FlashItemAppService flashItemAppService;
+    @Resource
+    private FlashItemQueryAppService flashItemQueryAppService;
 
     @ApiOperation(value = "发布秒杀商品")
     @PostMapping("/activities/{activityId}/flash-items/publish")
@@ -64,7 +67,7 @@ public class FlashItemController {
     @ApiOperation(value = "通过ID获取秒杀商品信息")
     @ApiImplicitParam(name = "itemId", value = "秒杀商品ID", dataTypeClass = Long.class)
     public SingleResponse<FlashItemResponse> getFlashItem(@PathVariable Long itemId) {
-        return ResponseConvertor.with(flashItemAppService.getById(itemId));
+        return ResponseConvertor.with(flashItemQueryAppService.getById(itemId));
     }
 
     @PostMapping("/flash-items")
@@ -72,7 +75,6 @@ public class FlashItemController {
     @ApiOperation(value = "条件查询秒杀商品")
     public SingleResponse<List<FlashItemResponse>> getFlashItems(@RequestBody FlashItemQueryRequest request) {
         FlashItemQuery query = FlashItemConvertor.toQuery(request);
-
-        return ResponseConvertor.with(flashItemAppService.getFlashItems(query));
+        return ResponseConvertor.with(flashItemQueryAppService.getFlashItems(query));
     }
 }

@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.infrastructure.persistence.repository;
 
-import com.actionworks.flashsale.domain.model.entity.FlashOrder;
+import com.actionworks.flashsale.domain.model.order.aggregate.FlashOrder;
 import com.actionworks.flashsale.domain.model.query.FlashOrderQueryCondition;
 import com.actionworks.flashsale.domain.repository.FlashOrderRepository;
 import com.actionworks.flashsale.infrastructure.exception.RepositoryException;

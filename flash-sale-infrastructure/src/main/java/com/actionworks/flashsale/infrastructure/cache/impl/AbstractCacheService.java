@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.infrastructure.cache.impl;
 
-import com.actionworks.flashsale.infrastructure.cache.CacheService;
+import com.actionworks.flashsale.application.ability.CacheService;
 import com.actionworks.flashsale.infrastructure.cache.model.EntityCache;
 import com.actionworks.flashsale.infrastructure.cache.redis.RedisCacheService;
 import com.actionworks.flashsale.domain.exception.DomainException;
@@ -222,7 +222,7 @@ public abstract class AbstractCacheService<T> implements CacheService<T> {
     /**
      * 未命中分布式缓存：先获取分布式锁，成功后在数据库中查，之后保存在分布式缓存中
      * 获取分布式锁失败，则抛出业务异常
-     *
+     * <p>
      * 列表查询，数据不存在时，不会抛出DomainException
      * 相比getDataFromDataBaseAndSaveDistributedCache方法少了一个catch语句
      */

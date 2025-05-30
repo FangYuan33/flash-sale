@@ -1,9 +1,9 @@
 package com.actionworks.flashsale.infrastructure.event;
 
-import com.actionworks.flashsale.infrastructure.cache.CacheService;
-import com.actionworks.flashsale.infrastructure.cache.constants.CacheConstants;
+import com.actionworks.flashsale.application.ability.CacheService;
+import com.actionworks.flashsale.common.constants.CacheConstants;
 import com.actionworks.flashsale.domain.event.entity.FlashActivityEvent;
-import com.actionworks.flashsale.domain.model.entity.FlashActivity;
+import com.actionworks.flashsale.domain.model.activity.aggregate.FlashActivity;
 import com.alibaba.cola.dto.Response;
 import com.alibaba.cola.event.EventHandler;
 import com.alibaba.cola.event.EventHandlerI;

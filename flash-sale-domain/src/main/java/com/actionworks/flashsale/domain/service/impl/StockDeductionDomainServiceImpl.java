@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.domain.service.impl;
 
-import com.actionworks.flashsale.domain.model.stock.StockDeduction;
+import com.actionworks.flashsale.domain.model.item.valobj.StockDeduction;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.domain.service.StockDeductionDomainService;
 import org.springframework.stereotype.Service;

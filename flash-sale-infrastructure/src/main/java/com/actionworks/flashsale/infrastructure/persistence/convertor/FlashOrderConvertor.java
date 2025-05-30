@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.infrastructure.persistence.convertor;
 
-import com.actionworks.flashsale.domain.model.entity.FlashOrder;
+import com.actionworks.flashsale.domain.model.order.aggregate.FlashOrder;
 import com.actionworks.flashsale.infrastructure.persistence.model.FlashOrderDO;
 import org.springframework.beans.BeanUtils;
 

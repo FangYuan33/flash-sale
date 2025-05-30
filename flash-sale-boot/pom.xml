@@ -5,7 +5,7 @@
     <parent>
         <artifactId>flash-sale</artifactId>
         <groupId>com.actionworks</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -20,12 +20,14 @@
         <dependency>
             <groupId>com.actionworks</groupId>
             <artifactId>flash-sale-trigger</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.actionworks</groupId>
             <artifactId>flash-sale-infrastructure</artifactId>
-            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.actionworks</groupId>
+            <artifactId>flash-sale-common</artifactId>
         </dependency>
 
         <dependency>
@@ -46,11 +48,6 @@
             <artifactId>junit</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -99,18 +96,6 @@
             </exclusions>
         </dependency>
 
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.csp</groupId>
-            <artifactId>sentinel-datasource-nacos</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.maven.shared</groupId>

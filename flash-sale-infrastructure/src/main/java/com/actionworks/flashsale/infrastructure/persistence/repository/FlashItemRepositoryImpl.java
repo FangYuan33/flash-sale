@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.infrastructure.persistence.repository;
 
-import com.actionworks.flashsale.domain.model.entity.FlashItem;
+import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
 import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.infrastructure.exception.RepositoryException;
@@ -61,10 +61,10 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
         }
 
         // stream 转换对象类型
-        List<FlashItem> flashItems = flashItemDOList.stream()
+        List<FlashItem> flashItemEntities = flashItemDOList.stream()
                 .map(FlashItemConvertor::toDomainObject).collect(Collectors.toList());
 
-        return Optional.of(flashItems);
+        return Optional.of(flashItemEntities);
     }
 
     @Override

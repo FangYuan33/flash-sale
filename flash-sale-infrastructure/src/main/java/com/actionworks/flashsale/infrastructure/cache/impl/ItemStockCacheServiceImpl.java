@@ -1,10 +1,10 @@
 package com.actionworks.flashsale.infrastructure.cache.impl;
 
+import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
 import com.actionworks.flashsale.infrastructure.cache.ItemStockCacheService;
 import com.actionworks.flashsale.infrastructure.cache.enums.LuaResult;
 import com.actionworks.flashsale.infrastructure.cache.redis.RedisCacheService;
-import com.actionworks.flashsale.domain.model.entity.FlashItem;
-import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
+import com.actionworks.flashsale.domain.model.item.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;

@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.infrastructure.persistence.convertor;
 
-import com.actionworks.flashsale.domain.model.entity.FlashItem;
+import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
 import com.actionworks.flashsale.infrastructure.persistence.model.FlashItemDO;
 import org.springframework.beans.BeanUtils;
 

@@ -1,15 +1,15 @@
 package com.actionworks.flashsale.application.service.activity;
 
 import com.actionworks.flashsale.application.exception.BizException;
-import com.actionworks.flashsale.application.model.convertor.FlashActivityAppConvertor;
+import com.actionworks.flashsale.application.query.convertor.FlashActivityAppConvertor;
 import com.actionworks.flashsale.application.model.command.FlashActivityPublishCommand;
 import com.actionworks.flashsale.application.model.dto.FlashActivityDTO;
 import com.actionworks.flashsale.application.model.query.FlashActivitiesQuery;
 import com.actionworks.flashsale.application.model.result.AppResult;
 import com.actionworks.flashsale.infrastructure.cache.CacheService;
 import com.actionworks.flashsale.infrastructure.cache.constants.CacheConstants;
-import com.actionworks.flashsale.domain.model.entity.FlashActivity;
-import com.actionworks.flashsale.domain.model.enums.FlashActivityStatus;
+import com.actionworks.flashsale.domain.model.activity.aggregate.FlashActivity;
+import com.actionworks.flashsale.domain.model.activity.enums.FlashActivityStatus;
 import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
 import com.actionworks.flashsale.domain.service.FlashActivityDomainService;
 import com.alibaba.fastjson.JSON;

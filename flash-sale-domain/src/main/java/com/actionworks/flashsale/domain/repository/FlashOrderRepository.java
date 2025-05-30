@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.domain.repository;
 
-import com.actionworks.flashsale.domain.model.entity.FlashOrder;
+import com.actionworks.flashsale.domain.model.order.aggregate.FlashOrder;
 import com.actionworks.flashsale.domain.model.query.FlashOrderQueryCondition;
 
 import java.util.List;

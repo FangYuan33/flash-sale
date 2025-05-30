@@ -1,18 +1,15 @@
 package com.actionworks.flashsale.application.service.item;
 
+import com.actionworks.flashsale.application.ability.CacheService;
 import com.actionworks.flashsale.application.exception.BizException;
 import com.actionworks.flashsale.application.model.command.FlashItemPublishCommand;
-import com.actionworks.flashsale.application.model.convertor.FlashItemAppConvertor;
-import com.actionworks.flashsale.application.model.dto.FlashItemDTO;
-import com.actionworks.flashsale.application.model.query.FlashItemQuery;
+import com.actionworks.flashsale.application.query.convertor.FlashItemAppConvertor;
 import com.actionworks.flashsale.application.model.result.AppResult;
-import com.actionworks.flashsale.infrastructure.cache.CacheService;
+import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
 import com.actionworks.flashsale.infrastructure.cache.ItemStockCacheService;
 import com.actionworks.flashsale.infrastructure.cache.constants.CacheConstants;
-import com.actionworks.flashsale.domain.model.entity.FlashActivity;
-import com.actionworks.flashsale.domain.model.entity.FlashItem;
-import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
-import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
+import com.actionworks.flashsale.domain.model.activity.aggregate.FlashActivity;
+import com.actionworks.flashsale.domain.model.item.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.service.FlashActivityDomainService;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import com.alibaba.fastjson.JSON;
@@ -22,8 +19,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.actionworks.flashsale.application.exception.AppErrorCode.ACTIVITY_NOT_EXIST;
 import static com.actionworks.flashsale.application.exception.AppErrorCode.INVALID_PARAMS;
@@ -102,36 +97,6 @@ public class DefaultFlashItemAppService implements FlashItemAppService {
         flashItemDomainService.offlineFlashItem(itemId);
 
         return AppResult.success();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public AppResult<FlashItemDTO> getById(Long itemId) {
-        FlashItem flashItem = cacheService.getCache(CacheConstants.FLASH_ITEM_SINGLE_CACHE_PREFIX, itemId);
-
-        // 库存缓存已预热的话，则以库存缓存为准，否则取的仍然是商品缓存中的库存值
-        Integer availableItemStock = itemStockCacheService.getAvailableItemStock(itemId);
-        if (!availableItemStock.equals(-1)) {
-            flashItem.setAvailableStock(availableItemStock);
-        }
-
-        FlashItemDTO flashItemDTO = FlashItemAppConvertor.toFlashItemDTO(flashItem);
-
-        return AppResult.success(flashItemDTO);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public AppResult<List<FlashItemDTO>> getFlashItems(FlashItemQuery query) {
-        FlashItemQueryCondition queryCondition = FlashItemAppConvertor.toFlashItemQueryCondition(query);
-
-        List<FlashItem> flashItems = cacheService.getCaches(CacheConstants.FLASH_ITEM_CACHE_LIST_PREFIX, queryCondition);
-
-        // stream 转换对象类型
-        List<FlashItemDTO> itemDTOS = flashItems.stream()
-                .map(FlashItemAppConvertor::toFlashItemDTO).collect(Collectors.toList());
-
-        return AppResult.success(itemDTOS);
     }
 
     @Override

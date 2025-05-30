@@ -1,7 +1,7 @@
 package com.actionworks.flashsale.trigger.model.convertor;
 
 import com.actionworks.flashsale.application.model.command.FlashItemPublishCommand;
-import com.actionworks.flashsale.application.model.query.FlashItemQuery;
+import com.actionworks.flashsale.application.query.model.FlashItemQuery;
 import com.actionworks.flashsale.trigger.model.request.FlashItemPublishRequest;
 import com.actionworks.flashsale.trigger.model.request.FlashItemQueryRequest;
 import org.springframework.beans.BeanUtils;

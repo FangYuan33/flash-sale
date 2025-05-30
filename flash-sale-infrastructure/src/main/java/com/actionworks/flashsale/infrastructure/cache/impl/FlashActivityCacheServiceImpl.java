@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.infrastructure.cache.impl;
 
-import com.actionworks.flashsale.domain.model.entity.FlashActivity;
+import com.actionworks.flashsale.domain.model.activity.aggregate.FlashActivity;
 import com.actionworks.flashsale.domain.model.query.BaseQueryCondition;
 import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
 import com.actionworks.flashsale.domain.model.query.PageResult;

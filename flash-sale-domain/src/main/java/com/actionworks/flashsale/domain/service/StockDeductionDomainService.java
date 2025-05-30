@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.domain.service;
 
-import com.actionworks.flashsale.domain.model.stock.StockDeduction;
+import com.actionworks.flashsale.domain.model.item.valobj.StockDeduction;
 
 public interface StockDeductionDomainService {
 

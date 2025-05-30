@@ -1,7 +1,7 @@
 package com.actionworks.flashsale.application.service.placeOrder.impl.queued;
 
 import com.actionworks.flashsale.application.service.placeOrder.impl.AbstractDoPlaceOrderService;
-import com.actionworks.flashsale.domain.model.stock.StockDeduction;
+import com.actionworks.flashsale.domain.model.item.valobj.StockDeduction;
 import com.actionworks.flashsale.domain.service.StockDeductionDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

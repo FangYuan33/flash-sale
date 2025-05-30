@@ -5,7 +5,7 @@
     <parent>
         <artifactId>flash-sale</artifactId>
         <groupId>com.actionworks</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -20,7 +20,16 @@
         <dependency>
             <groupId>com.actionworks</groupId>
             <artifactId>flash-sale-domain</artifactId>
-            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.actionworks</groupId>
+            <artifactId>flash-sale-common</artifactId>
+        </dependency>
+
+        <!-- cola -->
+        <dependency>
+            <groupId>com.alibaba.cola</groupId>
+            <artifactId>cola-component-dto</artifactId>
         </dependency>
 
         <!-- JSR 303 Validation -->

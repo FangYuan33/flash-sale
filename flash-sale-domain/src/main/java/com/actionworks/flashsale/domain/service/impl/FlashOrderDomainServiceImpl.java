@@ -1,8 +1,8 @@
 package com.actionworks.flashsale.domain.service.impl;
 
 import com.actionworks.flashsale.domain.exception.DomainException;
-import com.actionworks.flashsale.domain.model.entity.FlashOrder;
-import com.actionworks.flashsale.domain.model.enums.FlashOrderStatus;
+import com.actionworks.flashsale.domain.model.order.aggregate.FlashOrder;
+import com.actionworks.flashsale.domain.model.order.enums.FlashOrderStatus;
 import com.actionworks.flashsale.domain.model.query.FlashOrderQueryCondition;
 import com.actionworks.flashsale.domain.model.query.PageResult;
 import com.actionworks.flashsale.domain.repository.FlashOrderRepository;

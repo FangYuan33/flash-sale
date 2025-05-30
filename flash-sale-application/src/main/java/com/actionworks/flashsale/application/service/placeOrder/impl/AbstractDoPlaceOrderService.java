@@ -1,20 +1,20 @@
 package com.actionworks.flashsale.application.service.placeOrder.impl;
 
 import com.actionworks.flashsale.application.model.command.FlashPlaceOrderCommand;
-import com.actionworks.flashsale.application.model.convertor.FlashOrderAppConvertor;
+import com.actionworks.flashsale.application.query.convertor.FlashOrderAppConvertor;
 import com.actionworks.flashsale.application.model.dto.FlashItemDTO;
 import com.actionworks.flashsale.application.service.item.FlashItemAppService;
 import com.actionworks.flashsale.application.service.placeOrder.DoPlaceOrderService;
 import com.actionworks.flashsale.infrastructure.cache.ItemStockCacheService;
-import com.actionworks.flashsale.domain.model.entity.FlashOrder;
-import com.actionworks.flashsale.domain.model.stock.StockDeduction;
+import com.actionworks.flashsale.domain.model.order.aggregate.FlashOrder;
+import com.actionworks.flashsale.domain.model.item.valobj.StockDeduction;
 import com.actionworks.flashsale.domain.service.FlashOrderDomainService;
 import com.actionworks.flashsale.domain.service.StockDeductionDomainService;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Resource;
 
-import static com.actionworks.flashsale.domain.model.enums.FlashOrderStatus.CREATE;
+import static com.actionworks.flashsale.domain.model.order.enums.FlashOrderStatus.CREATE;
 
 @Slf4j
 public abstract class AbstractDoPlaceOrderService implements DoPlaceOrderService {

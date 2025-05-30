@@ -4,7 +4,7 @@ import com.actionworks.flashsale.domain.event.DomainEventPublisher;
 import com.actionworks.flashsale.domain.event.entity.FlashActivityEvent;
 import com.actionworks.flashsale.domain.event.enums.ActivityEventType;
 import com.actionworks.flashsale.domain.exception.DomainException;
-import com.actionworks.flashsale.domain.model.entity.FlashActivity;
+import com.actionworks.flashsale.domain.model.activity.aggregate.FlashActivity;
 import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
 import com.actionworks.flashsale.domain.model.query.PageResult;
 import com.actionworks.flashsale.domain.repository.FlashActivityRepository;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.actionworks.flashsale.domain.exception.DomainErrorCode.*;
-import static com.actionworks.flashsale.domain.model.enums.FlashActivityStatus.*;
+import static com.actionworks.flashsale.domain.model.activity.enums.FlashActivityStatus.*;
 
 @Slf4j
 @Service

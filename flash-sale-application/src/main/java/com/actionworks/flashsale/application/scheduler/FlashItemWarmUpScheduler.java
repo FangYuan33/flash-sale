@@ -1,9 +1,9 @@
 package com.actionworks.flashsale.application.scheduler;
 
+import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
 import com.actionworks.flashsale.infrastructure.cache.ItemStockCacheService;
-import com.actionworks.flashsale.domain.model.entity.FlashItem;
-import com.actionworks.flashsale.domain.model.enums.BaseEnums;
-import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
+import com.actionworks.flashsale.common.enums.BaseEnums;
+import com.actionworks.flashsale.domain.model.item.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import com.actionworks.flashsale.infrastructure.nacos.NacosProperties;
@@ -38,10 +38,10 @@ public class FlashItemWarmUpScheduler {
             // 未预热 已上线 秒杀时间未结束 的秒杀商品
             FlashItemQueryCondition queryCondition = new FlashItemQueryCondition().setWarmUp(BaseEnums.NO.getValue())
                     .setStatus(FlashItemStatus.ONLINE.getCode()).setEndTime(LocalDateTime.now());
-            List<FlashItem> flashItems = flashItemDomainService.listByQueryConditionWithoutPageSize(queryCondition);
+            List<FlashItem> flashItemEntities = flashItemDomainService.listByQueryConditionWithoutPageSize(queryCondition);
 
             // 更新缓存并重置预热标识
-            flashItems.forEach(item -> {
+            flashItemEntities.forEach(item -> {
                 boolean success = itemStockCacheService.initialItemStocks(item.getId());
 
                 if (success) {
