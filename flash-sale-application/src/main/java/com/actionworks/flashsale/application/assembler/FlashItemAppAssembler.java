@@ -1,9 +1,9 @@
 package com.actionworks.flashsale.application.assembler;
 
 import com.actionworks.flashsale.application.query.model.dto.FlashItemDTO;
-import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
-import com.actionworks.flashsale.domain.model.item.entity.StockEntity;
-import com.actionworks.flashsale.domain.model.item.valobj.ItemPrice;
+import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
+import com.actionworks.flashsale.domain.model.entity.StockEntity;
+import com.actionworks.flashsale.domain.model.valobj.ItemPrice;
 
 public class FlashItemAppAssembler {
 

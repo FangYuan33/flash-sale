@@ -1,4 +1,4 @@
-package com.actionworks.flashsale.domain.model.item.enums;
+package com.actionworks.flashsale.domain.model.enums;
 
 import com.actionworks.flashsale.common.exception.DomainException;
 import lombok.Getter;

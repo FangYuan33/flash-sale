@@ -1,9 +1,9 @@
 package com.actionworks.flashsale.infrastructure.persistence.convertor;
 
-import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
-import com.actionworks.flashsale.domain.model.item.entity.StockEntity;
-import com.actionworks.flashsale.domain.model.item.enums.FlashItemStatus;
-import com.actionworks.flashsale.domain.model.item.valobj.ItemPrice;
+import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
+import com.actionworks.flashsale.domain.model.entity.StockEntity;
+import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
+import com.actionworks.flashsale.domain.model.valobj.ItemPrice;
 import com.actionworks.flashsale.infrastructure.persistence.model.FlashItemPO;
 import com.actionworks.flashsale.infrastructure.persistence.model.StockPO;
 

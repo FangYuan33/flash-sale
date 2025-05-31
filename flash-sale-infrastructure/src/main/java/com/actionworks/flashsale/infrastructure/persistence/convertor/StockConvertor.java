@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.infrastructure.persistence.convertor;
 
-import com.actionworks.flashsale.domain.model.item.entity.StockEntity;
+import com.actionworks.flashsale.domain.model.entity.StockEntity;
 import com.actionworks.flashsale.infrastructure.persistence.model.StockPO;
 
 public class StockConvertor {

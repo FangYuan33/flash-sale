@@ -6,7 +6,7 @@ import com.actionworks.flashsale.application.query.model.dto.FlashItemDTO;
 import com.actionworks.flashsale.application.query.model.req.FlashItemQuery;
 import com.actionworks.flashsale.application.query.service.FlashItemAppQueryService;
 import com.actionworks.flashsale.common.exception.DomainException;
-import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
+import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
 import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;

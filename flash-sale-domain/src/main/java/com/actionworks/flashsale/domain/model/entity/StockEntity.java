@@ -1,4 +1,4 @@
-package com.actionworks.flashsale.domain.model.item.entity;
+package com.actionworks.flashsale.domain.model.entity;
 
 import com.actionworks.flashsale.common.model.Entity;
 import lombok.AccessLevel;

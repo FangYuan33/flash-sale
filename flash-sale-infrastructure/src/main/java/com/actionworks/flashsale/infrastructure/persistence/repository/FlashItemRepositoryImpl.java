@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.infrastructure.persistence.repository;
 
-import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
+import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
 import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.infrastructure.persistence.convertor.FlashItemConvertor;

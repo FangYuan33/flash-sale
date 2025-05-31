@@ -1,9 +1,9 @@
 package com.actionworks.flashsale.domain.service.impl;
 
 import com.actionworks.flashsale.common.exception.DomainException;
-import com.actionworks.flashsale.domain.adapter.ItemCodeGenerateService;
-import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
-import com.actionworks.flashsale.domain.model.item.enums.FlashItemStatus;
+import com.actionworks.flashsale.domain.adapter.CodeGenerateService;
+import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
+import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,14 +16,14 @@ import javax.annotation.Resource;
 public class FlashItemDomainServiceImpl implements FlashItemDomainService {
 
     @Resource
-    private ItemCodeGenerateService itemCodeGenerateService;
+    private CodeGenerateService codeGenerateService;
     @Resource
     private FlashItemRepository flashItemRepository;
 
     @Override
     public void publish(FlashItem flashItem) {
         // 执行发布逻辑
-        flashItem.publish(itemCodeGenerateService);
+        flashItem.publish(codeGenerateService);
         flashItemRepository.save(flashItem);
     }
 

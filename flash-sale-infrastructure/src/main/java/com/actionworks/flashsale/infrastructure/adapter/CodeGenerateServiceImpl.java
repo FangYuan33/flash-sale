@@ -1,12 +1,12 @@
 package com.actionworks.flashsale.infrastructure.adapter;
 
-import com.actionworks.flashsale.domain.adapter.ItemCodeGenerateService;
+import com.actionworks.flashsale.domain.adapter.CodeGenerateService;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-public class ItemCodeGenerateServiceImpl implements ItemCodeGenerateService {
+public class CodeGenerateServiceImpl implements CodeGenerateService {
 
     // 在这里可以依赖三方服务，比如发号器服务，这样便隔离了外部的变化
 

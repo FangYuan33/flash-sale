@@ -1,6 +1,6 @@
 package com.actionworks.flashsale.domain.service;
 
-import com.actionworks.flashsale.domain.model.item.aggregate.FlashItem;
+import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
 
 public interface FlashItemDomainService {
 

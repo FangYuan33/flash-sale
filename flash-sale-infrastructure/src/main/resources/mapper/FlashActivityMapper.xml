@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.actionworks.flashsale.infrastructure.persistence.mapper.FlashActivityMapper">
+    <sql id="ALL_COLUMNS">
+        id,
+        code,
+        activity_name,
+        activity_desc,
+        item_id,
+        start_time,
+        end_time,
+        status,
+        modified_time,
+        create_time
+    </sql>
+</mapper>
+

@@ -37,25 +37,6 @@ public class FlashItemController {
     @ApiOperation(value = "发布秒杀商品")
     @PostMapping("/activities/flash-items/publish")
     public Response publishFlashItem(@RequestBody FlashItemPublishRequest request) {
-        if (StringUtils.isBlank(request.getItemTitle())) {
-            throw new AppException("[发布秒杀商品] 标题为空");
-        }
-        if (StringUtils.isBlank(request.getItemDesc())) {
-            throw new AppException("[发布秒杀商品] 描述为空");
-        }
-        if (request.getInitialStock() == null) {
-            throw new AppException("[发布秒杀商品] 初始库存为空");
-        }
-        if (request.getAvailableStock() == null) {
-            throw new AppException("[发布秒杀商品] 可用库存为空");
-        }
-        if (request.getOriginalPrice() == null) {
-            throw new AppException("[发布秒杀商品] 秒杀品原价为空");
-        }
-        if (request.getFlashPrice() == null) {
-            throw new AppException("[发布秒杀商品] 秒杀价为空");
-        }
-
         FlashItemPublishCommand command = FlashItemConvertor.toPublishCommand(request);
         flashItemAppCommandService.publishFlashItem(command);
         return Response.buildSuccess();
@@ -64,18 +45,10 @@ public class FlashItemController {
     @ApiOperation(value = "操作秒杀商品：秒杀商品上架、下架")
     @PostMapping("/activities/flash-items/operate")
     public Response operateFlashItem(@RequestBody FlashItemOperateRequest request) {
-        if (StringUtils.isBlank(request.getCode())) {
-            throw new AppException("[操作秒杀商品] 商品编码为空");
-        }
-        if (request.getStatus() == null) {
-            throw new AppException("[操作秒杀商品] 操作状态为空");
-        }
-
         FlashItemOperateCommand command = FlashItemConvertor.toOperateCommand(request);
         flashItemAppCommandService.operateFlashItem(command);
         return Response.buildSuccess();
     }
-
 
     @GetMapping("/flash-items/{itemId}")
     @ApiOperation(value = "通过ID获取秒杀商品信息")

@@ -1,4 +1,4 @@
-package com.actionworks.flashsale.domain.model.item.valobj;
+package com.actionworks.flashsale.domain.model.valobj;
 
 import com.actionworks.flashsale.common.model.ValueObject;
 import lombok.Value;

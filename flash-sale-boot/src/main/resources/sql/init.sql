@@ -3,15 +3,17 @@ CREATE database `flash_sale`;
 -- 初始化秒杀活动表
 CREATE TABLE IF NOT EXISTS flash_sale.`flash_activity` (
     `id`            bigint  NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `code`            varchar(64) NOT NULL COMMENT '活动唯一编码',
     `activity_name` varchar(32) NOT NULL COMMENT '秒杀活动名称',
     `activity_desc` varchar(64) DEFAULT NULL COMMENT '秒杀活动描述',
-    `item_id`       bigint  NOT NULL COMMENT '秒杀品ID',
+    `item_code`       varchar(64)  NOT NULL COMMENT '秒杀品Code',
     `start_time`    datetime    NOT NULL COMMENT '秒杀活动开始时间',
     `end_time`      datetime    NOT NULL COMMENT '秒杀活动结束时间',
     `status`        tinyint  DEFAULT NULL COMMENT '秒杀活动状态 10-已发布 20-已上线 30-已下线',
     `create_time`   datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `modified_time` datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
+    UNIQUE KEY `uiq_key_code`(`code`),
     KEY `key_status`(`status`),
     KEY `key_start_time`(`start_time`)
     ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT = '秒杀活动表';
