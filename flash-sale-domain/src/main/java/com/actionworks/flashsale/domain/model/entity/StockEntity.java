@@ -1,5 +1,6 @@
 package com.actionworks.flashsale.domain.model.entity;
 
+import com.actionworks.flashsale.common.exception.DomainException;
 import com.actionworks.flashsale.common.model.Entity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,4 +34,10 @@ public class StockEntity implements Entity {
         this.code = code;
     }
 
+    public void deduct(Integer quantity) {
+        if (availableStock - quantity < 0) {
+            throw new DomainException("[扣减库存] 库存不足, 商品编码: " + code + ", 可用库存: " + availableStock + ", 扣减数量: " + quantity);
+        }
+        this.availableStock -= quantity;
+    }
 }

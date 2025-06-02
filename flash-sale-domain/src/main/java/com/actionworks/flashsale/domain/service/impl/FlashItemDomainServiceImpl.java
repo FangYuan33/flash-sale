@@ -5,6 +5,7 @@ import com.actionworks.flashsale.domain.adapter.CodeGenerateService;
 import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
 import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
+import com.actionworks.flashsale.domain.repository.StockRepository;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
     private CodeGenerateService codeGenerateService;
     @Resource
     private FlashItemRepository flashItemRepository;
+    @Resource
+    private StockRepository stockRepository;
 
     @Override
     public void publish(FlashItem flashItem) {
@@ -36,6 +39,22 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
         // 变更状态
         flashItem.changeStatus(FlashItemStatus.parseByCode(status));
         flashItemRepository.modifyStatus(flashItem);
+    }
+
+    @Override
+    public FlashItem deductStock(String itemCode, Integer quantity) {
+        FlashItem flashItem = flashItemRepository.findByCode(itemCode);
+        if (flashItem == null) {
+            throw new DomainException("[扣减库存] 商品不存在: " + itemCode);
+        }
+        flashItem.deductStock(quantity);
+        int success = stockRepository.deduct(itemCode, quantity);
+        if (success <= 0) {
+            log.error("[扣减库存] 扣减商品库存失败, 商品编码: {}, 数量: {}", itemCode, quantity);
+            throw new DomainException("[扣减库存] 扣减商品库存失败, 商品编码: " + itemCode + ", 数量: " + quantity);
+        }
+
+        return flashItem;
     }
 
 }

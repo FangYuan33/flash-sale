@@ -88,7 +88,16 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
     public FlashItem findByCode(String code) {
         LambdaQueryWrapper<FlashItemPO> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(FlashItemPO::getCode, code);
+        FlashItemPO flashItemPO = flashItemMapper.selectOne(queryWrapper);
 
-        return FlashItemConvertor.toDomainObject(flashItemMapper.selectOne(queryWrapper));
+        LambdaQueryWrapper<StockPO> stockPOLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        stockPOLambdaQueryWrapper.eq(StockPO::getCode, code);
+        StockPO stockPO = stockMapper.selectOne(stockPOLambdaQueryWrapper);
+
+        if (stockPO != null) {
+            return FlashItemConvertor.toDomainObject(flashItemPO, stockPO);
+        } else {
+            return FlashItemConvertor.toDomainObject(flashItemPO);
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.actionworks.flashsale.domain.model.aggregate;
 
-import com.actionworks.flashsale.common.exception.DomainException;
 import com.actionworks.flashsale.common.model.AggregateRoot;
 import com.actionworks.flashsale.domain.adapter.CodeGenerateService;
 import com.actionworks.flashsale.domain.model.entity.StockEntity;
@@ -83,4 +82,7 @@ public class FlashItem implements AggregateRoot, Serializable {
         }
     }
 
+    public void deductStock(Integer quantity) {
+        stock.deduct(quantity);
+    }
 }

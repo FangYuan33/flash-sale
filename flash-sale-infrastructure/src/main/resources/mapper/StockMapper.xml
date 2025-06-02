@@ -11,4 +11,12 @@
         create_time
     </sql>
 
+    <update id="deduct">
+        update stock
+        set available_stock = available_stock - #{quantity},
+            modified_time   = now()
+        where code = #{code}
+          and available_stock >= #{quantity}
+    </update>
+
 </mapper>
