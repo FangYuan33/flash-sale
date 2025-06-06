@@ -9,7 +9,6 @@ import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -20,7 +19,6 @@ public class FlashItemAppCommandServiceImpl implements FlashItemAppCommandServic
     private FlashItemDomainService flashItemDomainService;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void publishFlashItem(FlashItemPublishCommand command) {
         checkPublishCommand(command);
         FlashItem flashItem = FlashItemConvertor.publishCommandToDO(command);
@@ -49,7 +47,6 @@ public class FlashItemAppCommandServiceImpl implements FlashItemAppCommandServic
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void operateFlashItem(FlashItemOperateCommand command) {
         flashItemDomainService.changeItemStatus(command.getCode(), command.getStatus());
     }

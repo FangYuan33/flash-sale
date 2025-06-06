@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.collections4.*;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Collections;
@@ -67,6 +68,7 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void save(FlashItem flashItem) {
         FlashItemPO flashItemPO = FlashItemConvertor.toPersistentObject(flashItem);
         flashItemMapper.insert(flashItemPO);
