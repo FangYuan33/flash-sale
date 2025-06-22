@@ -45,11 +45,10 @@ public class FlashOrderAppCommandServiceImpl implements FlashOrderAppCommandServ
         }
 
         // 2. 扣减库存（领域服务只处理业务逻辑）
-        flashItemDomainService.deductStock(flashItem, createCommand.getQuantity());
-        
+        flashItem.deductStock(createCommand.getQuantity());
         // 3. 持久化库存扣减（应用层负责数据访问）
-        int success = stockRepository.deduct(flashItem.getCode(), createCommand.getQuantity());
-        if (success <= 0) {
+        boolean success = stockRepository.deduct(flashItem.getCode(), createCommand.getQuantity());
+        if (!success) {
             log.error("[扣减库存] 扣减商品库存失败, 商品编码: {}, 数量: {}", flashItem.getCode(), createCommand.getQuantity());
             throw new AppException("[扣减库存] 扣减商品库存失败, 商品编码: " + flashItem.getCode() + ", 数量: " + createCommand.getQuantity());
         }
@@ -57,7 +56,6 @@ public class FlashOrderAppCommandServiceImpl implements FlashOrderAppCommandServ
         // 4. 创建订单（领域服务只处理业务逻辑）
         FlashOrder flashOrder = FlashOrderConvertor.createCommandToDomain(createCommand);
         flashOrderDomainService.createOrder(flashOrder, flashItem);
-        
         // 5. 持久化订单（应用层负责数据访问）
         flashOrderRepository.save(flashOrder);
     }

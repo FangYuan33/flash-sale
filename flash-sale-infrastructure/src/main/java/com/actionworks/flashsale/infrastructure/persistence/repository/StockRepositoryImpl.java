@@ -12,7 +12,7 @@ public class StockRepositoryImpl implements StockRepository {
     private StockMapper stockMapper;
 
     @Override
-    public int deduct(String itemCode, Integer quantity) {
-        return stockMapper.deduct(itemCode, quantity);
+    public boolean deduct(String itemCode, Integer quantity) {
+        return stockMapper.deduct(itemCode, quantity) <= 0;
     }
 }
