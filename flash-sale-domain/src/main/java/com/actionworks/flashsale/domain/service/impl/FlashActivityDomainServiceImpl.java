@@ -24,13 +24,17 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
 
     @Override
     public void publish(FlashActivity flashActivity) {
-        flashActivity.publish(codeGenerateService);
+        // 发布活动（领域模型只处理核心业务逻辑）
+        flashActivity.publish();
 
         String itemCode = flashActivity.getFlashItem().getCode();
         FlashItem flashItem = flashItemRepository.findByCode(itemCode);
         if (flashItem == null) {
             throw new DomainException("[发布秒杀活动] 品 " + itemCode + " 不存在");
         }
+        // 在领域服务层处理外部依赖（编码生成）
+        String activityCode = codeGenerateService.generateCode();
+        flashActivity.assignCode(activityCode);
 
         flashActivityRepository.save(flashActivity);
     }

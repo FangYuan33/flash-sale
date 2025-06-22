@@ -25,8 +25,13 @@ public class FlashItemDomainServiceImpl implements FlashItemDomainService {
 
     @Override
     public void publish(FlashItem flashItem) {
-        // 执行发布逻辑
-        flashItem.publish(codeGenerateService);
+        // 发布商品（领域模型只处理核心业务逻辑）
+        flashItem.publish();
+        
+        // 在领域服务层处理外部依赖（编码生成）
+        String itemCode = codeGenerateService.generateCode();
+        flashItem.assignCode(itemCode);
+        
         flashItemRepository.save(flashItem);
     }
 

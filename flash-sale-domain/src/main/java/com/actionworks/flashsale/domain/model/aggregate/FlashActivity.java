@@ -2,7 +2,6 @@ package com.actionworks.flashsale.domain.model.aggregate;
 
 import com.actionworks.flashsale.common.exception.DomainException;
 import com.actionworks.flashsale.common.model.AggregateRoot;
-import com.actionworks.flashsale.domain.adapter.CodeGenerateService;
 import com.actionworks.flashsale.domain.model.enums.FlashActivityStatus;
 import com.actionworks.flashsale.domain.model.enums.FlashItemStatus;
 import lombok.AccessLevel;
@@ -73,9 +72,12 @@ public class FlashActivity implements AggregateRoot, Serializable {
                 && !endTime.isBefore(startTime) && !endTime.isBefore(LocalDateTime.now());
     }
 
-    public void publish(CodeGenerateService codeGenerateService) {
+    public void publish() {
         this.status = FlashActivityStatus.PUBLISHED;
-        this.code = codeGenerateService.generateCode();
+    }
+
+    public void assignCode(String code) {
+        this.code = code;
     }
 
     public void changeStatus(FlashActivityStatus newStatus) {

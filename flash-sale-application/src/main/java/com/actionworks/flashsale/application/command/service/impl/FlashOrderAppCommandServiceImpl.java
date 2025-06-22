@@ -5,6 +5,7 @@ import com.actionworks.flashsale.application.command.service.FlashOrderAppComman
 import com.actionworks.flashsale.application.convertor.FlashOrderConvertor;
 import com.actionworks.flashsale.common.exception.AppException;
 import com.actionworks.flashsale.domain.model.aggregate.FlashOrder;
+import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import com.actionworks.flashsale.domain.service.FlashOrderDomainService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -17,12 +18,18 @@ public class FlashOrderAppCommandServiceImpl implements FlashOrderAppCommandServ
 
     @Resource
     private FlashOrderDomainService flashOrderDomainService;
+    @Resource
+    private FlashItemDomainService flashItemDomainService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void createOrder(FlashOrderCreateCommand createCommand) {
         checkCreateCommand(createCommand);
 
+        // 1. 扣减库存（在应用层协调领域服务）
+        flashItemDomainService.deductStock(createCommand.getItemCode(), createCommand.getQuantity());
+
+        // 2. 创建订单
         FlashOrder flashOrder = FlashOrderConvertor.createCommandToDomain(createCommand);
         flashOrderDomainService.createOrder(flashOrder);
     }

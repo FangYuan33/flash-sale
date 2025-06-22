@@ -1,7 +1,6 @@
 package com.actionworks.flashsale.domain.model.aggregate;
 
 import com.actionworks.flashsale.common.model.AggregateRoot;
-import com.actionworks.flashsale.domain.adapter.CodeGenerateService;
 import com.actionworks.flashsale.domain.model.enums.FlashOrderStatus;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -35,11 +34,14 @@ public class FlashOrder implements AggregateRoot, Serializable {
 
     private FlashOrderStatus status;
 
-    public void create(CodeGenerateService codeGenerateService, FlashItem flashItem) {
-        this.code = codeGenerateService.generateCode();
+    public void create(FlashItem flashItem) {
         this.itemCode = flashItem.getCode();
         this.itemTitle = flashItem.getItemTitle();
         this.totalAmount = flashItem.getItemPrice().getFlashPrice() * quantity;
         this.status = FlashOrderStatus.CREATE;
+    }
+    
+    public void assignCode(String code) {
+        this.code = code;
     }
 }
