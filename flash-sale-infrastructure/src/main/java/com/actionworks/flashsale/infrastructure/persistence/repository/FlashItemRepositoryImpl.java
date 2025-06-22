@@ -102,4 +102,9 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
             return FlashItemConvertor.toDomainObject(flashItemPO);
         }
     }
+
+    @Override
+    public boolean deduct(String itemCode, Integer quantity) {
+        return stockMapper.deduct(itemCode, quantity) <= 0;
+    }
 }

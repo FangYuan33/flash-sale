@@ -8,8 +8,6 @@ import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
 import com.actionworks.flashsale.domain.model.aggregate.FlashOrder;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.domain.repository.FlashOrderRepository;
-import com.actionworks.flashsale.domain.repository.StockRepository;
-import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import com.actionworks.flashsale.domain.service.FlashOrderDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -25,13 +23,9 @@ public class FlashOrderAppCommandServiceImpl implements FlashOrderAppCommandServ
     @Resource
     private FlashOrderDomainService flashOrderDomainService;
     @Resource
-    private FlashItemDomainService flashItemDomainService;
-    @Resource
     private FlashItemRepository flashItemRepository;
     @Resource
     private FlashOrderRepository flashOrderRepository;
-    @Resource
-    private StockRepository stockRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -47,7 +41,7 @@ public class FlashOrderAppCommandServiceImpl implements FlashOrderAppCommandServ
         // 2. 扣减库存（领域服务只处理业务逻辑）
         flashItem.deductStock(createCommand.getQuantity());
         // 3. 持久化库存扣减（应用层负责数据访问）
-        boolean success = stockRepository.deduct(flashItem.getCode(), createCommand.getQuantity());
+        boolean success = flashItemRepository.deduct(flashItem.getCode(), createCommand.getQuantity());
         if (!success) {
             log.error("[扣减库存] 扣减商品库存失败, 商品编码: {}, 数量: {}", flashItem.getCode(), createCommand.getQuantity());
             throw new AppException("[扣减库存] 扣减商品库存失败, 商品编码: " + flashItem.getCode() + ", 数量: " + createCommand.getQuantity());

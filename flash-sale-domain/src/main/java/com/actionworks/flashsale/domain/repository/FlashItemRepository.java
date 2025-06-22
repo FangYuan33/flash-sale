@@ -21,4 +21,5 @@ public interface FlashItemRepository {
 
     void modifyStatus(FlashItem flashItem);
 
+    boolean deduct(String itemCode, Integer quantity);
 }
