@@ -6,6 +6,7 @@ import com.actionworks.flashsale.application.command.service.FlashItemAppCommand
 import com.actionworks.flashsale.application.convertor.FlashItemConvertor;
 import com.actionworks.flashsale.common.exception.AppException;
 import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
+import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -18,13 +19,22 @@ public class FlashItemAppCommandServiceImpl implements FlashItemAppCommandServic
 
     @Resource
     private FlashItemDomainService flashItemDomainService;
+    @Resource
+    private FlashItemRepository flashItemRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void publishFlashItem(FlashItemPublishCommand command) {
         checkPublishCommand(command);
+        
+        // 创建商品对象
         FlashItem flashItem = FlashItemConvertor.publishCommandToDO(command);
+        
+        // 发布商品（领域服务只处理业务逻辑）
         flashItemDomainService.publish(flashItem);
+        
+        // 持久化商品（应用层负责数据访问）
+        flashItemRepository.save(flashItem);
     }
 
     private void checkPublishCommand(FlashItemPublishCommand command) {
@@ -51,7 +61,19 @@ public class FlashItemAppCommandServiceImpl implements FlashItemAppCommandServic
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void operateFlashItem(FlashItemOperateCommand command) {
-        flashItemDomainService.changeItemStatus(command.getCode(), command.getStatus());
+        checkOperateCommand(command);
+        
+        // 获取商品信息
+        FlashItem flashItem = flashItemRepository.findByCode(command.getCode());
+        if (flashItem == null) {
+            throw new AppException("[操作秒杀商品] 商品不存在: " + command.getCode());
+        }
+        
+        // 变更商品状态（领域服务只处理业务逻辑）
+        flashItemDomainService.changeItemStatus(flashItem, command.getStatus());
+        
+        // 持久化商品状态（应用层负责数据访问）
+        flashItemRepository.modifyStatus(flashItem);
     }
 
     private void checkOperateCommand(FlashItemOperateCommand command) {

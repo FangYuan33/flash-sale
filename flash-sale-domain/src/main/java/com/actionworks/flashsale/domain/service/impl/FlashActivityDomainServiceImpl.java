@@ -1,12 +1,8 @@
 package com.actionworks.flashsale.domain.service.impl;
 
-import com.actionworks.flashsale.common.exception.DomainException;
 import com.actionworks.flashsale.domain.adapter.CodeGenerateService;
 import com.actionworks.flashsale.domain.model.aggregate.FlashActivity;
 import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
-import com.actionworks.flashsale.domain.model.enums.FlashActivityStatus;
-import com.actionworks.flashsale.domain.repository.FlashActivityRepository;
-import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.domain.service.FlashActivityDomainService;
 import org.springframework.stereotype.Service;
 
@@ -17,44 +13,24 @@ public class FlashActivityDomainServiceImpl implements FlashActivityDomainServic
 
     @Resource
     private CodeGenerateService codeGenerateService;
-    @Resource
-    private FlashActivityRepository flashActivityRepository;
-    @Resource
-    private FlashItemRepository flashItemRepository;
 
     @Override
-    public void publish(FlashActivity flashActivity) {
+    public void publish(FlashActivity flashActivity, FlashItem flashItem) {
         // 发布活动（领域模型只处理核心业务逻辑）
         flashActivity.publish();
-
-        String itemCode = flashActivity.getFlashItem().getCode();
-        FlashItem flashItem = flashItemRepository.findByCode(itemCode);
-        if (flashItem == null) {
-            throw new DomainException("[发布秒杀活动] 品 " + itemCode + " 不存在");
-        }
+        
         // 在领域服务层处理外部依赖（编码生成）
         String activityCode = codeGenerateService.generateCode();
         flashActivity.assignCode(activityCode);
-
-        flashActivityRepository.save(flashActivity);
+        
+        // 注意：数据访问操作已移除，由应用层负责
     }
 
     @Override
-    public void changeActivityStatus(String code, Integer status) {
-        FlashActivity flashActivity = flashActivityRepository.findByCode(code)
-                .orElseThrow(() -> new DomainException("[变更活动状态] 活动不存在，ID: " + code));
-
-        flashActivity.changeStatus(FlashActivityStatus.parse(status));
-        flashActivityRepository.modifyStatus(flashActivity);
-        // 活动下线同步更新秒杀商品状态
-        if (FlashActivityStatus.OFFLINE.getCode().equals(status)) {
-            flashItemRepository.modifyStatus(flashActivity.getFlashItem());
-        }
-    }
-
-    @Override
-    public FlashActivity getById(Long activityId) {
-        return flashActivityRepository.findById(activityId)
-                .orElseThrow(() -> new DomainException("[查询活动] 活动不存在，ID: " + activityId));
+    public void changeActivityStatus(FlashActivity flashActivity, Integer status) {
+        // 变更活动状态（领域模型只处理核心业务逻辑）
+        flashActivity.changeStatus(com.actionworks.flashsale.domain.model.enums.FlashActivityStatus.parse(status));
+        
+        // 注意：数据访问操作已移除，由应用层负责
     }
 }

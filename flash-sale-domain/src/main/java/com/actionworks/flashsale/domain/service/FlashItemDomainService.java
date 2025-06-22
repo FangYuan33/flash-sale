@@ -6,7 +6,7 @@ public interface FlashItemDomainService {
 
     void publish(FlashItem flashItem);
 
-    void changeItemStatus(String code, Integer status);
+    void changeItemStatus(FlashItem flashItem, Integer status);
 
-    FlashItem deductStock(String itemCode, Integer quantity);
+    void deductStock(FlashItem flashItem, Integer quantity);
 }
