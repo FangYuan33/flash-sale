@@ -4,8 +4,10 @@ import com.actionworks.flashsale.application.command.model.FlashOrderCreateComma
 import com.actionworks.flashsale.application.command.service.FlashOrderAppCommandService;
 import com.actionworks.flashsale.application.convertor.FlashOrderConvertor;
 import com.actionworks.flashsale.common.exception.AppException;
+import com.actionworks.flashsale.domain.event.EventPublisher;
 import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
 import com.actionworks.flashsale.domain.model.aggregate.FlashOrder;
+import com.actionworks.flashsale.domain.model.event.OrderCreateEvent;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.domain.repository.FlashOrderRepository;
 import com.actionworks.flashsale.domain.service.FlashItemDomainService;
@@ -29,6 +31,8 @@ public class FlashOrderAppCommandServiceImpl implements FlashOrderAppCommandServ
     private FlashItemRepository flashItemRepository;
     @Resource
     private FlashOrderRepository flashOrderRepository;
+    @Resource
+    private EventPublisher eventPublisher;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -46,9 +50,13 @@ public class FlashOrderAppCommandServiceImpl implements FlashOrderAppCommandServ
 
         // 3. 创建订单（领域服务只处理业务逻辑）
         FlashOrder flashOrder = FlashOrderConvertor.createCommandToDomain(createCommand);
-        flashOrderDomainService.createOrder(flashOrder, flashItem);
+        OrderCreateEvent orderCreateEvent = flashOrderDomainService.createOrder(flashOrder, flashItem);
+        
         // 4. 持久化订单（应用层负责数据访问）
         flashOrderRepository.save(flashOrder);
+        
+        // 5. 发布订单创建事件
+        eventPublisher.publish(orderCreateEvent);
     }
 
     private void checkCreateCommand(FlashOrderCreateCommand createCommand) {
