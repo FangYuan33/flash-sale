@@ -19,12 +19,13 @@
     </properties>
 
     <modules>
+        <module>flash-sale-common</module>
         <module>flash-sale-domain</module>
-        <module>flash-sale-infrastructure</module>
         <module>flash-sale-application</module>
+        <module>flash-sale-application-query</module>
+        <module>flash-sale-infrastructure</module>
         <module>flash-sale-trigger</module>
         <module>flash-sale-boot</module>
-        <module>flash-sale-common</module>
     </modules>
 
     <dependencyManagement>
@@ -37,6 +38,11 @@
             <dependency>
                 <groupId>com.actionworks</groupId>
                 <artifactId>flash-sale-application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.actionworks</groupId>
+                <artifactId>flash-sale-application-query</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

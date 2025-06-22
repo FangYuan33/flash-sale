@@ -1,8 +1,8 @@
 package com.actionworks.flashsale.trigger.controller;
 
-import com.actionworks.flashsale.application.query.service.impl.FlashOrderAppQueryServiceImpl;
-import com.actionworks.flashsale.application.command.service.impl.FlashOrderAppCommandServiceImpl;
-import com.actionworks.flashsale.domain.model.aggregate.FlashOrder;
+import com.actionworks.flashsale.application.command.service.FlashOrderAppCommandService;
+import com.actionworks.flashsale.application.query.model.dto.FlashOrderDTO;
+import com.actionworks.flashsale.application.query.service.FlashOrderAppQueryService;
 import com.actionworks.flashsale.trigger.convertor.FlashOrderConvertor;
 import com.actionworks.flashsale.trigger.model.request.FlashOrderCreateRequest;
 import com.actionworks.flashsale.trigger.model.response.Response;
@@ -16,15 +16,15 @@ import javax.annotation.Resource;
 public class FlashOrderController {
 
     @Resource
-    private FlashOrderAppQueryServiceImpl flashOrderAppQueryService;
+    private FlashOrderAppQueryService flashOrderAppQueryService;
 
     @Resource
-    private FlashOrderAppCommandServiceImpl flashOrderAppCommandService;
+    private FlashOrderAppCommandService flashOrderAppCommandService;
 
     @ApiOperation(value = "通过 code 获取订单信息")
     @GetMapping("/orders/{code}")
-    public SingleResponse<FlashOrder> getOrderByCode(@PathVariable String code) {
-        FlashOrder flashOrder = flashOrderAppQueryService.findByCode(code);
+    public SingleResponse<FlashOrderDTO> getOrderByCode(@PathVariable String code) {
+        FlashOrderDTO flashOrder = flashOrderAppQueryService.findByCode(code);
         return SingleResponse.of(flashOrder);
     }
 

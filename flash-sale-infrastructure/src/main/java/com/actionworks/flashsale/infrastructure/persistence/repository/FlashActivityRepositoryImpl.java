@@ -2,7 +2,6 @@ package com.actionworks.flashsale.infrastructure.persistence.repository;
 
 import com.actionworks.flashsale.domain.model.aggregate.FlashActivity;
 import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
-import com.actionworks.flashsale.domain.model.query.FlashActivityQueryCondition;
 import com.actionworks.flashsale.domain.repository.FlashActivityRepository;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.infrastructure.persistence.convertor.FlashActivityConvertor;
@@ -13,8 +12,6 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -28,11 +25,6 @@ public class FlashActivityRepositoryImpl implements FlashActivityRepository {
     @Override
     public Optional<FlashActivity> findById(Long activityId) {
         return Optional.empty();
-    }
-
-    @Override
-    public List<FlashActivity> findByCondition(FlashActivityQueryCondition condition) {
-        return Collections.emptyList();
     }
 
     @Override

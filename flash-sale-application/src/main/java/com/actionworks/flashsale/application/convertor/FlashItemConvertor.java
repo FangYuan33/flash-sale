@@ -1,22 +1,11 @@
 package com.actionworks.flashsale.application.convertor;
 
 import com.actionworks.flashsale.application.command.model.FlashItemPublishCommand;
-import com.actionworks.flashsale.application.query.model.req.FlashItemQuery;
 import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
 import com.actionworks.flashsale.domain.model.entity.StockEntity;
 import com.actionworks.flashsale.domain.model.valobj.ItemPrice;
-import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 
 public class FlashItemConvertor {
-
-    public static FlashItemQueryCondition query2QueryCondition(FlashItemQuery query) {
-        FlashItemQueryCondition condition = new FlashItemQueryCondition();
-        condition.setItemTitle(query.getItemTitle()).setStatus(query.getStatus());
-        condition.setPageNum(query.getPageNum());
-        condition.setPageSize(query.getPageSize());
-
-        return condition;
-    }
 
     public static FlashItem publishCommandToDO(FlashItemPublishCommand command) {
         FlashItem.FlashItemBuilder builder = FlashItem.builder();

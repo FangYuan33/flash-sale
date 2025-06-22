@@ -2,8 +2,6 @@ package com.actionworks.flashsale.application.query.model.dto;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 /**
  * 秒杀商品app层出参类型
  */

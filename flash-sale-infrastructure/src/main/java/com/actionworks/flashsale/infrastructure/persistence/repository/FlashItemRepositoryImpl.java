@@ -1,7 +1,6 @@
 package com.actionworks.flashsale.infrastructure.persistence.repository;
 
 import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
-import com.actionworks.flashsale.domain.model.query.FlashItemQueryCondition;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.infrastructure.persistence.convertor.FlashItemConvertor;
 import com.actionworks.flashsale.infrastructure.persistence.convertor.StockConvertor;
@@ -11,16 +10,11 @@ import com.actionworks.flashsale.infrastructure.persistence.model.FlashItemPO;
 import com.actionworks.flashsale.infrastructure.persistence.model.StockPO;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.collections4.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 public class FlashItemRepositoryImpl implements FlashItemRepository {
@@ -46,25 +40,6 @@ public class FlashItemRepositoryImpl implements FlashItemRepository {
         } else {
             return Optional.of(FlashItemConvertor.toDomainObject(flashItemDO));
         }
-    }
-
-    @Override
-    public List<FlashItem> findByCondition(FlashItemQueryCondition condition) {
-        LambdaQueryWrapper<FlashItemPO> queryWrapper = new LambdaQueryWrapper<>();
-        if (StringUtils.isNotBlank(condition.getCode())) {
-            queryWrapper.eq(FlashItemPO::getCode, condition.getCode());
-        }
-        if (StringUtils.isNotBlank(condition.getItemTitle())) {
-            queryWrapper.eq(FlashItemPO::getItemTitle, condition.getItemTitle());
-        }
-        if (condition.getStatus() != null) {
-            queryWrapper.eq(FlashItemPO::getStatus, condition.getStatus());
-        }
-
-        List<FlashItemPO> flashItemPOList = flashItemMapper.selectList(queryWrapper);
-
-        return CollectionUtils.isEmpty(flashItemPOList) ? Collections.emptyList() :
-                flashItemPOList.stream().map(FlashItemConvertor::toDomainObject).collect(Collectors.toList());
     }
 
     @Override

@@ -18,6 +18,10 @@
         </dependency>
         <dependency>
             <groupId>com.actionworks</groupId>
+            <artifactId>flash-sale-application-query</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.actionworks</groupId>
             <artifactId>flash-sale-common</artifactId>
         </dependency>
 
