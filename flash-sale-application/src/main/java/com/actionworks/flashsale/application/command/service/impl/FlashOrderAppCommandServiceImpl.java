@@ -8,6 +8,7 @@ import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
 import com.actionworks.flashsale.domain.model.aggregate.FlashOrder;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.domain.repository.FlashOrderRepository;
+import com.actionworks.flashsale.domain.service.FlashItemDomainService;
 import com.actionworks.flashsale.domain.service.FlashOrderDomainService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -22,6 +23,8 @@ public class FlashOrderAppCommandServiceImpl implements FlashOrderAppCommandServ
 
     @Resource
     private FlashOrderDomainService flashOrderDomainService;
+    @Resource
+    private FlashItemDomainService flashItemDomainService;
     @Resource
     private FlashItemRepository flashItemRepository;
     @Resource
@@ -38,19 +41,13 @@ public class FlashOrderAppCommandServiceImpl implements FlashOrderAppCommandServ
             throw new AppException("[创建秒杀订单] 商品不存在: " + createCommand.getItemCode());
         }
 
-        // 2. 扣减库存（领域服务只处理业务逻辑）
-        flashItem.deductStock(createCommand.getQuantity());
-        // 3. 持久化库存扣减（应用层负责数据访问）
-        boolean success = flashItemRepository.deduct(flashItem.getCode(), createCommand.getQuantity());
-        if (!success) {
-            log.error("[扣减库存] 扣减商品库存失败, 商品编码: {}, 数量: {}", flashItem.getCode(), createCommand.getQuantity());
-            throw new AppException("[扣减库存] 扣减商品库存失败, 商品编码: " + flashItem.getCode() + ", 数量: " + createCommand.getQuantity());
-        }
+        // 2. 使用领域服务完成扣减库存的逻辑
+        flashItemDomainService.deductStock(flashItem, createCommand.getQuantity());
 
-        // 4. 创建订单（领域服务只处理业务逻辑）
+        // 3. 创建订单（领域服务只处理业务逻辑）
         FlashOrder flashOrder = FlashOrderConvertor.createCommandToDomain(createCommand);
         flashOrderDomainService.createOrder(flashOrder, flashItem);
-        // 5. 持久化订单（应用层负责数据访问）
+        // 4. 持久化订单（应用层负责数据访问）
         flashOrderRepository.save(flashOrder);
     }
 
