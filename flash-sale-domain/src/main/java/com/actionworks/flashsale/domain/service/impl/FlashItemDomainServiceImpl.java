@@ -1,6 +1,5 @@
 package com.actionworks.flashsale.domain.service.impl;
 
-import com.actionworks.flashsale.common.exception.AppException;
 import com.actionworks.flashsale.common.exception.DomainException;
 import com.actionworks.flashsale.domain.adapter.CodeGenerateService;
 import com.actionworks.flashsale.domain.model.aggregate.FlashItem;

@@ -7,6 +7,7 @@ import com.actionworks.flashsale.application.convertor.FlashActivityConvertor;
 import com.actionworks.flashsale.common.exception.AppException;
 import com.actionworks.flashsale.domain.model.aggregate.FlashActivity;
 import com.actionworks.flashsale.domain.model.aggregate.FlashItem;
+import com.actionworks.flashsale.domain.model.enums.FlashActivityStatus;
 import com.actionworks.flashsale.domain.repository.FlashActivityRepository;
 import com.actionworks.flashsale.domain.repository.FlashItemRepository;
 import com.actionworks.flashsale.domain.service.FlashActivityDomainService;
@@ -31,19 +32,19 @@ public class FlashActivityAppCommandServiceImpl implements FlashActivityAppComma
     public void publishFlashActivity(FlashActivityPublishCommand command) {
         // 校验 command 参数
         checkPublishCommand(command);
-        
+
         // 获取商品信息
         FlashItem flashItem = flashItemRepository.findByCode(command.getFlashItemCode());
         if (flashItem == null) {
             throw new AppException("[发布秒杀活动] 商品不存在: " + command.getFlashItemCode());
         }
-        
+
         // 创建活动对象
         FlashActivity flashActivity = FlashActivityConvertor.publishCommandToDO(command);
-        
+
         // 发布活动（领域服务只处理业务逻辑）
-        flashActivityDomainService.publish(flashActivity, flashItem);
-        
+        flashActivityDomainService.publish(flashActivity);
+
         // 持久化活动（应用层负责数据访问）
         flashActivityRepository.save(flashActivity);
     }
@@ -72,15 +73,14 @@ public class FlashActivityAppCommandServiceImpl implements FlashActivityAppComma
         // 获取活动信息
         FlashActivity flashActivity = flashActivityRepository.findByCode(command.getCode())
                 .orElseThrow(() -> new AppException("[变更活动状态] 活动不存在，ID: " + command.getCode()));
-        
+
         // 变更活动状态（领域服务只处理业务逻辑）
-        flashActivityDomainService.changeActivityStatus(flashActivity, command.getStatus());
-        
+        flashActivity.changeStatus(FlashActivityStatus.parse(command.getStatus()));
         // 持久化活动状态（应用层负责数据访问）
         flashActivityRepository.modifyStatus(flashActivity);
-        
+
         // 活动下线同步更新秒杀商品状态
-        if (com.actionworks.flashsale.domain.model.enums.FlashActivityStatus.OFFLINE.getCode().equals(command.getStatus())) {
+        if (FlashActivityStatus.OFFLINE.getCode().equals(command.getStatus())) {
             flashItemRepository.modifyStatus(flashActivity.getFlashItem());
         }
     }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 @Service
-public class FlashOrderOrderDomainServiceImpl implements FlashOrderDomainService {
+public class FlashOrderDomainServiceImpl implements FlashOrderDomainService {
 
     @Resource
     private CodeGenerateService codeGenerateService;
